@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowCraft Pro | AI Client Acquisition for Agencies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Libertans Dark (inspired by Dribbble) -->
+    <!-- Application Structure Plan: A single-page, linear narrative structure guides users from a problem-aware state to a solution-oriented conversion. The flow starts with a strong hero section to capture attention, followed by social proof to build immediate trust. An interactive "Systems" section allows users to explore the specific services (the core offering) without being overwhelmed. This is followed by a clear process, data-backed results (including a chart for visual impact), and an FAQ to handle objections. This structure was chosen because it mirrors a sales conversation, logically leading a potential client from interest to inquiry in a single, seamless experience. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: Core services (Cold Email, LinkedIn, AI Content). Goal: Organize & Inform. Viz/Method: Interactive JS-powered tabs. Interaction: User clicks a tab to reveal detailed content for that service. Justification: Prevents a long, overwhelming list. Allows for self-segmentation and focused information discovery. Method: Vanilla JS.
+        2. Report Info: A client's growth metric (e.g., qualified meetings). Goal: Compare & Change. Viz/Method: Bar Chart. Interaction: Tooltips on hover provide exact numbers. Justification: A bar chart provides a simple, powerful visual representation of "before vs. after," which is more impactful than text alone for demonstrating value. Library: Chart.js (Canvas).
+        3. Report Info: Step-by-step client onboarding process. Goal: Organize. Viz/Method: Numbered list with icons styled as a visual flowchart. Interaction: None, purely informational. Justification: Clearly communicates the client journey, setting expectations and reducing uncertainty. Method: HTML/Tailwind CSS.
+        4. Report Info: Frequently Asked Questions. Goal: Inform. Viz/Method: Accordion list. Interaction: User clicks a question to toggle the answer's visibility. Justification: Keeps the section clean and scannable, allowing users to find answers to their specific questions without scrolling through irrelevant text. Method: Vanilla JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #111111;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Sora', sans-serif;
+        }
+        .chart-container { position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .active-tab {
+            color: #BEF264 !important;
+            border-color: #BEF264 !important;
+        }
+        .glow-button {
+            box-shadow: 0 0 15px rgba(190, 242, 100, 0.4), 0 0 5px rgba(190, 242, 100, 0.6);
+        }
+        .logo-marquee {
+            overflow: hidden;
+            position: relative;
+            white-space: nowrap;
+        }
+        .logo-marquee-content {
+            display: flex;
+            align-items: center;
+            animation: marquee 40s linear infinite;
+        }
+         .logo-marquee-content img {
+            height: 40px;
+            margin: 0 40px;
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: filter 0.3s ease, opacity 0.3s ease;
+        }
+         .logo-marquee-content img:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .process-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -2.5rem; /* Adjust based on gap */
+            width: 2.5rem; /* Should match the gap */
+            height: 2px;
+            background-color: #374151; /* gray-700 */
+        }
+        @media (max-width: 1023px) {
+            .process-step:not(:last-child)::after {
+                display: none;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#111111',
+                        'brand-lime': '#BEF264',
+                        'brand-light': '#F0F0F0',
+                        'brand-gray': '#AAAAAA'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Sora', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Vercel analytics (optional). Uncomment to enable. -->
+    <!-- <script defer src="/vercel/insights/script.js"></script> -->
+</head>
+<body class="bg-brand-dark text-brand-light">
+
+    <header class="bg-brand-dark/80 backdrop-blur-lg sticky top-0 z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0">
+                    <a href="#">
+                        <img class="h-12" src="https://aiaccelerator.bg/wp-content/uploads/2025/10/flowcraftpro-logo-1.png" alt="FlowCraft Pro Logo">
+                    </a>
+                </div>
+                <nav class="hidden md:flex md:space-x-8">
+                    <a href="#systems" class="text-brand-gray hover:text-white font-medium transition-colors">Systems</a>
+                    <a href="#process" class="text-brand-gray hover:text-white font-medium transition-colors">Process</a>
+                    <a href="#results" class="text-brand-gray hover:text-white font-medium transition-colors">Results</a>
+                    <a href="#faq" class="text-brand-gray hover:text-white font-medium transition-colors">FAQ</a>
+                </nav>
+                <div class="hidden md:block">
+                    <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-5 py-3 rounded-full hover:bg-lime-300 transition-colors">Book Strategy Call</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <span class="sr-only">Open menu</span>
+                        <div class="space-y-2">
+                            <span class="block w-8 h-0.5 bg-white"></span>
+                            <span class="block w-8 h-0.5 bg-white"></span>
+                            <span class="block w-5 h-0.5 bg-white"></span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-brand-dark z-50">
+            <div class="flex flex-col items-center justify-center h-full">
+                <button id="mobile-menu-close-button" class="absolute top-7 right-4 sm:right-6 lg:right-8 text-white focus:outline-none">
+                    <span class="sr-only">Close menu</span>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <nav class="flex flex-col space-y-8 text-center">
+                    <a href="#systems" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">Systems</a>
+                    <a href="#process" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">Process</a>
+                    <a href="#results" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">Results</a>
+                    <a href="#faq" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">FAQ</a>
+                    <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="mt-8 bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors">Book Strategy Call</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative py-24 md:py-32 bg-cover bg-center" style="background-image: url('https://aiaccelerator.bg/wp-content/uploads/2025/10/Gemini_Generated_Image_t3aczkt3aczkt3ac.png');">
+            <div class="absolute inset-0 bg-brand-dark/90"></div>
+            <div class="relative z-10 max-w-5xl mx-auto text-center px-4">
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                    Replace Unpredictable Referrals with an 
+                    <span class="text-brand-lime">AI-Driven Pipeline of 5+ Monthly Leads.</span>
+                </h1>
+                <p class="mt-8 text-lg md:text-xl text-brand-gray max-w-3xl mx-auto">AI-powered client acquisition systems for PPC & SEO agencies. Replace inconsistent referrals with predictable growth, <span class="text-white font-semibold">guaranteed to deliver 5+ monthly leads or your money back.</span></p>
+                <div class="mt-12">
+                    <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">Book Your Free Growth Strategy Call</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof Logo Marquee -->
+        <div class="py-12 bg-brand-dark border-t border-b border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <p class="text-sm font-semibold text-brand-gray uppercase tracking-wider">Trusted by Industry-Leading Agencies & Brands</p>
+                </div>
+                <div class="logo-marquee mt-10">
+                    <div class="logo-marquee-content">
+                        <!-- First set of logos -->
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo3.png" alt="Client Logo 1" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo2.png" alt="Client Logo 2" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo5.png" alt="Client Logo 3" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo13.png" alt="Client Logo 4" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo11.png" alt="Client Logo 5" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo1.png" alt="Client Logo 6" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo4.png" alt="Client Logo 7" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo6.png" alt="Client Logo 8" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo12.png" alt="Client Logo 9" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo14-2.png" alt="Client Logo 10" onerror="this.style.display='none'">
+                        <!-- Duplicate set for seamless loop -->
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo3.png" alt="Client Logo 1" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo2.png" alt="Client Logo 2" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo5.png" alt="Client Logo 3" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo13.png" alt="Client Logo 4" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo11.png" alt="Client Logo 5" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo1.png" alt="Client Logo 6" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo4.png" alt="Client Logo 7" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo6.png" alt="Client Logo 8" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo12.png" alt="Client Logo 9" onerror="this.style.display='none'">
+                        <img src="https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo14-2.png" alt="Client Logo 10" onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Systems Section -->
+        <section id="systems" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Your AI-Powered Client Acquisition System</h2>
+                    <p class="mt-4 text-lg text-brand-gray">A scalable, predictable growth asset, built for you. Explore the core components by clicking each tab below to see how a consistent flow of qualified opportunities is created.</p>
+                </div>
+
+                <div class="mt-16 max-w-4xl mx-auto">
+                    <div class="mb-8 border-b border-gray-800 flex justify-center space-x-4 md:space-x-8">
+                        <button data-tab="email" class="system-tab active-tab py-4 px-1 font-semibold text-lg border-b-2">✉️ Cold Email</button>
+                        <button data-tab="linkedin" class="system-tab py-4 px-1 font-semibold text-lg border-b-2 border-transparent text-brand-gray hover:text-white transition-colors">🔗 LinkedIn</button>
+                        <button data-tab="content" class="system-tab py-4 px-1 font-semibold text-lg border-b-2 border-transparent text-brand-gray hover:text-white transition-colors">🤖 AI Content</button>
+                    </div>
+
+                    <div id="email" class="system-content">
+                        <div class="bg-gray-900 p-8 md:p-10 rounded-2xl border border-gray-800">
+                           <h3 class="text-2xl font-bold mb-4 text-white">Direct-to-Inbox Pipeline</h3>
+                           <p class="text-brand-gray mb-6">A precision-targeted cold email system is built to book meetings directly with your ideal clients. The service covers everything from lead sourcing and personalized copywriting to technical setup and inbox management.</p>
+                           <ul class="space-y-4 text-brand-light">
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Technical Infrastructure:</strong> Full setup of domains, inboxes, and warming protocols to land in the primary inbox.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">AI-Powered Copywriting:</strong> A/B tested email sequences that convert, written by an expert team and optimized by AI.</div></li>
+                           </ul>
+                        </div>
+                    </div>
+                    <div id="linkedin" class="system-content hidden">
+                         <div class="bg-gray-900 p-8 md:p-10 rounded-2xl border border-gray-800">
+                           <h3 class="text-2xl font-bold mb-4 text-white">Authority & Connection Engine</h3>
+                           <p class="text-brand-gray mb-6">Your LinkedIn profile is turned into a powerful lead generation asset. The system connects with hundreds of ideal prospects, nurtures them with value-driven messaging, and converts them into booked sales calls.</p>
+                            <ul class="space-y-4 text-brand-light">
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Profile Optimization:</strong> Your profile is rewritten to speak directly to your target audience and position you as an authority.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Automated Connection Campaigns:</strong> Safely connect with 500+ targeted decision-makers every month.</div></li>
+                           </ul>
+                        </div>
+                    </div>
+                    <div id="content" class="system-content hidden">
+                         <div class="bg-gray-900 p-8 md:p-10 rounded-2xl border border-gray-800">
+                           <h3 class="text-2xl font-bold mb-4 text-white">AI-Powered Content Creation</h3>
+                           <p class="text-brand-gray mb-6">You are established as a thought leader with high-quality, AI-assisted content. This system repurposes your core ideas into content that attracts inbound leads and warms up outbound prospects.</p>
+                            <ul class="space-y-4 text-brand-light">
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">AI-Drafting & Human Editing:</strong> Advanced AI is used to draft content, which is then refined and polished by expert human editors.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Multi-Channel Distribution:</strong> Your content is formatted and distributed across key platforms to maximize reach.</div></li>
+                           </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Process Section -->
+        <section id="process" class="py-20 bg-gray-900 border-t border-b border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Your 90-Day Path to Predictable Growth</h2>
+                    <p class="mt-4 text-lg text-brand-gray">The structured process is designed for clarity and rapid results, taking you from strategy to a fully scaled system in one quarter.</p>
+                </div>
+                <div class="mt-16 max-w-6xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-10 gap-y-8">
+                        <!-- Step 1 -->
+                        <div class="process-step relative text-center lg:text-left">
+                            <div class="flex justify-center lg:justify-start items-center mb-2">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">1</div>
+                                <h3 class="ml-4 text-xl font-bold text-white">Strategy & Build</h3>
+                            </div>
+                            <p class="text-brand-gray">Days 1-14: System infrastructure setup and initial campaign strategy.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="process-step relative text-center lg:text-left">
+                           <div class="flex justify-center lg:justify-start items-center mb-2">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">2</div>
+                                <h3 class="ml-4 text-xl font-bold text-white">Launch & Test</h3>
+                            </div>
+                            <p class="text-brand-gray">Days 15-30: Campaigns go live to gather initial market feedback and data.</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="process-step relative text-center lg:text-left">
+                           <div class="flex justify-center lg:justify-start items-center mb-2">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">3</div>
+                                <h3 class="ml-4 text-xl font-bold text-white">Optimize & Scale</h3>
+                            </div>
+                            <p class="text-brand-gray">Days 31-60: Double down on winning angles and increase outreach volume.</p>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="process-step relative text-center lg:text-left">
+                            <div class="flex justify-center lg:justify-start items-center mb-2">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">4</div>
+                                <h3 class="ml-4 text-xl font-bold text-white">Predictable Flow</h3>
+                            </div>
+                            <p class="text-brand-gray">Days 61-90: The system is now a reliable growth asset delivering consistent calls.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Data-Backed Growth</h2>
+                    <p class="mt-4 text-lg text-brand-gray">Below is an example of a typical agency's pipeline growth, followed by specific, cross-industry case studies.</p>
+                </div>
+
+                <div class="mt-12">
+                    <div class="chart-container">
+                        <canvas id="resultsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="mt-16 grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+                        <span class="text-brand-lime font-bold text-xs uppercase">E-COMMERCE BUSINESS</span>
+                        <h3 class="mt-2 text-2xl font-bold text-white">$25,000/mo Profit Increase</h3>
+                        <p class="mt-2 text-brand-gray text-sm">Overhauled fulfillment and inventory workflows in just 4 months, drastically reducing costs.</p>
+                    </div>
+                     <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+                        <span class="text-brand-lime font-bold text-xs uppercase">IT OUTSOURCING CO.</span>
+                        <h3 class="mt-2 text-2xl font-bold text-white">$100k+ ARR Stabilized</h3>
+                        <p class="mt-2 text-brand-gray text-sm">Systematized their entire service delivery process, enabling consistent scaling for two consecutive years.</p>
+                    </div>
+                     <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+                        <span class="text-brand-lime font-bold text-xs uppercase">NEW LINKEDIN ACCOUNT</span>
+                        <h3 class="mt-2 text-2xl font-bold text-white">30,000+ Impressions</h3>
+                        <p class="mt-2 text-brand-gray text-sm">Built an AI-powered content system that generated significant authority from scratch in only 3 months.</p>
+                    </div>
+                     <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+                        <span class="text-brand-lime font-bold text-xs uppercase">HIGH-TICKET COACH</span>
+                        <h3 class="mt-2 text-2xl font-bold text-white">Custom Management App</h3>
+                        <p class="mt-2 text-brand-gray text-sm">Developed a bespoke app to streamline client management, saving hundreds of hours per year.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 bg-gray-900 border-t border-gray-800">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Frequently Asked Questions</h2>
+                     <p class="mt-4 text-lg text-brand-gray">Clear answers to common questions to help you make an informed decision.</p>
+                </div>
+                <div class="mt-12 space-y-4">
+                    <div class="faq-item border-b border-gray-800">
+                        <button class="faq-question w-full flex justify-between items-center text-left py-6">
+                            <span class="text-xl font-semibold text-white">What is the results guarantee?</span>
+                            <span class="faq-icon text-3xl font-light text-brand-lime">+</span>
+                        </button>
+                        <div class="faq-answer hidden pb-6 pr-8 text-brand-gray">
+                            <p>A full money-back guarantee is provided. If the system does not generate a minimum of 5 qualified sales opportunities on your calendar by the end of the 90-day program, you will receive a 100% refund of the service fee. This ensures a completely risk-free investment in your agency's growth.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item border-b border-gray-800">
+                        <button class="faq-question w-full flex justify-between items-center text-left py-6">
+                            <span class="text-xl font-semibold text-white">How long until we see results?</span>
+                            <span class="faq-icon text-3xl font-light text-brand-lime">+</span>
+                        </button>
+                        <div class="faq-answer hidden pb-6 pr-8 text-brand-gray">
+                            <p>Most clients see the first qualified meetings booked within 3-4 weeks of launch. The system is expected to be generating a consistent flow of 5+ calls per month within 90 days.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item border-b border-gray-800">
+                        <button class="faq-question w-full flex justify-between items-center text-left py-6">
+                            <span class="text-xl font-semibold text-white">Is this a fit for new agencies?</span>
+                            <span class="faq-icon text-3xl font-light text-brand-lime">+</span>
+                        </button>
+                        <div class="faq-answer hidden pb-6 pr-8 text-brand-gray">
+                            <p>This system works best for established agencies that already have case studies and a clear, validated offer. If you're pre-revenue or haven't proven your service delivery, it may be too early.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item border-b border-gray-800">
+                        <button class="faq-question w-full flex justify-between items-center text-left py-6">
+                            <span class="text-xl font-semibold text-white">What time commitment is needed?</span>
+                            <span class="faq-icon text-3xl font-light text-brand-lime">+</span>
+                        </button>
+                        <div class="faq-answer hidden pb-6 pr-8 text-brand-gray">
+                            <p>Minimal. Your input is required during the initial strategy phase (2-3 hours total). After that, 99% of the work is handled. You just need to show up to the sales calls.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section id="cta" class="py-20">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="bg-gray-900 rounded-2xl p-10 md:p-16 text-center border border-gray-800">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Ready to Build Your Growth Engine?</h2>
+                    <p class="mt-4 text-lg text-brand-gray max-w-2xl mx-auto">Stop waiting for referrals. Build a predictable system that brings your ideal clients to you. Book a free, no-obligation strategy call to see if it's a good fit.</p>
+                    <div class="mt-10">
+                        <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">Book Your Free Strategy Call</a>
+                    </div>
+                    <p class="mt-6 text-brand-gray flex items-center justify-center space-x-2">
+                        <span class="text-lg">🛡️</span> 
+                        <span><strong>Risk-Free Guarantee:</strong> Full refund if the 5+ lead goal isn't met in 90 days.</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-brand-dark">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center border-t border-gray-800">
+            <p class="text-brand-gray">&copy; 2025 FlowCraft Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.remove('hidden');
+            });
+            mobileMenuCloseButton.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Smooth scrolling for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') {
+                        window.scrollTo({ top: 0, behavior: 'smooth'});
+                        return;
+                    }
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        // Offset for sticky header
+                        const headerOffset = 80;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+            
+            // Systems Tabs
+            const tabs = document.querySelectorAll('.system-tab');
+            const contents = document.querySelectorAll('.system-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.getAttribute('data-tab');
+
+                    tabs.forEach(t => t.classList.remove('active-tab'));
+                    tab.classList.add('active-tab');
+
+                    contents.forEach(content => {
+                        if (content.id === target) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // FAQ Accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                const icon = item.querySelector('.faq-icon');
+
+                question.addEventListener('click', () => {
+                    const isVisible = !answer.classList.contains('hidden');
+                    if (isVisible) {
+                        answer.classList.add('hidden');
+                        icon.textContent = '+';
+                    } else {
+                        // Close other FAQs when one is opened
+                        faqItems.forEach(otherItem => {
+                            if (otherItem !== item) {
+                                otherItem.querySelector('.faq-answer').classList.add('hidden');
+                                otherItem.querySelector('.faq-icon').textContent = '+';
+                            }
+                        });
+                        answer.classList.remove('hidden');
+                        icon.textContent = '-';
+                    }
+                });
+            });
+
+            // Results Chart
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            if (ctx) {
+                const resultsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4'],
+                        datasets: [{
+                            label: 'Qualified Meetings Booked',
+                            data: [1, 3, 5, 7],
+                            backgroundColor: 'rgba(190, 242, 100, 0.6)',
+                            borderColor: 'rgba(190, 242, 100, 1)',
+                            borderWidth: 2,
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: { color: '#AAAAAA', font: { family: "'Inter', sans-serif" } },
+                                title: { display: true, text: 'Number of Meetings', color: '#AAAAAA', font: { family: "'Inter', sans-serif" } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#AAAAAA', font: { family: "'Inter', sans-serif" } },
+                                title: { display: true, text: 'Time Since Launch', color: '#AAAAAA', font: { family: "'Inter', sans-serif" } }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'Client A: Qualified Sales Meetings Per Month', font: { size: 18, family: "'Sora', sans-serif" }, color: '#F0F0F0' },
+                            tooltip: {
+                                backgroundColor: '#000',
+                                titleFont: { family: "'Sora', sans-serif" },
+                                bodyFont: { family: "'Inter', sans-serif" },
+                                titleColor: '#F0F0F0',
+                                bodyColor: '#AAAAAA',
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) { label += ': '; }
+                                        if (context.parsed.y !== null) {
+                                            label += context.parsed.y + ' meetings';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+
