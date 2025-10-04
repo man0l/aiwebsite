@@ -126,7 +126,7 @@
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-brand-dark z-50">
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-brand-dark/95 z-[9999]">
             <div class="flex flex-col items-center justify-center h-full">
                 <button id="mobile-menu-close-button" class="absolute top-7 right-4 sm:right-6 lg:right-8 text-white focus:outline-none">
                     <span class="sr-only">Close menu</span>
@@ -154,7 +154,7 @@
                 </h1>
                 <p class="mt-8 text-lg md:text-xl text-brand-gray max-w-3xl mx-auto">AI-powered client acquisition systems for PPC & SEO agencies. Replace inconsistent referrals with predictable growth, <span class="text-white font-semibold">guaranteed to deliver 5+ monthly leads or your money back.</span></p>
                 <div class="mt-12">
-                    <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">Book Your Free Growth Strategy Call</a>
+                    <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button inline-flex items-center justify-center text-center w-full sm:w-auto max-w-xs mx-auto">Book Your Free Growth Strategy Call</a>
                 </div>
             </div>
         </section>
@@ -253,32 +253,32 @@
                 <div class="mt-16 max-w-6xl mx-auto">
                     <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-10 gap-y-8">
                         <!-- Step 1 -->
-                        <div class="process-step relative text-center lg:text-left">
-                            <div class="flex justify-center lg:justify-start items-center mb-2">
+                        <div class="process-step relative text-left">
+                            <div class="flex justify-start items-center mb-2">
                                 <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">1</div>
                                 <h3 class="ml-4 text-xl font-bold text-white">Strategy & Build</h3>
                             </div>
                             <p class="text-brand-gray">Days 1-14: System infrastructure setup and initial campaign strategy.</p>
                         </div>
                         <!-- Step 2 -->
-                        <div class="process-step relative text-center lg:text-left">
-                           <div class="flex justify-center lg:justify-start items-center mb-2">
+                        <div class="process-step relative text-left">
+                           <div class="flex justify-start items-center mb-2">
                                 <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">2</div>
                                 <h3 class="ml-4 text-xl font-bold text-white">Launch & Test</h3>
                             </div>
                             <p class="text-brand-gray">Days 15-30: Campaigns go live to gather initial market feedback and data.</p>
                         </div>
                         <!-- Step 3 -->
-                        <div class="process-step relative text-center lg:text-left">
-                           <div class="flex justify-center lg:justify-start items-center mb-2">
+                        <div class="process-step relative text-left">
+                           <div class="flex justify-start items-center mb-2">
                                 <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">3</div>
                                 <h3 class="ml-4 text-xl font-bold text-white">Optimize & Scale</h3>
                             </div>
                             <p class="text-brand-gray">Days 31-60: Double down on winning angles and increase outreach volume.</p>
                         </div>
                         <!-- Step 4 -->
-                        <div class="process-step relative text-center lg:text-left">
-                            <div class="flex justify-center lg:justify-start items-center mb-2">
+                        <div class="process-step relative text-left">
+                            <div class="flex justify-start items-center mb-2">
                                 <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">4</div>
                                 <h3 class="ml-4 text-xl font-bold text-white">Predictable Flow</h3>
                             </div>
@@ -383,7 +383,7 @@
                     <h2 class="text-4xl md:text-5xl font-bold text-white">Ready to Build Your Growth Engine?</h2>
                     <p class="mt-4 text-lg text-brand-gray max-w-2xl mx-auto">Stop waiting for referrals. Build a predictable system that brings your ideal clients to you. Book a free, no-obligation strategy call to see if it's a good fit.</p>
                     <div class="mt-10">
-                        <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">Book Your Free Strategy Call</a>
+                        <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button inline-flex items-center justify-center text-center w-full sm:w-auto max-w-xs mx-auto">Book Your Free Strategy Call</a>
                     </div>
                     <p class="mt-6 text-brand-gray flex items-center justify-center space-x-2">
                         <span class="text-lg">🛡️</span> 
@@ -408,39 +408,57 @@
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-            mobileMenuButton.addEventListener('click', () => {
+            const openMobileMenu = () => {
                 mobileMenu.classList.remove('hidden');
-            });
-            mobileMenuCloseButton.addEventListener('click', () => {
+                document.body.classList.add('overflow-hidden');
+            };
+            const closeMobileMenu = () => {
                 mobileMenu.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            };
+
+            mobileMenuButton.addEventListener('click', openMobileMenu);
+            mobileMenuCloseButton.addEventListener('click', closeMobileMenu);
+
+            // Close on ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMobileMenu();
             });
+
+            // Smooth scroll helper
+            function smoothScrollToTarget(targetId) {
+                if (targetId === '#') {
+                    window.scrollTo({ top: 0, behavior: 'smooth'});
+                    return;
+                }
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+            }
+
+            // Mobile nav links: close menu first, then scroll
             mobileNavLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    closeMobileMenu();
+                    // allow menu to close visually before scrolling
+                    setTimeout(() => smoothScrollToTarget(targetId), 50);
                 });
             });
 
             // Smooth scrolling for nav links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
+                    // Skip mobile menu links (they have their own handler)
+                    if (this.classList.contains('mobile-nav-link')) return;
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
-                    if (targetId === '#') {
-                        window.scrollTo({ top: 0, behavior: 'smooth'});
-                        return;
-                    }
-                    const targetElement = document.querySelector(targetId);
-                    if(targetElement) {
-                        // Offset for sticky header
-                        const headerOffset = 80;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth"
-                        });
-                    }
+                    smoothScrollToTarget(targetId);
                 });
             });
             
