@@ -396,6 +396,50 @@
             </div>
         </section>
 
+        <!-- Revenue Loss Calculator -->
+        <section class="py-20 bg-brand-dark border-b border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <p class="text-brand-lime font-bold text-sm uppercase tracking-wide">The Cost of Silence</p>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mt-3">See What 20 Missed Meetings Cost Every Month</h2>
+                    <p class="mt-4 text-lg text-brand-gray">Drag the sliders to quantify the revenue lost when 20 qualified appointments aren’t on your calendar.</p>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="dealValue" class="text-white font-semibold">Average Client Value</label>
+                                <span id="dealValueLabel" class="text-brand-lime font-semibold">$3,000</span>
+                            </div>
+                            <input id="dealValue" type="range" min="500" max="50000" value="3000" step="100" class="w-full accent-brand-lime">
+                            <p class="text-xs text-brand-gray mt-2">$500 – $50,000</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="closeRate" class="text-white font-semibold">Close Rate</label>
+                                <span id="closeRateLabel" class="text-brand-lime font-semibold">20%</span>
+                            </div>
+                            <input id="closeRate" type="range" min="1" max="50" value="20" step="1" class="w-full accent-brand-lime">
+                            <p class="text-xs text-brand-gray mt-2">1% – 50%</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col justify-between">
+                        <div>
+                            <p class="text-sm text-brand-gray uppercase tracking-wide">Revenue Lost (per month)</p>
+                            <p id="revenueLost" class="mt-3 text-4xl md:text-5xl font-extrabold text-red-400">$12,000</p>
+                            <p id="revenueSubtext" class="mt-2 text-brand-gray text-sm">You’re leaving $12,000/month on the table.</p>
+                        </div>
+                        <div class="mt-8">
+                            <a id="revenueCTA" href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="block text-center bg-brand-lime text-black font-bold px-6 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">Reclaim My $12,000 Next Month</a>
+                            <p class="mt-3 text-center text-xs text-brand-gray">First 5 meetings booked or you don’t pay.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- About Section -->
         <section id="about" class="py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -760,6 +804,41 @@
                         }
                     }
                 });
+            }
+
+            // Revenue Loss Calculator
+            const dealValueInput = document.getElementById('dealValue');
+            const closeRateInput = document.getElementById('closeRate');
+            const dealValueLabel = document.getElementById('dealValueLabel');
+            const closeRateLabel = document.getElementById('closeRateLabel');
+            const revenueLostEl = document.getElementById('revenueLost');
+            const revenueSubtextEl = document.getElementById('revenueSubtext');
+            const revenueCTA = document.getElementById('revenueCTA');
+
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+            }
+
+            function updateCalculator() {
+                const meetings = 20;
+                const dealValue = Number(dealValueInput?.value || 0);
+                const closeRate = Number(closeRateInput?.value || 0) / 100;
+
+                dealValueLabel.textContent = formatCurrency(dealValue);
+                closeRateLabel.textContent = `${Math.round(closeRate * 100)}%`;
+
+                const revenueLost = Math.round(meetings * closeRate * dealValue);
+                const revenueText = formatCurrency(revenueLost);
+
+                revenueLostEl.textContent = revenueText;
+                revenueSubtextEl.textContent = `You’re leaving ${revenueText}/month on the table.`;
+                revenueCTA.textContent = `Reclaim My ${revenueText} Next Month`;
+            }
+
+            if (dealValueInput && closeRateInput) {
+                updateCalculator();
+                dealValueInput.addEventListener('input', updateCalculator);
+                closeRateInput.addEventListener('input', updateCalculator);
             }
         });
     </script>
