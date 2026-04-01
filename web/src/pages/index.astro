@@ -1,0 +1,79 @@
+---
+import Layout from '../components/Layout.astro';
+import { getHomePage, getGlobal } from '../lib/strapi.ts';
+
+const [homePage, global] = await Promise.all([getHomePage(), getGlobal()]);
+
+const hero = homePage?.attributes?.hero ?? {};
+const caseStudies: any[] = homePage?.attributes?.caseStudies ?? [];
+const faq: any[] = homePage?.attributes?.faq ?? [];
+const nav: any[] = global?.attributes?.nav ?? [];
+---
+<Layout
+  title={global?.attributes?.siteName ?? 'FlowCraft Pro'}
+  description={hero.subHeadline}
+  nav={nav.map((n: any) => ({ label: n.label, href: n.href }))}
+>
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-brand-dark">
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-5xl md:text-7xl font-display font-bold text-white leading-tight">
+        {hero.headline ?? 'Grow Your Agency With AI'}
+      </h1>
+      {hero.subHeadline && (
+        <p class="mt-6 text-xl text-brand-gray max-w-2xl mx-auto">{hero.subHeadline}</p>
+      )}
+      {hero.ctaLabel && hero.ctaUrl && (
+        <a
+          href={hero.ctaUrl}
+          class="mt-10 inline-block bg-brand-lime text-black font-bold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"
+        >
+          {hero.ctaLabel}
+        </a>
+      )}
+    </div>
+  </section>
+
+  <!-- Case Studies -->
+  {caseStudies.length > 0 && (
+    <section class="py-20 bg-gray-900 border-t border-b border-gray-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-display font-bold text-white text-center mb-12">Case Studies</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {caseStudies.map((cs: any) => (
+            <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              {cs.industry && (
+                <span class="text-brand-lime font-bold text-xs uppercase tracking-wide">{cs.industry}</span>
+              )}
+              <h3 class="mt-2 text-xl font-bold text-white">{cs.title}</h3>
+              {cs.description && <p class="mt-2 text-brand-gray text-sm">{cs.description}</p>}
+              {cs.result && (
+                <p class="mt-4 text-brand-lime font-semibold text-sm">{cs.result}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- FAQ -->
+  {faq.length > 0 && (
+    <section id="faq" class="py-20 bg-gray-900 border-t border-gray-800">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-display font-bold text-white text-center mb-12">FAQ</h2>
+        <div class="space-y-0">
+          {faq.map((item: any) => (
+            <details class="border-b border-gray-800 group">
+              <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
+                {item.question}
+                <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
+              </summary>
+              <div class="pb-6 pr-8 text-brand-gray" set:html={item.answer} />
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>
