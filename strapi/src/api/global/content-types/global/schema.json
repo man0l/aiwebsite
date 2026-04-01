@@ -1,0 +1,28 @@
+{
+  "kind": "singleType",
+  "collectionName": "global",
+  "info": {
+    "singularName": "global",
+    "pluralName": "globals",
+    "displayName": "Global"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "required": true
+    },
+    "nav": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.nav-item"
+    },
+    "socialLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.social-link"
+    }
+  }
+}
