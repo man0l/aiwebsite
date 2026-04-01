@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_sections_calculators",
+  "info": { "displayName": "Calculator" },
+  "options": {},
+  "attributes": {
+    "eyebrow": { "type": "string" },
+    "heading": { "type": "string", "required": true },
+    "subheading": { "type": "text" },
+    "defaultDealValue": { "type": "integer" },
+    "defaultCloseRate": { "type": "integer" },
+    "ctaUrl": { "type": "string" },
+    "guaranteeText": { "type": "string" }
+  }
+}

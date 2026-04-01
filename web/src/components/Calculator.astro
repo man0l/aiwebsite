@@ -1,0 +1,116 @@
+---
+interface Props {
+  calc: any;
+}
+const { calc } = Astro.props;
+
+const defaultDealValue = calc?.defaultDealValue ?? 5000;
+const defaultCloseRate = calc?.defaultCloseRate ?? 20;
+---
+
+<section id="calculator" class="py-20 bg-brand-dark border-t border-gray-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Eyebrow -->
+    {calc?.eyebrow && (
+      <p class="text-center text-brand-lime font-bold text-sm uppercase tracking-wide mb-4">
+        {calc.eyebrow}
+      </p>
+    )}
+    <!-- Heading -->
+    {calc?.heading && (
+      <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
+        {calc.heading}
+      </h2>
+    )}
+    <!-- Subheading -->
+    {calc?.subheading && (
+      <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
+        {calc.subheading}
+      </p>
+    )}
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Left card: inputs -->
+      <div class="bg-gray-900 rounded-2xl p-8 border border-gray-800">
+        <div class="space-y-8">
+          <!-- Deal Value -->
+          <div>
+            <div class="flex justify-between mb-3">
+              <label for="dealValue" class="text-white font-semibold">Average Deal Value</label>
+              <span id="dealValueLabel" class="text-brand-lime font-bold">$5,000</span>
+            </div>
+            <input
+              type="range"
+              id="dealValue"
+              min="500"
+              max="50000"
+              step="500"
+              value={defaultDealValue}
+              class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-brand-lime"
+            />
+            <div class="flex justify-between text-xs text-brand-gray mt-1">
+              <span>$500</span>
+              <span>$50,000</span>
+            </div>
+          </div>
+
+          <!-- Close Rate -->
+          <div>
+            <div class="flex justify-between mb-3">
+              <label for="closeRate" class="text-white font-semibold">Current Close Rate</label>
+              <span id="closeRateLabel" class="text-brand-lime font-bold">20%</span>
+            </div>
+            <input
+              type="range"
+              id="closeRate"
+              min="1"
+              max="50"
+              step="1"
+              value={defaultCloseRate}
+              class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-brand-lime"
+            />
+            <div class="flex justify-between text-xs text-brand-gray mt-1">
+              <span>1%</span>
+              <span>50%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right card: result -->
+      <div class="bg-gray-900 rounded-2xl p-8 border border-gray-800 flex flex-col justify-between">
+        <div>
+          <p class="text-brand-gray text-sm font-semibold uppercase tracking-wide mb-3">Revenue Lost (per month)</p>
+          <p id="revenueLost" class="text-5xl md:text-6xl font-display font-bold text-red-400">$0</p>
+          <p id="revenueSubtext" class="mt-4 text-brand-gray text-sm"></p>
+        </div>
+        <a
+          id="revenueCTA"
+          href={calc?.ctaUrl ?? '#'}
+          class="mt-8 block text-center bg-brand-lime text-black font-bold px-6 py-4 rounded-full hover:opacity-90 transition-opacity"
+        >
+          Reclaim My $0 Next Month
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  const MISSED = 20;
+  function fmt(n) { return '$' + n.toLocaleString('en-US'); }
+  function update() {
+    const dv = +document.getElementById('dealValue').value;
+    const cr = +document.getElementById('closeRate').value;
+    const lost = Math.round(MISSED * dv * (cr / 100));
+    document.getElementById('dealValueLabel').textContent = fmt(dv);
+    document.getElementById('closeRateLabel').textContent = cr + '%';
+    document.getElementById('revenueLost').textContent = fmt(lost);
+    document.getElementById('revenueSubtext').textContent = 'You\'re leaving ' + fmt(lost) + '/month on the table.';
+    const cta = document.getElementById('revenueCTA');
+    cta.textContent = 'Reclaim My ' + fmt(lost) + ' Next Month';
+  }
+  document.getElementById('dealValue').addEventListener('input', update);
+  document.getElementById('closeRate').addEventListener('input', update);
+  update();
+</script>

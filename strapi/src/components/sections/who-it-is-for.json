@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_sections_who_it_is_fors",
+  "info": { "displayName": "Who It Is For" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "string", "required": true },
+    "subheading": { "type": "text" },
+    "cards": { "type": "component", "repeatable": true, "component": "sections.info-card" }
+  }
+}

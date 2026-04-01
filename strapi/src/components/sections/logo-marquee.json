@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_sections_logo_marquees",
+  "info": { "displayName": "Logo Marquee" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "string" },
+    "logos": { "type": "component", "repeatable": true, "component": "sections.logo-item" }
+  }
+}

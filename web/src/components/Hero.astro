@@ -1,0 +1,140 @@
+---
+interface Props {
+  hero: any;
+}
+const { hero } = Astro.props;
+
+const complianceBadges: any[] = hero?.complianceBadges ?? [];
+const howItWorksSteps: any[] = hero?.howItWorksSteps ?? [];
+const pipelineBars: any[] = hero?.pipelineBars ?? [];
+
+const STRAPI_URL = import.meta.env.STRAPI_URL || 'http://localhost:1337';
+function imgUrl(path?: string) {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  return `${STRAPI_URL}${path}`;
+}
+
+const bgImage = imgUrl(hero?.bgImage?.url ?? hero?.bgImage);
+const founderAvatar = imgUrl(hero?.founderAvatarUrl?.url ?? hero?.founderAvatarUrl);
+---
+
+<section
+  class="relative min-h-screen flex items-center justify-center bg-brand-dark"
+  style={bgImage ? `background-image: url('${bgImage}'); background-size: cover; background-position: center;` : ''}
+>
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-brand-dark/90"></div>
+
+  <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-24 md:py-32">
+    <!-- Headline -->
+    <h1 class="text-5xl md:text-7xl font-display font-bold text-white leading-tight">
+      {hero?.headline ?? 'Grow Your Agency With AI'}
+    </h1>
+
+    <!-- Sub-headline -->
+    {hero?.subHeadline && (
+      <p class="mt-6 text-lg md:text-xl text-brand-gray max-w-3xl mx-auto">
+        {hero.subHeadline}
+      </p>
+    )}
+
+    <!-- CTA Button -->
+    {hero?.ctaLabel && hero?.ctaUrl && (
+      <div class="mt-10">
+        <a
+          href={hero.ctaUrl}
+          class="inline-block bg-brand-lime text-black font-bold px-8 py-4 rounded-full glow-button hover:opacity-90 transition-opacity"
+        >
+          {hero.ctaLabel}
+        </a>
+      </div>
+    )}
+
+    <!-- Guarantee subtext -->
+    <p class="mt-4 text-sm text-brand-gray">
+      Pay only after the first 5 meetings are booked. GDPR &amp; HIPAA compliant.
+    </p>
+
+    <!-- Compliance badges -->
+    {complianceBadges.length > 0 && (
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        {complianceBadges.map((b: any) => (
+          <span class="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded-full px-4 py-1.5 text-sm text-brand-light">
+            <span class="w-2 h-2 rounded-full bg-brand-lime inline-block flex-shrink-0"></span>
+            {b.label}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <!-- Founder block -->
+    {(founderAvatar || hero?.founderName) && (
+      <div class="mt-12 flex flex-col items-center gap-4">
+        {founderAvatar && (
+          <img
+            src={founderAvatar}
+            alt={hero?.founderName ?? 'Founder'}
+            class="w-16 h-16 rounded-full object-cover border-2 border-brand-lime"
+          />
+        )}
+        {hero?.founderCredential && (
+          <p class="text-brand-lime font-bold text-sm uppercase tracking-wide">{hero.founderCredential}</p>
+        )}
+        {hero?.founderQuote && (
+          <p class="italic text-brand-gray max-w-xl text-base">"{hero.founderQuote}"</p>
+        )}
+        {hero?.founderName && (
+          <p class="text-white font-semibold">{hero.founderName}</p>
+        )}
+      </div>
+    )}
+
+    <!-- How It Works box -->
+    {(hero?.howItWorksTitle || howItWorksSteps.length > 0) && (
+      <div class="mt-14 bg-gray-900 border border-gray-700 rounded-2xl p-8 text-left max-w-2xl mx-auto">
+        {hero?.howItWorksTitle && (
+          <h3 class="text-xl font-display font-bold text-white mb-6">{hero.howItWorksTitle}</h3>
+        )}
+        {howItWorksSteps.length > 0 && (
+          <ol class="space-y-4">
+            {howItWorksSteps.map((step: any, i: number) => (
+              <li class="flex gap-4 items-start">
+                <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-lime text-black text-sm font-bold flex items-center justify-center">
+                  {i + 1}
+                </span>
+                <span class="text-brand-light">{step.text ?? step}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+    )}
+
+    <!-- Pipeline visualization -->
+    {pipelineBars.length > 0 && (
+      <div class="mt-10 max-w-2xl mx-auto space-y-4">
+        {pipelineBars.map((bar: any) => (
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-brand-light">{bar.label}</span>
+              <span class="text-brand-lime font-bold">{bar.value ?? bar.percent}%</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2.5">
+              <div
+                class="bg-brand-lime h-2.5 rounded-full"
+                style={`width: ${bar.value ?? bar.percent ?? 0}%`}
+              ></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .glow-button {
+    box-shadow: 0 0 15px rgba(190,242,100,0.4), 0 0 5px rgba(190,242,100,0.6);
+  }
+</style>

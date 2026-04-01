@@ -1,0 +1,236 @@
+---
+import Layout from '../components/Layout.astro';
+
+const STRAPI_URL = import.meta.env.STRAPI_URL ?? 'http://localhost:1337';
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+
+// Fallback data mirrored from reddit.html
+const fallback = {
+  title: 'The Cold Email Resurrection - Case Study for Agencies | FlowCraft Pro',
+  hero: {
+    headline: 'The Cold Email Resurrection',
+    subHeadline: 'How to Bypass Spam Filters and Spark Real Conversations at Scale',
+    ctaLabel: 'Read The Complete Guide →',
+    ctaUrl: 'https://distinct-wave-2c5.notion.site/The-Cold-Email-Resurrection-How-to-Bypass-Spam-Filters-and-Spark-Real-Conversations-at-Scale-2c41d5e95bf5808784bcdf6cd67ea26f',
+  },
+  stats: [
+    { value: '3%+', label: 'Reply Rate' },
+    { value: '300+', label: 'Leads Per Campaign' },
+    { value: '20+', label: 'Qualified Meetings/Month' },
+  ],
+  phases: [
+    {
+      title: 'Phase 1',
+      heading: 'The "Unspammable" Infrastructure',
+      body: 'The Google-to-Google trust hack that ensures your emails land in the Primary Inbox, not spam.',
+    },
+    {
+      title: 'Phase 2',
+      heading: 'High-Octane Fuel',
+      body: 'Sourcing & verification strategies to ensure clean, targeted lead data that converts.',
+    },
+    {
+      title: 'Phase 3',
+      heading: 'The "Hyper-Human" AI Protocol',
+      body: 'Custom AI agents that research prospects and write personalized emails that look hand-written—at scale.',
+    },
+    {
+      title: 'Phase 4',
+      heading: 'The "Reply-First" Copywriting Blueprint',
+      body: 'The 4-part email structure that earns replies, not just opens. Stop selling, start starting conversations.',
+    },
+  ],
+  proofPoints: [
+    {
+      heading: 'Consistent 3%+ Reply Rates',
+      body1: 'Running on lists as small as 300 people, this methodology generates consistent reply rates that outperform industry standards by 3-5x.',
+      body2: 'The system works even when targeting agencies—the most "over-spammed" audience in B2B.',
+    },
+    {
+      heading: 'Performance-Based Offers',
+      body1: 'The guide includes the exact "risk reversal" offer structure: "You only pay for the meetings that actually show up."',
+      body2: 'This removes friction and makes it easy for prospects to say yes—even when they\'re skeptical of cold outreach.',
+    },
+  ],
+  ctaSection: {
+    heading: 'Ready to Transform Your Cold Email?',
+    subheading: 'Get instant access to the complete case study—including the exact infrastructure setup, AI protocols, and copywriting templates that are generating real results right now.',
+    ctaLabel: 'Read The Complete Guide →',
+    ctaUrl: 'https://distinct-wave-2c5.notion.site/The-Cold-Email-Resurrection-How-to-Bypass-Spam-Filters-and-Spark-Real-Conversations-at-Scale-2c41d5e95bf5808784bcdf6cd67ea26f',
+    guaranteeText: 'Free • No sign-up required • Full case study with screenshots',
+  },
+};
+
+let pageData = fallback;
+let usedStrapi = false;
+
+try {
+  const res = await fetch(
+    `${STRAPI_URL}/api/landing-pages?filters[slug][$eq]=cold-email-case-study&populate=*`,
+    {
+      headers: {
+        Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  if (res.ok) {
+    const json = await res.json();
+    const item = json?.data?.[0]?.attributes ?? json?.data?.[0];
+    if (item) {
+      // Map Strapi fields onto pageData shape
+      pageData = {
+        title: item.title ?? fallback.title,
+        hero: item.hero ?? fallback.hero,
+        stats: item.stats ?? fallback.stats,
+        // Strapi phases are stored differently — keep fallback display structure
+        phases: fallback.phases,
+        proofPoints: fallback.proofPoints,
+        ctaSection: item.ctaSection ?? fallback.ctaSection,
+      };
+      usedStrapi = true;
+    }
+  }
+} catch (e) {
+  // Strapi unavailable — use fallback
+}
+
+const { hero, stats, phases, proofPoints, ctaSection } = pageData;
+const pageTitle = typeof pageData.title === 'string' ? pageData.title : fallback.title;
+---
+
+<Layout
+  title="The Cold Email Resurrection - Case Study for Agencies | FlowCraft Pro"
+  description="A proven cold email system generating 3%+ reply rates. See the exact infrastructure, AI protocols, and copywriting templates."
+>
+  <style>
+    .glow-button {
+      box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
+      transition: all 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 30px rgba(190, 242, 100, 0.7), 0 0 15px rgba(190, 242, 100, 0.9);
+      transform: translateY(-2px);
+    }
+    .stat-card {
+      background: linear-gradient(135deg, rgba(190, 242, 100, 0.1) 0%, rgba(190, 242, 100, 0.05) 100%);
+      border: 1px solid rgba(190, 242, 100, 0.2);
+    }
+  </style>
+
+  <!-- Hero Section -->
+  <section class="relative py-20 md:py-32 min-h-screen flex items-center">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-gray-900 to-brand-dark"></div>
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="text-center mb-12">
+        <span class="inline-block px-4 py-2 bg-brand-lime/20 text-brand-lime text-sm font-semibold rounded-full border border-brand-lime/30 mb-6">
+          AGENCY CASE STUDY
+        </span>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight mb-6">
+          {hero.headline}
+        </h1>
+        <p class="text-xl md:text-2xl text-brand-gray max-w-3xl mx-auto mb-4">
+          {hero.subHeadline}
+        </p>
+        <p class="text-lg text-brand-gray/80 max-w-2xl mx-auto">
+          A proven system generating <span class="text-brand-lime font-bold">3%+ reply rates</span> from cold traffic—even for agencies drowning in spam.
+        </p>
+      </div>
+
+      <!-- Key Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+        {stats.map((stat: { value: string; label: string }) => (
+          <div class="stat-card p-6 rounded-2xl text-center">
+            <div class="text-4xl md:text-5xl font-bold text-brand-lime mb-2">{stat.value}</div>
+            <div class="text-brand-gray text-sm">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Main CTA -->
+      <div class="text-center">
+        <a
+          href={hero.ctaUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button"
+        >
+          {hero.ctaLabel}
+        </a>
+        <p class="mt-4 text-sm text-brand-gray">
+          Free case study • No email required • Instant access
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You'll Learn -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">What You'll Learn</h2>
+        <p class="text-lg text-brand-gray">The complete blueprint for cold email that actually works</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {phases.map((phase: { title: string; heading: string; body: string }) => (
+          <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
+            <div class="text-brand-lime text-2xl font-bold mb-3">{phase.title}</div>
+            <h3 class="text-xl font-bold text-white mb-2">{phase.heading}</h3>
+            <p class="text-brand-gray">{phase.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof Section -->
+  <section class="py-20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Real Results from Real Campaigns</h2>
+        <p class="text-lg text-brand-gray">This isn't theory—it's what's working right now</p>
+      </div>
+
+      <div class="space-y-6">
+        {proofPoints.map((point: { heading: string; body1: string; body2: string }) => (
+          <div class="bg-gray-900 p-8 md:p-10 rounded-2xl border border-gray-800">
+            <div class="flex items-start space-x-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-full bg-brand-lime flex items-center justify-center text-black font-bold text-xl">
+                  ✓
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white mb-3">{point.heading}</h3>
+                <p class="text-brand-gray mb-4">{point.body1}</p>
+                <p class="text-brand-gray">{point.body2}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        {ctaSection.heading}
+      </h2>
+      <p class="text-lg text-brand-gray mb-8 max-w-2xl mx-auto">
+        {ctaSection.subheading}
+      </p>
+      <a
+        href={ctaSection.ctaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button mb-6"
+      >
+        {ctaSection.ctaLabel}
+      </a>
+      <p class="text-sm text-brand-gray">{ctaSection.guaranteeText}</p>
+    </div>
+  </section>
+</Layout>

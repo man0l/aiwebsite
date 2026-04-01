@@ -1,0 +1,42 @@
+---
+interface Props {
+  cta: any;
+}
+const { cta } = Astro.props;
+---
+
+<section class="py-20 bg-gray-950 border-t border-gray-800">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-gray-900 rounded-2xl p-10 md:p-16 text-center border border-gray-800">
+      {cta?.heading && (
+        <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-6">
+          {cta.heading}
+        </h2>
+      )}
+      {cta?.subheading && (
+        <p class="text-lg text-brand-gray max-w-2xl mx-auto mb-10">
+          {cta.subheading}
+        </p>
+      )}
+      {cta?.ctaLabel && cta?.ctaUrl && (
+        <a
+          href={cta.ctaUrl}
+          class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full glow-button hover:opacity-90 transition-opacity text-lg"
+        >
+          {cta.ctaLabel}
+        </a>
+      )}
+      {cta?.guaranteeText && (
+        <p class="mt-6 text-brand-gray text-sm">
+          🛡️ {cta.guaranteeText}
+        </p>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .glow-button {
+    box-shadow: 0 0 15px rgba(190,242,100,0.4), 0 0 5px rgba(190,242,100,0.6);
+  }
+</style>

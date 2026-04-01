@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_sections_system_bullets",
+  "info": { "displayName": "System Bullet" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "text": { "type": "text", "required": true }
+  }
+}

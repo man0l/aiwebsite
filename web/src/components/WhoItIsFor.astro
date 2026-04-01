@@ -1,0 +1,39 @@
+---
+interface Props {
+  who: any;
+}
+const { who } = Astro.props;
+
+const cards: any[] = who?.cards ?? [];
+---
+
+<section class="py-20 bg-gray-950 border-t border-gray-800">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    {who?.heading && (
+      <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
+        {who.heading}
+      </h2>
+    )}
+    {who?.subheading && (
+      <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
+        {who.subheading}
+      </p>
+    )}
+
+    {cards.length > 0 && (
+      <div class="grid md:grid-cols-3 gap-6">
+        {cards.map((c: any) => (
+          <div class="bg-gray-900 rounded-2xl p-6 border border-gray-800">
+            {c.icon && (
+              <p class="text-3xl mb-4">{c.icon}</p>
+            )}
+            <h3 class="text-xl font-bold text-white">{c.title ?? c.heading}</h3>
+            {(c.body ?? c.text) && (
+              <p class="text-brand-gray mt-3">{c.body ?? c.text}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>

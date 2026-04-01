@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_sections_pipeline_bars",
+  "info": { "displayName": "Pipeline Bar" },
+  "options": {},
+  "attributes": {
+    "leftLabel": { "type": "string", "required": true },
+    "rightLabel": { "type": "string", "required": true },
+    "widthPct": { "type": "integer", "required": true },
+    "color": { "type": "string", "required": true }
+  }
+}

@@ -55,7 +55,28 @@ export async function getGlobal() {
 }
 
 export async function getHomePage() {
-  return fetchApi<any>({ endpoint: '/home-page', params: { populate: '*' } });
+  // Build query string manually to avoid URLSearchParams double-encoding brackets
+  const qs = [
+    'populate[hero][populate]=*',
+    'populate[calculator]=*',
+    'populate[logoMarquee][populate][logos]=*',
+    'populate[caseStudies]=*',
+    'populate[systemsTabs][populate][tabs][populate]=*',
+    'populate[processTimeline][populate][steps][populate]=*',
+    'populate[whoItIsFor][populate][cards]=*',
+    'populate[resultsChart][populate][dataPoints]=*',
+    'populate[faq]=*',
+    'populate[ctaSection]=*',
+  ].join('&');
+  const res = await fetch(`${STRAPI_URL}/api/home-page?${qs}`, {
+    headers: {
+      Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!res.ok) throw new Error(`Strapi API error: ${res.status} ${res.statusText} for /home-page`);
+  const json = await res.json();
+  return json.data as any;
 }
 
 export { STRAPI_URL };

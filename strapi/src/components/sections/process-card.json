@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_sections_process_cards",
+  "info": { "displayName": "Process Card" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "text": { "type": "text", "required": true }
+  }
+}

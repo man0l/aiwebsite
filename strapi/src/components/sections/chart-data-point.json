@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_sections_chart_data_points",
+  "info": { "displayName": "Chart Data Point" },
+  "options": {},
+  "attributes": {
+    "label": { "type": "string", "required": true },
+    "value": { "type": "integer", "required": true }
+  }
+}

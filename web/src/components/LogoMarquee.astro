@@ -1,0 +1,76 @@
+---
+interface Props {
+  marquee: any;
+}
+const { marquee } = Astro.props;
+
+const logos: any[] = marquee?.logos ?? [];
+
+const STRAPI_URL = import.meta.env.STRAPI_URL || 'http://localhost:1337';
+function imgUrl(path?: string) {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  return `${STRAPI_URL}${path}`;
+}
+---
+
+<section class="py-14 bg-brand-dark border-t border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {marquee?.heading && (
+      <p class="text-center text-sm font-semibold text-brand-gray uppercase tracking-wider mb-10">
+        {marquee.heading}
+      </p>
+    )}
+
+    {logos.length > 0 && (
+      <div class="logo-marquee">
+        <div class="logo-marquee-content">
+          {logos.map((logo: any) => (
+            <img
+              src={imgUrl(logo.url?.url ?? logo.url ?? logo.src)}
+              alt={logo.alt ?? logo.name ?? ''}
+              onerror="this.style.display='none'"
+            />
+          ))}
+          {/* Duplicate for seamless loop */}
+          {logos.map((logo: any) => (
+            <img
+              src={imgUrl(logo.url?.url ?? logo.url ?? logo.src)}
+              alt={logo.alt ?? logo.name ?? ''}
+              aria-hidden="true"
+              onerror="this.style.display='none'"
+            />
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .logo-marquee {
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
+  }
+  .logo-marquee-content {
+    display: flex;
+    align-items: center;
+    animation: marquee 40s linear infinite;
+  }
+  .logo-marquee-content img {
+    height: 40px;
+    margin: 0 40px;
+    filter: grayscale(100%);
+    opacity: 0.6;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+  }
+  .logo-marquee-content img:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+</style>

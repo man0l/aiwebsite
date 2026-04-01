@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_sections_process_steps",
+  "info": { "displayName": "Process Step" },
+  "options": {},
+  "attributes": {
+    "number": { "type": "string", "required": true },
+    "title": { "type": "string", "required": true },
+    "dateRange": { "type": "string" },
+    "description": { "type": "text", "required": true },
+    "cards": { "type": "component", "repeatable": true, "component": "sections.process-card" }
+  }
+}

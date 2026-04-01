@@ -1,13 +1,33 @@
 ---
 import Layout from '../components/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Calculator from '../components/Calculator.astro';
+import LogoMarquee from '../components/LogoMarquee.astro';
+import SystemsTabs from '../components/SystemsTabs.astro';
+import ProcessTimeline from '../components/ProcessTimeline.astro';
+import WhoItIsFor from '../components/WhoItIsFor.astro';
+import ResultsChart from '../components/ResultsChart.astro';
+import CTASection from '../components/CTASection.astro';
 import { getHomePage, getGlobal } from '../lib/strapi.ts';
 
-let homePage: any = null, global: any = null;
-try { [homePage, global] = await Promise.all([getHomePage(), getGlobal()]); } catch {}
+let homePage: any = null;
+let global: any = null;
+try {
+  [homePage, global] = await Promise.all([getHomePage(), getGlobal()]);
+} catch (e) {
+  console.warn('Strapi fetch failed:', e);
+}
 
 const hero = homePage?.hero ?? {};
+const calc = homePage?.calculator ?? {};
+const logoMarquee = homePage?.logoMarquee ?? {};
 const caseStudies: any[] = homePage?.caseStudies ?? [];
+const systemsTabs = homePage?.systemsTabs ?? {};
+const processTimeline = homePage?.processTimeline ?? {};
+const whoItIsFor = homePage?.whoItIsFor ?? {};
+const resultsChart = homePage?.resultsChart ?? {};
 const faq: any[] = homePage?.faq ?? [];
+const ctaSection = homePage?.ctaSection ?? {};
 const nav: any[] = global?.nav ?? [];
 ---
 <Layout
@@ -17,24 +37,13 @@ const nav: any[] = global?.nav ?? [];
   siteName={global?.siteName}
 >
   <!-- Hero -->
-  <section class="relative py-24 md:py-32 bg-brand-dark">
-    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="text-5xl md:text-7xl font-display font-bold text-white leading-tight">
-        {hero.headline ?? 'Grow Your Agency With AI'}
-      </h1>
-      {hero.subHeadline && (
-        <p class="mt-6 text-xl text-brand-gray max-w-2xl mx-auto">{hero.subHeadline}</p>
-      )}
-      {hero.ctaLabel && hero.ctaUrl && (
-        <a
-          href={hero.ctaUrl}
-          class="mt-10 inline-block bg-brand-lime text-black font-bold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"
-        >
-          {hero.ctaLabel}
-        </a>
-      )}
-    </div>
-  </section>
+  <Hero hero={hero} />
+
+  <!-- Calculator -->
+  <Calculator calc={calc} />
+
+  <!-- Logo Marquee -->
+  <LogoMarquee marquee={logoMarquee} />
 
   <!-- Case Studies -->
   {caseStudies.length > 0 && (
@@ -59,6 +68,18 @@ const nav: any[] = global?.nav ?? [];
     </section>
   )}
 
+  <!-- Systems Tabs -->
+  <SystemsTabs systems={systemsTabs} />
+
+  <!-- Process Timeline -->
+  <ProcessTimeline process={processTimeline} />
+
+  <!-- Who It Is For -->
+  <WhoItIsFor who={whoItIsFor} />
+
+  <!-- Results Chart -->
+  <ResultsChart results={resultsChart} />
+
   <!-- FAQ -->
   {faq.length > 0 && (
     <section id="faq" class="py-20 bg-gray-900 border-t border-gray-800">
@@ -78,4 +99,7 @@ const nav: any[] = global?.nav ?? [];
       </div>
     </section>
   )}
+
+  <!-- CTA Section -->
+  <CTASection cta={ctaSection} />
 </Layout>

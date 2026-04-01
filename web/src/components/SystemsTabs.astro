@@ -1,0 +1,103 @@
+---
+interface Props {
+  systems: any;
+}
+const { systems } = Astro.props;
+
+const tabs: any[] = systems?.tabs ?? [];
+---
+
+<section id="systems" class="py-20 bg-gray-950 border-t border-gray-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    {systems?.heading && (
+      <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
+        {systems.heading}
+      </h2>
+    )}
+    {systems?.subheading && (
+      <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
+        {systems.subheading}
+      </p>
+    )}
+
+    {tabs.length > 0 && (
+      <>
+        <!-- Tab buttons -->
+        <div class="flex flex-wrap gap-3 justify-center mb-10">
+          {tabs.map((t: any, i: number) => (
+            <button
+              class={`system-tab px-5 py-2.5 rounded-full border font-semibold text-sm transition-colors ${i === 0 ? 'active-tab' : 'border-gray-700 text-brand-gray hover:text-white hover:border-gray-500'}`}
+              data-tab={t.tabId}
+            >
+              {t.emoji && <span class="mr-2">{t.emoji}</span>}
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <!-- Tab panels -->
+        <div>
+          {tabs.map((t: any, i: number) => {
+            const bullets: any[] = t.bullets ?? [];
+            const miniCase = t.miniCaseStudy;
+            return (
+              <div id={t.tabId} class={`system-content ${i !== 0 ? 'hidden' : ''}`}>
+                <div class="bg-gray-900 rounded-2xl p-8 border border-gray-800">
+                  {t.title && (
+                    <h3 class="text-2xl font-display font-bold text-white mb-4">{t.title}</h3>
+                  )}
+                  {t.body && (
+                    <p class="text-brand-gray mb-6">{t.body}</p>
+                  )}
+                  {bullets.length > 0 && (
+                    <ul class="space-y-3 mb-6">
+                      {bullets.map((b: any) => (
+                        <li class="flex items-start gap-3 text-brand-light">
+                          <span class="flex-shrink-0 w-5 h-5 rounded-full bg-brand-lime text-black text-xs font-bold flex items-center justify-center mt-0.5">✓</span>
+                          {b.text ?? b}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {miniCase && (
+                    <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
+                      <p class="text-brand-lime font-bold text-xs uppercase tracking-wide mb-2">
+                        {miniCase.label ?? 'Case Study'}
+                      </p>
+                      <p class="text-white font-semibold">{miniCase.title}</p>
+                      {miniCase.body && (
+                        <p class="text-brand-gray text-sm mt-2">{miniCase.body}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </>
+    )}
+  </div>
+</section>
+
+<style>
+  .active-tab {
+    color: #BEF264 !important;
+    border-color: #BEF264 !important;
+  }
+</style>
+
+<script type="module">
+  document.querySelectorAll('.system-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.system-content').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.system-tab').forEach(b => {
+        b.classList.remove('active-tab');
+        b.style.color = '';
+        b.style.borderColor = '';
+      });
+      document.getElementById(btn.dataset.tab).classList.remove('hidden');
+      btn.classList.add('active-tab');
+    });
+  });
+</script>

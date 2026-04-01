@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_sections_info_cards",
+  "info": { "displayName": "Info Card" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "text": { "type": "text", "required": true }
+  }
+}

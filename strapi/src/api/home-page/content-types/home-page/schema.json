@@ -24,6 +24,41 @@
       "type": "component",
       "repeatable": true,
       "component": "shared.faq-item"
+    },
+    "calculator": {
+      "type": "component",
+      "repeatable": false,
+      "component": "sections.calculator"
+    },
+    "logoMarquee": {
+      "type": "component",
+      "repeatable": false,
+      "component": "sections.logo-marquee"
+    },
+    "systemsTabs": {
+      "type": "component",
+      "repeatable": false,
+      "component": "sections.systems-tabs"
+    },
+    "processTimeline": {
+      "type": "component",
+      "repeatable": false,
+      "component": "sections.process-timeline"
+    },
+    "whoItIsFor": {
+      "type": "component",
+      "repeatable": false,
+      "component": "sections.who-it-is-for"
+    },
+    "resultsChart": {
+      "type": "component",
+      "repeatable": false,
+      "component": "sections.results-chart"
+    },
+    "ctaSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "sections.cta-section"
     }
   }
 }

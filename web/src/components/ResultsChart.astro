@@ -1,0 +1,73 @@
+---
+interface Props {
+  results: any;
+}
+const { results } = Astro.props;
+
+const dataPoints: any[] = results?.dataPoints ?? [];
+const labels = JSON.stringify(dataPoints.map((d: any) => d.label ?? d.month ?? ''));
+const values = JSON.stringify(dataPoints.map((d: any) => d.value ?? d.meetings ?? 0));
+---
+
+<section id="results" class="py-20 bg-brand-dark border-t border-gray-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    {results?.heading && (
+      <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
+        {results.heading}
+      </h2>
+    )}
+    {results?.subheading && (
+      <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
+        {results.subheading}
+      </p>
+    )}
+
+    <div class="chart-container">
+      <canvas id="resultsChart"></canvas>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="module" define:vars={{ labels, values }}>
+  const LABELS = JSON.parse(labels);
+  const VALUES = JSON.parse(values);
+  const ctx = document.getElementById('resultsChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: LABELS,
+      datasets: [{
+        label: 'Qualified Meetings',
+        data: VALUES,
+        backgroundColor: '#BEF264',
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#AAAAAA' } }
+      },
+      scales: {
+        x: { ticks: { color: '#AAAAAA' }, grid: { color: '#374151' } },
+        y: { ticks: { color: '#AAAAAA' }, grid: { color: '#374151' }, beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+<style>
+  .chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    height: 350px;
+  }
+  @media (min-width: 768px) {
+    .chart-container { height: 400px; }
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_sections_cta_sections",
+  "info": { "displayName": "CTA Section" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "string", "required": true },
+    "subheading": { "type": "text" },
+    "ctaLabel": { "type": "string", "required": true },
+    "ctaUrl": { "type": "string", "required": true },
+    "guaranteeText": { "type": "string" }
+  }
+}

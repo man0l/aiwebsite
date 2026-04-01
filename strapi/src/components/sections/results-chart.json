@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_sections_results_charts",
+  "info": { "displayName": "Results Chart" },
+  "options": {},
+  "attributes": {
+    "heading": { "type": "string", "required": true },
+    "subheading": { "type": "text" },
+    "dataPoints": { "type": "component", "repeatable": true, "component": "sections.chart-data-point" }
+  }
+}

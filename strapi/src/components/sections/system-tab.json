@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_sections_system_tabs",
+  "info": { "displayName": "System Tab" },
+  "options": {},
+  "attributes": {
+    "tabId": { "type": "string", "required": true },
+    "emoji": { "type": "string" },
+    "label": { "type": "string", "required": true },
+    "title": { "type": "string", "required": true },
+    "body": { "type": "text", "required": true },
+    "bullets": { "type": "component", "repeatable": true, "component": "sections.system-bullet" },
+    "miniCaseStudyLabel": { "type": "string" },
+    "miniCaseStudyText": { "type": "text" }
+  }
+}

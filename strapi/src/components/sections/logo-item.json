@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_sections_logo_items",
+  "info": { "displayName": "Logo Item" },
+  "options": {},
+  "attributes": {
+    "url": { "type": "string", "required": true },
+    "alt": { "type": "string", "required": true }
+  }
+}

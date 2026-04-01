@@ -19,6 +19,42 @@
     },
     "ctaUrl": {
       "type": "string"
+    },
+    "bgImage": {
+      "type": "string"
+    },
+    "complianceBadges": {
+      "type": "component",
+      "repeatable": true,
+      "component": "sections.hero-badge"
+    },
+    "founderQuote": {
+      "type": "string"
+    },
+    "founderName": {
+      "type": "string"
+    },
+    "founderCredential": {
+      "type": "string"
+    },
+    "founderAvatarUrl": {
+      "type": "string"
+    },
+    "howItWorksTitle": {
+      "type": "string"
+    },
+    "howItWorksSteps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "sections.how-it-works-step"
+    },
+    "pipelineTitle": {
+      "type": "string"
+    },
+    "pipelineBars": {
+      "type": "component",
+      "repeatable": true,
+      "component": "sections.pipeline-bar"
     }
   }
 }

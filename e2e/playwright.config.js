@@ -15,7 +15,7 @@ export default defineConfig({
     {
       // cms.spec.js — read-only page rendering tests, run in parallel
       name: 'cms',
-      testMatch: 'cms.spec.js',
+      testMatch: ['cms.spec.js', 'migration.spec.js'],
       use: { ...CHROME },
     },
     {
