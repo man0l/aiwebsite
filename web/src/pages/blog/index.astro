@@ -1,0 +1,58 @@
+---
+import Layout from '../../components/Layout.astro';
+import { getBlogPosts, getGlobal, STRAPI_URL } from '../../lib/strapi.ts';
+
+const [posts, global] = await Promise.all([getBlogPosts(), getGlobal()]);
+const nav: any[] = global?.attributes?.nav ?? [];
+---
+<Layout
+  title={`Blog — ${global?.attributes?.siteName ?? 'FlowCraft Pro'}`}
+  description="Insights on AI automation and agency growth"
+  nav={nav.map((n: any) => ({ label: n.label, href: n.href }))}
+>
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-white text-center mb-12">Blog</h1>
+
+      {posts.length === 0 && (
+        <p class="text-brand-gray text-center">No posts published yet.</p>
+      )}
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post: any) => {
+          const attrs = post.attributes;
+          const coverUrl = attrs.coverImage?.data?.attributes?.url
+            ? `${STRAPI_URL}${attrs.coverImage.data.attributes.url}`
+            : null;
+          const categories: string[] = attrs.categories?.data?.map((c: any) => c.attributes.name) ?? [];
+          const date = attrs.publishedAt
+            ? new Date(attrs.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            : '';
+
+          return (
+            <a href={`/blog/${attrs.slug}`} class="group block bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-brand-lime transition-colors">
+              {coverUrl && (
+                <img src={coverUrl} alt={attrs.title} class="w-full h-48 object-cover" />
+              )}
+              <div class="p-6">
+                {categories.length > 0 && (
+                  <div class="flex gap-2 mb-3">
+                    {categories.map((cat) => (
+                      <span class="text-brand-lime text-xs font-bold uppercase tracking-wide">{cat}</span>
+                    ))}
+                  </div>
+                )}
+                <h2 class="text-xl font-bold text-white group-hover:text-brand-lime transition-colors">{attrs.title}</h2>
+                {attrs.excerpt && <p class="mt-2 text-brand-gray text-sm line-clamp-3">{attrs.excerpt}</p>}
+                <div class="mt-4 flex items-center gap-3 text-xs text-brand-gray">
+                  {date && <span>{date}</span>}
+                  {attrs.readingTime && <span>· {attrs.readingTime} min read</span>}
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</Layout>
