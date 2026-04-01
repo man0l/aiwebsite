@@ -29,7 +29,7 @@ async function fetchApi<T>({ endpoint, params = {}, wrap = true }: RequestOption
 }
 
 export async function getPages(params?: Record<string, string>) {
-  return fetchApi<any[]>(({ endpoint: '/pages', params }));
+  return fetchApi<any[]>({ endpoint: '/pages', params });
 }
 
 export async function getPage(slug: string, params?: Record<string, string>) {

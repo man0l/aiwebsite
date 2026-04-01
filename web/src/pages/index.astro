@@ -14,6 +14,7 @@ const nav: any[] = global?.attributes?.nav ?? [];
   title={global?.attributes?.siteName ?? 'FlowCraft Pro'}
   description={hero.subHeadline}
   nav={nav.map((n: any) => ({ label: n.label, href: n.href }))}
+  siteName={global?.attributes?.siteName}
 >
   <!-- Hero -->
   <section class="relative py-24 md:py-32 bg-brand-dark">

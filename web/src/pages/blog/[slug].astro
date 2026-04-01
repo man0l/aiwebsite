@@ -45,6 +45,7 @@ const seo = attrs.seo ?? {};
   description={seo.metaDescription ?? attrs.excerpt}
   image={seo.metaImage?.data?.attributes?.url ? `${STRAPI_URL}${seo.metaImage.data.attributes.url}` : coverUrl ?? undefined}
   nav={nav.map((n: any) => ({ label: n.label, href: n.href }))}
+  siteName={global?.attributes?.siteName}
 >
   <article class="py-20">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
