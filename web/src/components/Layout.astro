@@ -1,0 +1,51 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  nav?: Array<{ label: string; href: string }>;
+}
+
+const { title, description, image, nav = [] } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+  {image && <meta property="og:image" content={image} />}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-brand-dark text-brand-light font-sans">
+  <header class="bg-brand-dark/80 backdrop-blur-lg sticky top-0 z-50 border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="/">
+          <span class="text-white font-display font-bold text-xl">FlowCraft Pro</span>
+        </a>
+        {nav.length > 0 && (
+          <nav class="hidden md:flex items-center gap-8">
+            {nav.map((item) => (
+              <a href={item.href} class="text-brand-gray hover:text-white font-medium transition-colors">
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <slot />
+
+  <footer class="border-t border-gray-800 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-brand-gray text-sm">
+      <p>&copy; {new Date().getFullYear()} FlowCraft Pro. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
