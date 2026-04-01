@@ -1,0 +1,87 @@
+---
+import Layout from '../../components/Layout.astro';
+import { getBlogPosts, getGlobal, STRAPI_URL } from '../../lib/strapi.ts';
+
+export async function getStaticPaths() {
+  let posts: any[] = [];
+  try {
+    posts = await getBlogPosts();
+  } catch (e) {
+    // Strapi not available at build time — return empty paths
+    console.warn('[blog/[slug]] Strapi unavailable, building with 0 post pages:', (e as Error).message);
+  }
+  return posts.map((post: any) => ({
+    params: { slug: post.attributes.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const attrs = post.attributes;
+
+let global: any = null;
+try { global = await getGlobal(); } catch {}
+const nav: any[] = global?.attributes?.nav ?? [];
+
+const coverUrl = attrs.coverImage?.data?.attributes?.url
+  ? `${STRAPI_URL}${attrs.coverImage.data.attributes.url}`
+  : null;
+
+const authorName: string = attrs.author?.data?.attributes?.name ?? '';
+const authorAvatarUrl: string | null = attrs.author?.data?.attributes?.avatar?.data?.attributes?.url
+  ? `${STRAPI_URL}${attrs.author.data.attributes.avatar.data.attributes.url}`
+  : null;
+
+const categories: string[] = attrs.categories?.data?.map((c: any) => c.attributes.name) ?? [];
+
+const date = attrs.publishedAt
+  ? new Date(attrs.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : '';
+
+const seo = attrs.seo ?? {};
+---
+<Layout
+  title={seo.metaTitle ?? attrs.title}
+  description={seo.metaDescription ?? attrs.excerpt}
+  image={seo.metaImage?.data?.attributes?.url ? `${STRAPI_URL}${seo.metaImage.data.attributes.url}` : coverUrl ?? undefined}
+  nav={nav.map((n: any) => ({ label: n.label, href: n.href }))}
+>
+  <article class="py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {categories.length > 0 && (
+        <div class="flex gap-2 mb-4">
+          {categories.map((cat) => (
+            <span class="text-brand-lime text-xs font-bold uppercase tracking-wide">{cat}</span>
+          ))}
+        </div>
+      )}
+
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-white leading-tight">{attrs.title}</h1>
+
+      <div class="mt-6 flex items-center gap-4 text-brand-gray text-sm">
+        {authorAvatarUrl && (
+          <img src={authorAvatarUrl} alt={authorName} class="w-8 h-8 rounded-full object-cover" />
+        )}
+        {authorName && <span>{authorName}</span>}
+        {date && <span>· {date}</span>}
+        {attrs.readingTime && <span>· {attrs.readingTime} min read</span>}
+      </div>
+
+      {coverUrl && (
+        <img src={coverUrl} alt={attrs.title} class="mt-8 w-full rounded-2xl object-cover max-h-96" />
+      )}
+
+      {attrs.content && (
+        <div
+          class="mt-10 prose prose-invert prose-lg max-w-none prose-headings:font-display prose-a:text-brand-lime"
+          set:html={attrs.content}
+        />
+      )}
+
+      <div class="mt-16 pt-8 border-t border-gray-800">
+        <a href="/blog" class="text-brand-lime hover:underline text-sm font-medium">← Back to Blog</a>
+      </div>
+    </div>
+  </article>
+</Layout>

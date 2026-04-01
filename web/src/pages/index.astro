@@ -2,7 +2,8 @@
 import Layout from '../components/Layout.astro';
 import { getHomePage, getGlobal } from '../lib/strapi.ts';
 
-const [homePage, global] = await Promise.all([getHomePage(), getGlobal()]);
+let homePage: any = null, global: any = null;
+try { [homePage, global] = await Promise.all([getHomePage(), getGlobal()]); } catch {}
 
 const hero = homePage?.attributes?.hero ?? {};
 const caseStudies: any[] = homePage?.attributes?.caseStudies ?? [];

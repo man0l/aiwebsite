@@ -2,7 +2,8 @@
 import Layout from '../../components/Layout.astro';
 import { getBlogPosts, getGlobal, STRAPI_URL } from '../../lib/strapi.ts';
 
-const [posts, global] = await Promise.all([getBlogPosts(), getGlobal()]);
+let posts: any[] = [], global: any = null;
+try { [posts, global] = await Promise.all([getBlogPosts(), getGlobal()]); } catch {}
 const nav: any[] = global?.attributes?.nav ?? [];
 ---
 <Layout
