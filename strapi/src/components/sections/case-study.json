@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_sections_case_studies",
+  "info": {
+    "displayName": "Case Study",
+    "icon": "briefcase",
+    "description": "Client case study card"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "result": {
+      "type": "string"
+    },
+    "industry": {
+      "type": "string"
+    }
+  }
+}
