@@ -11,41 +11,38 @@ export async function getStaticPaths() {
     console.warn('[blog/[slug]] Strapi unavailable, building with 0 post pages:', (e as Error).message);
   }
   return posts.map((post: any) => ({
-    params: { slug: post.attributes.slug },
+    params: { slug: post.slug },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const attrs = post.attributes;
 
 let global: any = null;
 try { global = await getGlobal(); } catch {}
-const nav: any[] = global?.attributes?.nav ?? [];
+const nav: any[] = global?.nav ?? [];
 
-const coverUrl = attrs.coverImage?.data?.attributes?.url
-  ? `${STRAPI_URL}${attrs.coverImage.data.attributes.url}`
+const coverUrl = post.coverImage?.url ? `${STRAPI_URL}${post.coverImage.url}` : null;
+
+const authorName: string = post.author?.name ?? '';
+const authorAvatarUrl: string | null = post.author?.avatar?.url
+  ? `${STRAPI_URL}${post.author.avatar.url}`
   : null;
 
-const authorName: string = attrs.author?.data?.attributes?.name ?? '';
-const authorAvatarUrl: string | null = attrs.author?.data?.attributes?.avatar?.data?.attributes?.url
-  ? `${STRAPI_URL}${attrs.author.data.attributes.avatar.data.attributes.url}`
-  : null;
+const categories: string[] = post.categories?.map((c: any) => c.name) ?? [];
 
-const categories: string[] = attrs.categories?.data?.map((c: any) => c.attributes.name) ?? [];
-
-const date = attrs.publishedAt
-  ? new Date(attrs.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+const date = post.publishedAt
+  ? new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   : '';
 
-const seo = attrs.seo ?? {};
+const seo = post.seo ?? {};
 ---
 <Layout
-  title={seo.metaTitle ?? attrs.title}
-  description={seo.metaDescription ?? attrs.excerpt}
-  image={seo.metaImage?.data?.attributes?.url ? `${STRAPI_URL}${seo.metaImage.data.attributes.url}` : coverUrl ?? undefined}
+  title={seo.metaTitle ?? post.title}
+  description={seo.metaDescription ?? post.excerpt}
+  image={seo.metaImage?.url ? `${STRAPI_URL}${seo.metaImage.url}` : coverUrl ?? undefined}
   nav={nav.map((n: any) => ({ label: n.label, href: n.href }))}
-  siteName={global?.attributes?.siteName}
+  siteName={global?.siteName}
 >
   <article class="py-20">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,7 +55,7 @@ const seo = attrs.seo ?? {};
         </div>
       )}
 
-      <h1 class="text-4xl md:text-5xl font-display font-bold text-white leading-tight">{attrs.title}</h1>
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-white leading-tight">{post.title}</h1>
 
       <div class="mt-6 flex items-center gap-4 text-brand-gray text-sm">
         {authorAvatarUrl && (
@@ -66,17 +63,17 @@ const seo = attrs.seo ?? {};
         )}
         {authorName && <span>{authorName}</span>}
         {date && <span>· {date}</span>}
-        {attrs.readingTime && <span>· {attrs.readingTime} min read</span>}
+        {post.readingTime && <span>· {post.readingTime} min read</span>}
       </div>
 
       {coverUrl && (
-        <img src={coverUrl} alt={attrs.title} class="mt-8 w-full rounded-2xl object-cover max-h-96" />
+        <img src={coverUrl} alt={post.title} class="mt-8 w-full rounded-2xl object-cover max-h-96" />
       )}
 
-      {attrs.content && (
+      {post.content && (
         <div
           class="mt-10 prose prose-invert prose-lg max-w-none prose-headings:font-display prose-a:text-brand-lime"
-          set:html={attrs.content}
+          set:html={post.content}
         />
       )}
 

@@ -35,27 +35,27 @@ export async function getPages(params?: Record<string, string>) {
 export async function getPage(slug: string, params?: Record<string, string>) {
   return fetchApi<any>({
     endpoint: `/pages`,
-    params: { 'filters[slug][$eq]': slug, populate: 'deep', ...params },
+    params: { 'filters[slug][$eq]': slug, populate: '*', ...params },
   });
 }
 
 export async function getBlogPosts(params?: Record<string, string>) {
-  return fetchApi<any[]>({ endpoint: '/blog-posts', params: { populate: 'deep', ...params } });
+  return fetchApi<any[]>({ endpoint: '/blog-posts', params: { populate: '*', ...params } });
 }
 
 export async function getBlogPost(slug: string, params?: Record<string, string>) {
   return fetchApi<any>({
     endpoint: `/blog-posts`,
-    params: { 'filters[slug][$eq]': slug, populate: 'deep', ...params },
+    params: { 'filters[slug][$eq]': slug, populate: '*', ...params },
   });
 }
 
 export async function getGlobal() {
-  return fetchApi<any>({ endpoint: '/global', params: { populate: 'deep' } });
+  return fetchApi<any>({ endpoint: '/global', params: { populate: '*' } });
 }
 
 export async function getHomePage() {
-  return fetchApi<any>({ endpoint: '/home-page', params: { populate: 'deep' } });
+  return fetchApi<any>({ endpoint: '/home-page', params: { populate: '*' } });
 }
 
 export { STRAPI_URL };

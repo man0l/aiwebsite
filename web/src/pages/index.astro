@@ -5,16 +5,16 @@ import { getHomePage, getGlobal } from '../lib/strapi.ts';
 let homePage: any = null, global: any = null;
 try { [homePage, global] = await Promise.all([getHomePage(), getGlobal()]); } catch {}
 
-const hero = homePage?.attributes?.hero ?? {};
-const caseStudies: any[] = homePage?.attributes?.caseStudies ?? [];
-const faq: any[] = homePage?.attributes?.faq ?? [];
-const nav: any[] = global?.attributes?.nav ?? [];
+const hero = homePage?.hero ?? {};
+const caseStudies: any[] = homePage?.caseStudies ?? [];
+const faq: any[] = homePage?.faq ?? [];
+const nav: any[] = global?.nav ?? [];
 ---
 <Layout
-  title={global?.attributes?.siteName ?? 'FlowCraft Pro'}
+  title={global?.siteName ?? 'FlowCraft Pro'}
   description={hero.subHeadline}
   nav={nav.map((n: any) => ({ label: n.label, href: n.href }))}
-  siteName={global?.attributes?.siteName}
+  siteName={global?.siteName}
 >
   <!-- Hero -->
   <section class="relative py-24 md:py-32 bg-brand-dark">
