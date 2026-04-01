@@ -2,6 +2,7 @@ import type { Core } from '@strapi/strapi';
 import { writeFileSync } from 'fs';
 
 const TOKEN_FILE = '/app/seed-token.txt';
+const WRITE_TOKEN_FILE = '/app/write-token.txt';
 const PUBLIC_ROLE_ID = 2; // from up_roles: id=2, type=public
 
 const PUBLIC_ACTIONS = [
@@ -34,6 +35,21 @@ export async function seed({ strapi }: { strapi: Core.Strapi }) {
   });
   writeFileSync(TOKEN_FILE, created.accessKey);
   console.log('[seed] ✅ API token written to', TOKEN_FILE);
+
+  // ── 1b. Full-access token for E2E tests ───────────────────────────────────
+  const existingWrite = await knex('strapi_api_tokens').where({ name: 'e2e-write' }).select('id');
+  for (const t of existingWrite) {
+    try { await tokenService.revoke(t.id); } catch {}
+  }
+  const createdWrite = await tokenService.create({
+    name: 'e2e-write',
+    description: 'Full-access token for Playwright E2E CMS change tests',
+    type: 'full-access',
+    lifespan: null,
+    permissions: [],
+  });
+  writeFileSync(WRITE_TOKEN_FILE, createdWrite.accessKey);
+  console.log('[seed] ✅ Write token written to', WRITE_TOKEN_FILE);
 
   // ── 2. Set Public role permissions via raw SQL ────────────────────────────
   for (const action of PUBLIC_ACTIONS) {
