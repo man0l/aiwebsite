@@ -64,7 +64,7 @@ function imgUrl(path?: string) {
   return `${STRAPI_URL}${path}`;
 }
 
-const bgImage      = imgUrl(hero?.bgImage?.url ?? hero?.bgImage);
+const bgImage      = ''; // clean dark background per design
 const founderAvatar = imgUrl(founderAvatarUrl?.url ?? founderAvatarUrl);
 ---
 
@@ -73,18 +73,17 @@ const founderAvatar = imgUrl(founderAvatarUrl?.url ?? founderAvatarUrl);
   style={bgImage ? `background-image: url('${bgImage}'); background-size: cover; background-position: center;` : ''}
 >
   <!-- Dark overlay -->
-  <div class="absolute inset-0 bg-brand-dark/90"></div>
+  <div class="absolute inset-0 bg-brand-dark/70"></div>
 
   <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-24 md:py-32">
 
-    <!-- Headline with rotating phrase on its own fixed line -->
-    <h1 class="text-4xl md:text-6xl font-display font-bold text-white leading-tight">
-      More
-      <span
-        id="typewriter-niche"
-        class="block text-brand-lime"
-        data-niches={JSON.stringify(niches.map(n => n.label))}
-      >{niches[0].label}</span>
+    <!-- Headline: brush covers the full "More [niche]" first line -->
+    <h1 class="text-4xl sm:text-5xl font-display font-bold text-white leading-[1.3]">
+      More <span id="first-line" class="brush-highlight"><span
+          id="typewriter-niche"
+          class="text-black font-bold px-3"
+          data-niches={JSON.stringify(niches.map(n => n.label))}
+        >{niches[0].label}</span></span><br />
       clients for your agency — guaranteed.
     </h1>
 
@@ -206,14 +205,14 @@ const founderAvatar = imgUrl(founderAvatarUrl?.url ?? founderAvatarUrl);
   const CYCLE_MS = 3500;
   const FADE_MS  = 380;
 
-  const nicheEl = document.getElementById('typewriter-niche') as HTMLElement;
-  const subEl   = document.getElementById('niche-subheadline') as HTMLElement;
-  const proofEl = document.getElementById('niche-proof') as HTMLElement;
+  const firstLineEl = document.getElementById('first-line') as HTMLElement;
+  const nicheEl     = document.getElementById('typewriter-niche') as HTMLElement;
+  const subEl       = document.getElementById('niche-subheadline') as HTMLElement;
+  const proofEl     = document.getElementById('niche-proof') as HTMLElement;
 
-  if (!nicheEl || !subEl || !proofEl) throw new Error('Rotator elements not found');
+  if (!firstLineEl || !nicheEl || !subEl || !proofEl) throw new Error('Rotator elements not found');
 
-  // Prepare the rotating span for CSS transitions (display:block set via class)
-  nicheEl.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
+  firstLineEl.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
 
   let current = 0;
 
@@ -225,9 +224,8 @@ const founderAvatar = imgUrl(founderAvatarUrl?.url ?? founderAvatarUrl);
     const niche = NICHES[idx];
 
     // Slide out upward + fade
-    nicheEl.style.opacity   = '0';
-    nicheEl.style.transform = 'translateY(-12px)';
-
+    firstLineEl.style.opacity   = '0';
+    firstLineEl.style.transform = 'translateY(-12px)';
     // Fade sub + proof
     subEl.style.transition   = `opacity ${FADE_MS}ms ease`;
     proofEl.style.transition = `opacity ${FADE_MS}ms ease`;
@@ -242,13 +240,13 @@ const founderAvatar = imgUrl(founderAvatarUrl?.url ?? founderAvatarUrl);
     proofEl.textContent  = niche.proof;
 
     // Reset to below, then transition up into place
-    nicheEl.style.transition = 'none';
-    nicheEl.style.transform  = 'translateY(12px)';
-    nicheEl.offsetHeight;    // force reflow
+    firstLineEl.style.transition = 'none';
+    firstLineEl.style.transform  = 'translateY(12px)';
+    firstLineEl.offsetHeight;    // force reflow
 
-    nicheEl.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
-    nicheEl.style.opacity    = '1';
-    nicheEl.style.transform  = 'translateY(0)';
+    firstLineEl.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
+    firstLineEl.style.opacity    = '1';
+    firstLineEl.style.transform  = 'translateY(0)';
     subEl.style.opacity      = '1';
     proofEl.style.opacity    = '1';
   }
@@ -272,5 +270,21 @@ const founderAvatar = imgUrl(founderAvatarUrl?.url ?? founderAvatarUrl);
   #niche-subheadline,
   #niche-proof {
     opacity: 1;
+  }
+
+  /* Brush-stroke highlight behind rotating niche text */
+  .brush-highlight {
+    position: relative;
+    display: inline-block;
+  }
+  .brush-highlight::before {
+    content: '';
+    position: absolute;
+    inset: -0.2em -0.35em;
+    z-index: -1;
+    background: #BEF264;
+    transform: rotate(-1deg) skewX(-2deg);
+    border-radius: 4px 6px 5px 3px / 6px 4px 4px 7px;
+    pointer-events: none;
   }
 </style>

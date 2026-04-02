@@ -26,7 +26,9 @@ test('hero section — headline and compliance badges', async ({ page }) => {
   await expect(h1).toBeVisible();
   const headline = await h1.textContent();
   console.log('Hero headline:', headline?.trim());
-  expect(headline).toContain('Stop Hiring Expensive SDRs');
+  // Headline uses rotating typewriter — check static parts present in HTML
+  expect(headline).toContain('More');
+  expect(headline?.replace(/\s+/g, ' ')).toMatch(/clients for your agency/i);
 
   // Compliance badges (may appear in mobile + desktop nav, use first())
   const hipaa = page.getByText('HIPAA Compliant').first();
