@@ -28,9 +28,9 @@ test('hero section — headline and compliance badges', async ({ page }) => {
   console.log('Hero headline:', headline?.trim());
   expect(headline).toContain('Stop Hiring Expensive SDRs');
 
-  // Compliance badges
-  const hipaa = page.getByText('HIPAA Compliant');
-  const gdpr = page.getByText('GDPR Compliant');
+  // Compliance badges (may appear in mobile + desktop nav, use first())
+  const hipaa = page.getByText('HIPAA Compliant').first();
+  const gdpr = page.getByText('GDPR Compliant').first();
   await expect(hipaa).toBeVisible();
   await expect(gdpr).toBeVisible();
   console.log('Compliance badges: HIPAA ✅  GDPR ✅');
@@ -107,18 +107,16 @@ test('case studies — at least 7 cards rendered', async ({ page }) => {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
 
-  const section = page.locator('section').filter({ hasText: /Case Studies/i });
-  const exists = await section.count();
-  if (exists === 0) {
-    console.warn('No Case Studies section found');
+  // Case studies are rendered as cards with an industry label in uppercase
+  // Look for cards containing typical industry text from the seeded data
+  const cards = page.locator('.bg-gray-800.rounded-2xl').filter({ hasText: /AGENCY|BUSINESS|OUTSOURCING|LINKEDIN|KLAVIYO|CLICKROI|MED SPA/i });
+  const count = await cards.count();
+  console.log(`Case study cards found: ${count}`);
+  if (count === 0) {
+    console.warn('No case study cards found — check CMS seed');
     await shot(page, 'migration-04-case-studies-missing');
     return;
   }
-
-  await expect(section.first()).toBeVisible();
-  const cards = section.first().locator('[class*="rounded-2xl"]');
-  const count = await cards.count();
-  console.log(`Case study cards found: ${count}`);
   expect(count).toBeGreaterThanOrEqual(7);
 
   await shot(page, 'migration-04-case-studies');

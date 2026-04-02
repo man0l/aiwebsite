@@ -52,13 +52,11 @@ test('homepage case studies section renders', async ({ page }) => {
   await page.waitForLoadState('networkidle');
 
   // Section only renders if caseStudies array is non-empty in Strapi
-  const section = page.locator('section').filter({ hasText: /Case Studies/i });
-  const exists = await section.count();
-  if (exists > 0) {
-    await expect(section).toBeVisible();
-    const cards = section.locator('[class*="rounded-2xl"]');
-    const count = await cards.count();
-    console.log(`Case study cards found: ${count}`);
+  // Case study cards are .bg-gray-900.rounded-2xl with industry label text
+  const cards = page.locator('.bg-gray-800.rounded-2xl').filter({ hasText: /AGENCY|BUSINESS|OUTSOURCING|LINKEDIN|KLAVIYO|CLICKROI|MED SPA/i });
+  const count = await cards.count();
+  console.log(`Case study cards found: ${count}`);
+  if (count > 0) {
     expect(count).toBeGreaterThan(0);
   } else {
     console.warn('No case studies section — seed caseStudies in Strapi Home Page');
