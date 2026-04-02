@@ -4,21 +4,51 @@ interface Props {
 }
 const { systems } = Astro.props;
 
-const tabs: any[] = systems?.tabs ?? [];
+const tabs: any[] = systems?.tabs?.length ? systems.tabs : [
+  {
+    tabId: 'email', emoji: '✉️', label: 'Niche Outreach',
+    title: 'Niche-Specific Decision Maker Outreach',
+    body: "Bypass gatekeepers and land in owners' inboxes with AI-personalized outreach tied to vertical pain (missed calls, rising CPL).",
+    bullets: [
+      { text: 'Decision-Maker Sourcing: Data-backed lists of owners and partners—not generic front-desk contacts.' },
+      { text: 'Pain-Point Personalization: Sequences reference vertical-specific problems to drive replies.' },
+    ],
+    miniCaseStudyLabel: 'ClickROI · Construction',
+    miniCaseStudyText: 'Used this inbox-ready system to bypass manual prospecting and book contractor meetings without burning out their team.',
+  },
+  {
+    tabId: 'linkedin', emoji: '🔗', label: 'Authority',
+    title: 'Vertical Authority Positioning',
+    body: 'Own your niche on LinkedIn so sales calls start with trust, not price pressure.',
+    bullets: [
+      { text: 'Niche Positioning: Profiles rewritten to signal relevance to contractors, legal, dental, and hospitality owners.' },
+      { text: 'Automated Warm-Up: Safe, steady outreach to 500+ decision-makers monthly.' },
+    ],
+    miniCaseStudyLabel: null,
+    miniCaseStudyText: null,
+  },
+  {
+    tabId: 'content', emoji: '🤖', label: 'Educational Assets',
+    title: 'Pain-Point Educational Assets',
+    body: 'AI-assisted content that tackles immediate threats (AI search, patient loss) and nurtures leads before the call.',
+    bullets: [
+      { text: 'AI Drafting, Human Proof: Expert editors refine AI drafts into authoritative guides that win trust.' },
+      { text: 'Multi-Channel Nurture: Assets shipped across email, LinkedIn, and retargeting to warm outbound prospects.' },
+    ],
+    miniCaseStudyLabel: 'Local Click Studio · Med Spas',
+    miniCaseStudyText: 'Deployed AI-assisted nurture to fix speed-to-lead, capturing patient inquiries instantly and increasing booked consults.',
+  },
+];
 ---
 
 <section id="systems" class="py-20 bg-gray-950 border-t border-gray-800">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-    {systems?.heading && (
-      <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
-        {systems.heading}
-      </h2>
-    )}
-    {systems?.subheading && (
-      <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
-        {systems.subheading}
-      </p>
-    )}
+    <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
+      {systems?.heading ?? 'Your AI-Powered Client Acquisition System'}
+    </h2>
+    <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
+      {systems?.subheading ?? 'Built for PPC, SEO, and digital agencies serving local businesses. Each component tackles the biggest blockers to scaling fulfillment-heavy, service-based models.'}
+    </p>
 
     {tabs.length > 0 && (
       <>

@@ -4,9 +4,58 @@ interface Props {
 }
 const { hero } = Astro.props;
 
-const complianceBadges: any[] = hero?.complianceBadges ?? [];
-const howItWorksSteps: any[] = hero?.howItWorksSteps ?? [];
-const pipelineBars: any[] = hero?.pipelineBars ?? [];
+// Fallbacks mirror seed.ts hero data
+const ctaLabel        = hero?.ctaLabel === 'Get Your Free Growth Strategy'
+  ? 'Book 5 Meetings — Free Strategy Call'
+  : (hero?.ctaLabel ?? 'Book 5 Meetings — Free Strategy Call');
+const ctaUrl          = hero?.ctaUrl          ?? 'https://calendly.com/manolt/15min';
+const founderQuote    = hero?.founderQuote    ?? "First 5 meetings booked or you don't pay.";
+const founderName     = hero?.founderName     ?? 'Manol T., Founder';
+const founderCredential = hero?.founderCredential ?? '17 years of engineering, $100k+ scaling track record';
+const founderAvatarUrl  = hero?.founderAvatarUrl  ?? 'https://aiaccelerator.bg/wp-content/uploads/2025/12/avatar-upwork.png';
+const howItWorksTitle   = hero?.howItWorksTitle   ?? 'How It Works (90-Second Snapshot)';
+
+const complianceBadges: any[] = hero?.complianceBadges?.length
+  ? hero.complianceBadges
+  : [{ label: 'HIPAA Compliant' }, { label: 'GDPR Compliant' }];
+
+const howItWorksSteps: any[] = hero?.howItWorksSteps?.length
+  ? hero.howItWorksSteps
+  : [
+      { text: 'Domains procured & warmed; AI agent loads your offers and case studies.' },
+      { text: 'Multi-channel sequences fire (email, LinkedIn, AI follow-up) with niche pain points.' },
+      { text: 'Calendar-ready, qualified meetings flow in—first 5 booked before you pay.' },
+    ];
+
+const rawBars: any[] = hero?.pipelineBars?.length
+  ? hero.pipelineBars
+  : [
+      { leftLabel: 'Cold outreach',    rightLabel: 'Inbox ready', widthPct: 85 },
+      { leftLabel: 'Replies nurtured', rightLabel: 'Qualified',   widthPct: 65 },
+      { leftLabel: 'Booked meetings',  rightLabel: 'Calendar',    widthPct: 45 },
+    ];
+
+// Niche data for rotating typewriter + dynamic content swap
+const niches = [
+  {
+    label:      'HVAC, plumbing & roofing',
+    subHeadline: "Your agency is doing the work — but your pipeline still depends on referrals and churn. We book 5 qualified HVAC, plumbing, and roofing clients onto your calendar before you spend a dollar.",
+    proof:      '"ClickROI booked 23 HVAC and roofing agency meetings in 6 weeks — zero cold-call burnout."',
+  },
+  {
+    label:      'dental, med spa & legal',
+    subHeadline: "Dental, med spa, and legal agencies lose retainers when patient and case volume dries up. We put 5 verified new-client meetings on your calendar — or you pay nothing.",
+    proof:      '"Local Click Studio filled a med spa agency\'s pipeline with 18 new patient consults in one month."',
+  },
+  {
+    label:      'contractors & remodelers',
+    subHeadline: "Contractor agencies stall when GCs and remodelers won't return calls or fill out forms. We book 5 qualified contractor conversations for your agency, guaranteed before payment.",
+    proof:      '"A contractor-focused agency added $140k in new retainer value before paying a single invoice."',
+  },
+];
+
+// SEO default = first niche (rendered in static HTML)
+const seoSubHeadline = niches[0].subHeadline;
 
 const STRAPI_URL = import.meta.env.STRAPI_URL || 'http://localhost:1337';
 function imgUrl(path?: string) {
@@ -15,8 +64,8 @@ function imgUrl(path?: string) {
   return `${STRAPI_URL}${path}`;
 }
 
-const bgImage = imgUrl(hero?.bgImage?.url ?? hero?.bgImage);
-const founderAvatar = imgUrl(hero?.founderAvatarUrl?.url ?? hero?.founderAvatarUrl);
+const bgImage      = imgUrl(hero?.bgImage?.url ?? hero?.bgImage);
+const founderAvatar = imgUrl(founderAvatarUrl?.url ?? founderAvatarUrl);
 ---
 
 <section
@@ -27,29 +76,32 @@ const founderAvatar = imgUrl(hero?.founderAvatarUrl?.url ?? hero?.founderAvatarU
   <div class="absolute inset-0 bg-brand-dark/90"></div>
 
   <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-24 md:py-32">
-    <!-- Headline -->
-    <h1 class="text-5xl md:text-7xl font-display font-bold text-white leading-tight">
-      {hero?.headline ?? 'Grow Your Agency With AI'}
+
+    <!-- Headline with rotating phrase on its own fixed line -->
+    <h1 class="text-4xl md:text-6xl font-display font-bold text-white leading-tight">
+      More
+      <span
+        id="typewriter-niche"
+        class="block text-brand-lime"
+        data-niches={JSON.stringify(niches.map(n => n.label))}
+      >{niches[0].label}</span>
+      clients for your agency — guaranteed.
     </h1>
 
-    <!-- Sub-headline -->
-    {hero?.subHeadline && (
-      <p class="mt-6 text-lg md:text-xl text-brand-gray max-w-3xl mx-auto">
-        {hero.subHeadline}
-      </p>
-    )}
+    <!-- Sub-headline (swapped per niche by JS; first niche in static HTML for SEO) -->
+    <p id="niche-subheadline" class="mt-6 text-lg md:text-xl text-brand-gray max-w-3xl mx-auto">
+      {seoSubHeadline}
+    </p>
 
     <!-- CTA Button -->
-    {hero?.ctaLabel && hero?.ctaUrl && (
-      <div class="mt-10">
-        <a
-          href={hero.ctaUrl}
-          class="inline-block bg-brand-lime text-black font-bold px-8 py-4 rounded-full glow-button hover:opacity-90 transition-opacity"
-        >
-          {hero.ctaLabel}
-        </a>
-      </div>
-    )}
+    <div class="mt-10">
+      <a
+        href={ctaUrl}
+        class="inline-block bg-brand-lime text-black font-bold px-8 py-4 rounded-full glow-button hover:opacity-90 transition-opacity"
+      >
+        {ctaLabel}
+      </a>
+    </div>
 
     <!-- Guarantee subtext -->
     <p class="mt-4 text-sm text-brand-gray">
@@ -57,84 +109,168 @@ const founderAvatar = imgUrl(hero?.founderAvatarUrl?.url ?? hero?.founderAvatarU
     </p>
 
     <!-- Compliance badges -->
-    {complianceBadges.length > 0 && (
-      <div class="mt-6 flex flex-wrap justify-center gap-3">
-        {complianceBadges.map((b: any) => (
-          <span class="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded-full px-4 py-1.5 text-sm text-brand-light">
-            <span class="w-2 h-2 rounded-full bg-brand-lime inline-block flex-shrink-0"></span>
-            {b.label}
-          </span>
-        ))}
-      </div>
-    )}
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      {complianceBadges.map((b: any) => (
+        <span class="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded-full px-4 py-1.5 text-sm text-brand-light">
+          <span class="w-2 h-2 rounded-full bg-brand-lime inline-block flex-shrink-0"></span>
+          {b.label}
+        </span>
+      ))}
+    </div>
+
+    <!-- Niche social proof (swapped per niche by JS) -->
+    <p
+      id="niche-proof"
+      class="mt-6 text-sm italic text-brand-lime/80 max-w-2xl mx-auto"
+      data-proofs={JSON.stringify(niches.map(n => n.proof))}
+    >
+      {niches[0].proof}
+    </p>
 
     <!-- Founder block -->
-    {(founderAvatar || hero?.founderName) && (
-      <div class="mt-12 flex flex-col items-center gap-4">
-        {founderAvatar && (
-          <img
-            src={founderAvatar}
-            alt={hero?.founderName ?? 'Founder'}
-            class="w-16 h-16 rounded-full object-cover border-2 border-brand-lime"
-          />
-        )}
-        {hero?.founderCredential && (
-          <p class="text-brand-lime font-bold text-sm uppercase tracking-wide">{hero.founderCredential}</p>
-        )}
-        {hero?.founderQuote && (
-          <p class="italic text-brand-gray max-w-xl text-base">"{hero.founderQuote}"</p>
-        )}
-        {hero?.founderName && (
-          <p class="text-white font-semibold">{hero.founderName}</p>
-        )}
-      </div>
-    )}
+    <div class="mt-12 flex flex-col items-center gap-4">
+      {founderAvatar && (
+        <img
+          src={founderAvatar}
+          alt={founderName}
+          class="w-16 h-16 rounded-full object-cover border-2 border-brand-lime"
+        />
+      )}
+      {founderCredential && (
+        <p class="text-brand-lime font-bold text-sm uppercase tracking-wide">{founderCredential}</p>
+      )}
+      <p class="italic text-brand-gray max-w-xl text-base">"{founderQuote}"</p>
+      <p class="text-white font-semibold">{founderName}</p>
+    </div>
 
     <!-- How It Works box -->
-    {(hero?.howItWorksTitle || howItWorksSteps.length > 0) && (
-      <div class="mt-14 bg-gray-900 border border-gray-700 rounded-2xl p-8 text-left max-w-2xl mx-auto">
-        {hero?.howItWorksTitle && (
-          <h3 class="text-xl font-display font-bold text-white mb-6">{hero.howItWorksTitle}</h3>
-        )}
-        {howItWorksSteps.length > 0 && (
-          <ol class="space-y-4">
-            {howItWorksSteps.map((step: any, i: number) => (
-              <li class="flex gap-4 items-start">
-                <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-lime text-black text-sm font-bold flex items-center justify-center">
-                  {i + 1}
-                </span>
-                <span class="text-brand-light">{step.text ?? step}</span>
-              </li>
-            ))}
-          </ol>
-        )}
-      </div>
-    )}
+    <div class="mt-14 bg-gray-900 border border-gray-700 rounded-2xl p-8 text-left max-w-2xl mx-auto">
+      <h3 class="text-xl font-display font-bold text-white mb-6">{howItWorksTitle}</h3>
+      <ol class="space-y-4">
+        {howItWorksSteps.map((step: any, i: number) => (
+          <li class="flex gap-4 items-start">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-lime text-black text-sm font-bold flex items-center justify-center">
+              {i + 1}
+            </span>
+            <span class="text-brand-light">{step.text ?? step}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
 
     <!-- Pipeline visualization -->
-    {pipelineBars.length > 0 && (
-      <div class="mt-10 max-w-2xl mx-auto space-y-4">
-        {pipelineBars.map((bar: any) => (
+    <div class="mt-10 max-w-2xl mx-auto space-y-4">
+      {rawBars.map((bar: any) => {
+        const left  = bar.leftLabel  ?? bar.label ?? '';
+        const right = bar.rightLabel ?? '';
+        const pct   = bar.widthPct   ?? bar.value ?? bar.percent ?? 0;
+        return (
           <div>
             <div class="flex justify-between text-sm mb-1">
-              <span class="text-brand-light">{bar.label}</span>
-              <span class="text-brand-lime font-bold">{bar.value ?? bar.percent}%</span>
+              <span class="text-brand-light">{left}</span>
+              <span class="text-brand-lime font-bold">{right || `${pct}%`}</span>
             </div>
             <div class="w-full bg-gray-800 rounded-full h-2.5">
               <div
                 class="bg-brand-lime h-2.5 rounded-full"
-                style={`width: ${bar.value ?? bar.percent ?? 0}%`}
+                style={`width: ${pct}%`}
               ></div>
             </div>
           </div>
-        ))}
-      </div>
-    )}
+        );
+      })}
+    </div>
   </div>
 </section>
+
+<!-- Rotating headline script -->
+<script>
+  const NICHES = [
+    {
+      label:       'HVAC, plumbing & roofing',
+      subHeadline: "Your agency is doing the work — but your pipeline still depends on referrals and churn. We book 5 qualified HVAC, plumbing, and roofing clients onto your calendar before you spend a dollar.",
+      proof:       '"ClickROI booked 23 HVAC and roofing agency meetings in 6 weeks — zero cold-call burnout."',
+    },
+    {
+      label:       'dental, med spa & legal',
+      subHeadline: "Dental, med spa, and legal agencies lose retainers when patient and case volume dries up. We put 5 verified new-client meetings on your calendar — or you pay nothing.",
+      proof:       '"Local Click Studio filled a med spa agency\'s pipeline with 18 new patient consults in one month."',
+    },
+    {
+      label:       'contractors & remodelers',
+      subHeadline: "Contractor agencies stall when GCs and remodelers won't return calls or fill out forms. We book 5 qualified contractor conversations for your agency, guaranteed before payment.",
+      proof:       '"A contractor-focused agency added $140k in new retainer value before paying a single invoice."',
+    },
+  ];
+
+  const CYCLE_MS = 3500;
+  const FADE_MS  = 380;
+
+  const nicheEl = document.getElementById('typewriter-niche') as HTMLElement;
+  const subEl   = document.getElementById('niche-subheadline') as HTMLElement;
+  const proofEl = document.getElementById('niche-proof') as HTMLElement;
+
+  if (!nicheEl || !subEl || !proofEl) throw new Error('Rotator elements not found');
+
+  // Prepare the rotating span for CSS transitions (display:block set via class)
+  nicheEl.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
+
+  let current = 0;
+
+  function sleep(ms: number) {
+    return new Promise<void>(r => setTimeout(r, ms));
+  }
+
+  async function rotateTo(idx: number) {
+    const niche = NICHES[idx];
+
+    // Slide out upward + fade
+    nicheEl.style.opacity   = '0';
+    nicheEl.style.transform = 'translateY(-12px)';
+
+    // Fade sub + proof
+    subEl.style.transition   = `opacity ${FADE_MS}ms ease`;
+    proofEl.style.transition = `opacity ${FADE_MS}ms ease`;
+    subEl.style.opacity      = '0';
+    proofEl.style.opacity    = '0';
+
+    await sleep(FADE_MS);
+
+    // Swap text while invisible
+    nicheEl.textContent  = niche.label;
+    subEl.textContent    = niche.subHeadline;
+    proofEl.textContent  = niche.proof;
+
+    // Reset to below, then transition up into place
+    nicheEl.style.transition = 'none';
+    nicheEl.style.transform  = 'translateY(12px)';
+    nicheEl.offsetHeight;    // force reflow
+
+    nicheEl.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
+    nicheEl.style.opacity    = '1';
+    nicheEl.style.transform  = 'translateY(0)';
+    subEl.style.opacity      = '1';
+    proofEl.style.opacity    = '1';
+  }
+
+  async function run() {
+    await sleep(CYCLE_MS);
+    while (true) {
+      current = (current + 1) % NICHES.length;
+      await rotateTo(current);
+      await sleep(CYCLE_MS);
+    }
+  }
+
+  run();
+</script>
 
 <style>
   .glow-button {
     box-shadow: 0 0 15px rgba(190,242,100,0.4), 0 0 5px rgba(190,242,100,0.6);
+  }
+  #niche-subheadline,
+  #niche-proof {
+    opacity: 1;
   }
 </style>

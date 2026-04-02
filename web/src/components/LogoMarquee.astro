@@ -4,7 +4,19 @@ interface Props {
 }
 const { marquee } = Astro.props;
 
-const logos: any[] = marquee?.logos ?? [];
+const heading = marquee?.heading ?? 'Trusted by Industry-Leading Agencies & Brands';
+const logos: any[] = marquee?.logos?.length ? marquee.logos : [
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo3.png',    alt: 'Client Logo 1' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo2.png',    alt: 'Client Logo 2' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo5.png',    alt: 'Client Logo 3' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo13.png',   alt: 'Client Logo 4' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo11.png',   alt: 'Client Logo 5' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo1.png',    alt: 'Client Logo 6' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo4.png',    alt: 'Client Logo 7' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo6.png',    alt: 'Client Logo 8' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo12.png',   alt: 'Client Logo 9' },
+  { url: 'https://aiaccelerator.bg/wp-content/uploads/2024/09/Logo14-2.png', alt: 'Client Logo 10' },
+];
 
 const STRAPI_URL = import.meta.env.STRAPI_URL || 'http://localhost:1337';
 function imgUrl(path?: string) {
@@ -16,11 +28,9 @@ function imgUrl(path?: string) {
 
 <section class="py-14 bg-brand-dark border-t border-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    {marquee?.heading && (
-      <p class="text-center text-sm font-semibold text-brand-gray uppercase tracking-wider mb-10">
-        {marquee.heading}
-      </p>
-    )}
+    <p class="text-center text-sm font-semibold text-brand-gray uppercase tracking-wider mb-10">
+      {heading}
+    </p>
 
     {logos.length > 0 && (
       <div class="logo-marquee">

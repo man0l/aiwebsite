@@ -4,21 +4,23 @@ interface Props {
 }
 const { who } = Astro.props;
 
-const cards: any[] = who?.cards ?? [];
+const whoHeading    = who?.heading    ?? 'Built for Local-Focused Agencies';
+const whoSubheading = who?.subheading ?? 'For PPC, SEO, and digital marketing agencies stuck in the feast-or-famine cycle and ready to productize acquisition.';
+const cards: any[] = who?.cards?.length ? who.cards : [
+  { title: 'Who We Target',      text: 'Practice owners, partners, and contractors—roofers, MedSpas, dental groups, law firms, restaurants, and hospitality operators.' },
+  { title: 'Core Pain We Solve', text: 'Unpredictable referrals, high churn, and manual fulfillment that keeps you from scaling beyond a handful of retainers.' },
+  { title: 'Why It Works',       text: 'Gatekeeper-bypass outreach, niche authority positioning, and educational assets that pre-sell before the first call.' },
+];
 ---
 
 <section class="py-20 bg-gray-950 border-t border-gray-800">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    {who?.heading && (
-      <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
-        {who.heading}
-      </h2>
-    )}
-    {who?.subheading && (
-      <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
-        {who.subheading}
-      </p>
-    )}
+    <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
+      {whoHeading}
+    </h2>
+    <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
+      {whoSubheading}
+    </p>
 
     {cards.length > 0 && (
       <div class="grid md:grid-cols-3 gap-6">

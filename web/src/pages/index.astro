@@ -21,12 +21,25 @@ try {
 const hero = homePage?.hero ?? {};
 const calc = homePage?.calculator ?? {};
 const logoMarquee = homePage?.logoMarquee ?? {};
-const caseStudies: any[] = homePage?.caseStudies ?? [];
+const caseStudies: any[] = homePage?.caseStudies?.length ? homePage.caseStudies : [
+  { industry: 'AI AUTOMATION AGENCY',      title: '3.1% Positive Response Rate',  description: 'Built a hyper-personalized outreach system using AI site-crawling and manual lead-scrubbing to book high-intent meetings with SEO & PPC founders.', result: '3.1% positive response rate' },
+  { industry: 'E-COMMERCE BUSINESS',       title: '$25,000/mo Profit Increase',    description: 'Overhauled fulfillment and inventory workflows in just 4 months, drastically reducing costs.',                                                          result: '$25,000/mo profit increase' },
+  { industry: 'IT OUTSOURCING CO.',        title: '$100k+ ARR Stabilized',         description: 'Systematized their entire service delivery process, enabling consistent scaling for two consecutive years.',                                              result: '$100k+ ARR stabilized' },
+  { industry: 'NEW LINKEDIN ACCOUNT',      title: '30,000+ Impressions',           description: 'Built an AI-powered content system that generated significant authority from scratch in only 3 months.',                                                  result: '30,000+ impressions' },
+  { industry: 'KLAVIYO EMAIL AGENCY',      title: '100% Admin Automation',         description: 'Eliminated a 60-minute manual onboarding bottleneck by engineering a 3-tier n8n workflow connecting ClickUp, GDrive, and Slack.',                        result: '100% admin automation' },
+  { industry: 'CLICKROI · CONSTRUCTION',  title: 'No-Burnout Lead Engine',        description: 'Gatekeeper-bypass cold outreach for general contractors, delivering a steady pipeline without manual prospecting burnout.',                                result: 'No-burnout lead engine' },
+  { industry: 'LOCAL CLICK STUDIO · MED SPAS', title: '24/7 Patient Intake',      description: 'AI-assisted nurturing to fix speed-to-lead for Med Spas, capturing inquiries instantly and boosting booked consults.',                                    result: '24/7 patient intake' },
+];
 const systemsTabs = homePage?.systemsTabs ?? {};
 const processTimeline = homePage?.processTimeline ?? {};
 const whoItIsFor = homePage?.whoItIsFor ?? {};
 const resultsChart = homePage?.resultsChart ?? {};
-const faq: any[] = homePage?.faq ?? [];
+const faq: any[] = homePage?.faq?.length ? homePage.faq : [
+  { question: 'What is the results guarantee?',    answer: '<p>A full money-back guarantee is provided. If the system does not generate a minimum of 5 qualified sales opportunities on your calendar by the end of the 90-day program, you will receive a 100% refund of the service fee.</p>' },
+  { question: 'How long until we see results?',   answer: '<p>Most clients see the first qualified meetings booked within 3-4 weeks of launch. The system is expected to be generating a consistent flow of 5+ calls per month within 90 days.</p>' },
+  { question: 'Is this a fit for new agencies?',  answer: "<p>This system works best for established agencies that already have case studies and a clear, validated offer. If you're pre-revenue or haven't proven your service delivery, it may be too early.</p>" },
+  { question: 'What time commitment is needed?',  answer: '<p>Minimal. Your input is required during the initial strategy phase (2-3 hours total). After that, 99% of the work is handled. You just need to show up to the sales calls.</p>' },
+];
 const ctaSection = homePage?.ctaSection ?? {};
 const nav: any[] = global?.nav ?? [];
 ---
@@ -46,27 +59,26 @@ const nav: any[] = global?.nav ?? [];
   <LogoMarquee marquee={logoMarquee} />
 
   <!-- Case Studies -->
-  {caseStudies.length > 0 && (
-    <section class="py-20 bg-gray-900 border-t border-b border-gray-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-display font-bold text-white text-center mb-12">Case Studies</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {caseStudies.map((cs: any) => (
-            <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700">
-              {cs.industry && (
-                <span class="text-brand-lime font-bold text-xs uppercase tracking-wide">{cs.industry}</span>
-              )}
-              <h3 class="mt-2 text-xl font-bold text-white">{cs.title}</h3>
-              {cs.description && <p class="mt-2 text-brand-gray text-sm">{cs.description}</p>}
-              {cs.result && (
-                <p class="mt-4 text-brand-lime font-semibold text-sm">{cs.result}</p>
-              )}
-            </div>
-          ))}
-        </div>
+  <section class="py-20 bg-gray-900 border-t border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-display font-bold text-white text-center mb-2">Real Results. Real Agencies.</h2>
+      <p class="text-brand-gray text-center mb-12">From cold outreach to admin automation — here's what we've built.</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {caseStudies.map((cs: any) => (
+          <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            {cs.industry && (
+              <span class="text-brand-lime font-bold text-xs uppercase tracking-wide">{cs.industry}</span>
+            )}
+            <h3 class="mt-2 text-xl font-bold text-white">{cs.title}</h3>
+            {cs.description && <p class="mt-2 text-brand-gray text-sm">{cs.description}</p>}
+            {cs.result && (
+              <p class="mt-4 text-brand-lime font-semibold text-sm">→ {cs.result}</p>
+            )}
+          </div>
+        ))}
       </div>
-    </section>
-  )}
+    </div>
+  </section>
 
   <!-- Systems Tabs -->
   <SystemsTabs systems={systemsTabs} />
@@ -81,24 +93,22 @@ const nav: any[] = global?.nav ?? [];
   <ResultsChart results={resultsChart} />
 
   <!-- FAQ -->
-  {faq.length > 0 && (
-    <section id="faq" class="py-20 bg-gray-900 border-t border-gray-800">
-      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-display font-bold text-white text-center mb-12">FAQ</h2>
-        <div class="space-y-0">
-          {faq.map((item: any) => (
-            <details class="border-b border-gray-800 group">
-              <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
-                {item.question}
-                <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
-              </summary>
-              <div class="pb-6 pr-8 text-brand-gray" set:html={item.answer} />
-            </details>
-          ))}
-        </div>
+  <section id="faq" class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-display font-bold text-white text-center mb-12">Frequently Asked Questions</h2>
+      <div class="space-y-0">
+        {faq.map((item: any) => (
+          <details class="border-b border-gray-800 group">
+            <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
+              {item.question}
+              <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <div class="pb-6 pr-8 text-brand-gray" set:html={item.answer} />
+          </details>
+        ))}
       </div>
-    </section>
-  )}
+    </div>
+  </section>
 
   <!-- CTA Section -->
   <CTASection cta={ctaSection} />

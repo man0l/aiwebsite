@@ -6,28 +6,25 @@ const { calc } = Astro.props;
 
 const defaultDealValue = calc?.defaultDealValue ?? 5000;
 const defaultCloseRate = calc?.defaultCloseRate ?? 20;
+const eyebrow    = calc?.eyebrow    ?? 'The Cost of Silence';
+const heading    = calc?.heading    ?? 'See What 20 Missed Meetings Cost Every Month';
+const subheading = calc?.subheading ?? "Drag the sliders to quantify the revenue lost when 20 qualified appointments aren't on your calendar.";
 ---
 
 <section id="calculator" class="py-20 bg-brand-dark border-t border-gray-800">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Eyebrow -->
-    {calc?.eyebrow && (
-      <p class="text-center text-brand-lime font-bold text-sm uppercase tracking-wide mb-4">
-        {calc.eyebrow}
-      </p>
-    )}
+    <p class="text-center text-brand-lime font-bold text-sm uppercase tracking-wide mb-4">
+      {eyebrow}
+    </p>
     <!-- Heading -->
-    {calc?.heading && (
-      <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
-        {calc.heading}
-      </h2>
-    )}
+    <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
+      {heading}
+    </h2>
     <!-- Subheading -->
-    {calc?.subheading && (
-      <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
-        {calc.subheading}
-      </p>
-    )}
+    <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
+      {subheading}
+    </p>
 
     <div class="grid md:grid-cols-2 gap-8">
       <!-- Left card: inputs -->

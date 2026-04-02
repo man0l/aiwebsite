@@ -4,26 +4,45 @@ interface Props {
 }
 const { process } = Astro.props;
 
-const steps: any[] = process?.steps ?? [];
+const steps: any[] = process?.steps?.length ? process.steps : [
+  {
+    number: '1', title: 'Asset Build', dateRange: 'Days 1-14',
+    description: 'Dedicated domains procured and warmed; 24/7 AI agent loaded with your offers and case studies; compliance baked in (HIPAA/GDPR).',
+    cards: [
+      { title: 'Infrastructure', text: 'Domains + inboxes warmed, DKIM/SPF/DMARC set, SISR sharding for inbox placement.' },
+      { title: 'Targeting', text: 'ICP + lookalikes from your best wins (Construction, Med Spa, Legal).' },
+    ],
+  },
+  {
+    number: '2', title: 'Launch', dateRange: 'Days 15-45',
+    description: 'Multi-channel orchestration: email, LinkedIn, and AI follow-ups tuned to niche pain points (missed calls, high CPL, compliance risk).',
+    cards: [
+      { title: 'Messaging', text: 'PAS-driven sequences tied to vertical pains; AI personalization; reply routing to calendar.' },
+      { title: 'Volume Control', text: 'High-ticket niches: 5-10 enterprise consults. High-volume niches: 20-30 patient/intake appointments.' },
+    ],
+  },
+  {
+    number: '3', title: 'Scale', dateRange: 'Days 46-90',
+    description: "Optimize on reply data; automated follow-up captures the 60% of responses after touch two; no-lead-lost ops while you focus on fulfillment.",
+    cards: [
+      { title: 'Qualification', text: 'BANT-style filtering: Budget, Authority, Need, Timing matched to ICP before booking.' },
+      { title: 'Guarantee', text: "First 5 meetings booked before you pay; ongoing target 20-30 meetings/month once ramped." },
+    ],
+  },
+];
 ---
 
 <section id="process" class="py-20 bg-brand-dark border-t border-gray-800">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    {process?.eyebrow && (
-      <p class="text-center text-brand-lime font-bold text-sm uppercase tracking-wide mb-4">
-        {process.eyebrow}
-      </p>
-    )}
-    {process?.heading && (
-      <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
-        {process.heading}
-      </h2>
-    )}
-    {process?.subheading && (
-      <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-16">
-        {process.subheading}
-      </p>
-    )}
+    <p class="text-center text-brand-lime font-bold text-sm uppercase tracking-wide mb-4">
+      {process?.eyebrow ?? 'How We Build & Scale'}
+    </p>
+    <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
+      {process?.heading ?? 'One Clear Path to 20-30 Qualified Meetings'}
+    </h2>
+    <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-16">
+      {process?.subheading ?? 'Asset build, launch, and scale in one streamlined timeline—backed by the First 5 Meetings Guarantee.'}
+    </p>
 
     <div class="space-y-20">
       {steps.map((step: any, i: number) => {

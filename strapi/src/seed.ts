@@ -163,7 +163,7 @@ export async function seed({ strapi }: { strapi: Core.Strapi }) {
     hero: {
       headline: 'Stop Hiring Expensive SDRs. Automate 20-30 Qualified Meetings Per Month.',
       subHeadline: "Manual prospecting burnout ends here. We build the AI-first acquisition infrastructure—domains procured and warmed, multi-channel orchestration, and a \"first 5 meetings booked or you don't pay\" guarantee.",
-      ctaLabel: 'Get Your Free Growth Strategy',
+      ctaLabel: 'Book 5 Meetings — Free Strategy Call',
       ctaUrl: 'https://calendly.com/manolt/15min',
       bgImage: 'https://aiaccelerator.bg/wp-content/uploads/2025/10/Gemini_Generated_Image_t3aczkt3aczkt3ac.png',
       complianceBadges: [{ label: 'HIPAA Compliant' }, { label: 'GDPR Compliant' }],
