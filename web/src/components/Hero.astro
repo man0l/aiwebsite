@@ -79,7 +79,8 @@ const founderAvatar = imgUrl(founderAvatarUrl?.url ?? founderAvatarUrl);
 
     <!-- Headline: brush covers the full "More [niche]" first line -->
     <h1 class="text-4xl sm:text-5xl font-display font-bold text-white leading-[1.3]">
-      More <span id="first-line" class="brush-highlight"><span
+      More<br />
+      <span id="first-line" class="brush-highlight"><span
           id="typewriter-niche"
           class="text-black font-bold px-3"
           data-niches={JSON.stringify(niches.map(n => n.label))}

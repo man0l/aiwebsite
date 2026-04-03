@@ -39,3 +39,4 @@ e2e/screenshots/
 # Claude Code
 .claude/
 .playwright-mcp/
+.vercel
