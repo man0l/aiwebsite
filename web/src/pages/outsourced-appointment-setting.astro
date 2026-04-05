@@ -1,0 +1,389 @@
+---
+import Layout from '../components/Layout.astro';
+import { getGlobal } from '../lib/strapi.ts';
+
+const STRAPI_URL = import.meta.env.STRAPI_URL ?? 'http://localhost:1337';
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+
+let global: any = null;
+try { global = await getGlobal(); } catch (_) {}
+
+const fallback = {
+  hero: {
+    headline: 'Outsourced Appointment Setting for Marketing Agencies',
+    subHeadline: 'BANT-qualified appointments on your agency\'s calendar in 14 days. Home services, med spa, legal, and IT covered. White-label delivery, HIPAA and GDPR compliant. You don\'t pay until the first 5 meetings are confirmed.',
+    ctaLabel: 'Book a Free Qualification Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+  },
+  stats: [
+    { value: '14',  label: 'Days to First Appointment' },
+    { value: '5',   label: 'Free Appointments Guarantee' },
+    { value: '60%', label: 'No-Show Recovery Rate' },
+  ],
+  phases: [
+    {
+      title: 'Week 1 — Setup and ICP Lock',
+      items: [
+        'Agency positioning, offers, and case studies loaded into the AI agent',
+        'Sending domains registered and warmed under your brand or client\'s',
+        'ICP built from service area, vertical, and existing customer profile',
+      ],
+    },
+    {
+      title: 'Week 2 — Outreach Launch',
+      items: [
+        'Multi-channel sequences fire across email and LinkedIn',
+        'AI-personalized hooks tied to vertical-specific pain',
+        'HVAC language for HVAC, med spa language for med spas, compliance-aware copy for law firms',
+      ],
+    },
+    {
+      title: 'Weeks 2–3 — Reply Triage and Qualification',
+      items: [
+        'Every reply routed through BANT filtering before touching your calendar',
+        'Prospects clearing all four criteria get booked',
+        'Prospects clearing three get nurtured — fewer get filed',
+      ],
+    },
+    {
+      title: 'Ongoing — Calendar Delivery and No-Show Recovery',
+      items: [
+        'Branded invite, confirmation, 24-hour reminder, and 1-hour reminder',
+        'Automated reschedule outreach on every no-show — 60% recovery rate',
+        'Volume calibrated to what your client\'s sales capacity can actually handle',
+      ],
+    },
+  ],
+  proofPoints: [
+    'One in-house setter costs $45k–$70k loaded — before ramp, before commission',
+    '14-day ramp vs. 60–90 days to hire, train, and see first bookings in-house',
+    'No-show recovery built in — 60% of no-shows recover with a single follow-up',
+    'First-5-appointments guarantee passes through to your client — risk sits with us',
+  ],
+  ctaSection: {
+    heading: 'Book Qualified Appointments Without Hiring a Setter',
+    subheading: '15-minute qualification call. We\'ll look at your client base, confirm which verticals we have playbooks for, and tell you honestly whether appointment setting or the full outbound stack is the right starting point.',
+    ctaLabel: 'Book Your Free Qualification Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+    guaranteeText: 'First 5 appointments free per engagement. Full refund if guarantee not met in 90 days. White-label delivery. HIPAA and GDPR compliant.',
+  },
+};
+
+let pageData = fallback;
+
+try {
+  const res = await fetch(
+    `${STRAPI_URL}/api/landing-pages?filters[slug][$eq]=outsourced-appointment-setting&populate=*`,
+    { headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}`, 'Content-Type': 'application/json' } }
+  );
+  if (res.ok) {
+    const json = await res.json();
+    const item = json?.data?.[0]?.attributes ?? json?.data?.[0];
+    if (item) {
+      pageData = {
+        hero:        item.hero        ?? fallback.hero,
+        stats:       item.stats?.length       ? item.stats       : fallback.stats,
+        phases:      item.phases?.length      ? item.phases      : fallback.phases,
+        proofPoints: item.proofPoints?.length ? item.proofPoints : fallback.proofPoints,
+        ctaSection:  item.ctaSection  ?? fallback.ctaSection,
+      };
+    }
+  }
+} catch (_) {}
+
+const { hero, stats, phases, proofPoints, ctaSection } = pageData;
+
+const included = [
+  { title: 'Infrastructure', body: 'Dedicated sending domains, warmup, DKIM/SPF/DMARC, inbox rotation, deliverability monitoring — the layer most vendors skip.' },
+  { title: 'Personalization engine', body: 'AI-driven research tied to your vertical\'s actual pain points. Not mail-merge — sequences that reference the prospect\'s business, location, and industry context.' },
+  { title: 'Multi-channel orchestration', body: 'Email and LinkedIn running in parallel, coordinated so a prospect gets consistent messaging without tripping duplicate-contact filters.' },
+  { title: 'Reply handling and qualification', body: 'Every reply reviewed, categorized, and routed. Positive replies go through BANT. Objections handled with pre-approved responses matching your positioning.' },
+  { title: 'Calendar and booking flow', body: 'Direct integration with Google, Outlook, Calendly, or HubSpot. Branded invites, confirmation sequences, automated reminders, no-show recovery.' },
+  { title: 'White-label delivery', body: 'Everything branded as your agency or your client — never FlowCraftPro. Your logo on the invite. Your domain on the email. Every touchpoint.' },
+  { title: 'Reporting', body: 'Weekly delivery reports: meetings booked, qualification criteria hit, vertical performance, pipeline attribution. Monthly strategic reviews.' },
+];
+
+const goodFit = [
+  'PPC, SEO, or digital marketing agencies with at least 5 active clients',
+  'Agencies serving home services, med spa, dental, legal, accounting, IT outsourcing, or adjacent verticals',
+  'Agencies that want to add a white-label revenue line without hiring',
+  'Willing to commit to a 90-day minimum so the system has room to ramp',
+];
+
+const notFit = [
+  'Pre-revenue agencies with no defined ICP or offer',
+  'Agencies serving verticals with no existing FlowCraftPro playbook — we\'ll say so on the call',
+  'Anyone looking for scraped lists, pure volume plays, or spray-and-pray outbound',
+  'Solo operators with fewer than three active clients — unit economics don\'t land yet',
+];
+
+const faq = [
+  {
+    q: 'How much does outsourced appointment setting cost?',
+    a: 'FlowCraftPro charges a flat monthly partner rate designed to give resellers a 2–3x markup window. Exact rate depends on vertical and volume target. Rate sheet sent after a 15-minute qualification call. First 5 appointments are free regardless of rate.',
+  },
+  {
+    q: 'How fast can we see the first booked meeting?',
+    a: 'Typical ramp is 14 days from contract signature to first qualified appointment. Verticals we already have playbooks for (HVAC, med spa, legal, IT) ramp fastest. New verticals take 21–28 days for ICP data and sequence building.',
+  },
+  {
+    q: 'Can I white-label just the appointment setting piece, or do I need the full outbound program?',
+    a: 'Either works. White label appointment setting is available as a standalone engagement if your agency is already handling the top of the funnel and only needs qualification and booking. Most agencies run the full outbound stack because the economics are better, but we don\'t force it.',
+  },
+  {
+    q: 'What happens if an appointment no-shows?',
+    a: 'Automated rescheduling kicks in within 24 hours. Roughly 60% of no-shows recover with one follow-up. No-shows that don\'t recover don\'t count against the first-5-appointments guarantee — we replace them.',
+  },
+  {
+    q: 'Do you handle outsourced cold calling?',
+    a: 'Yes, as an add-on for verticals where phone is the right channel (high-ticket legal, IT, enterprise consulting). For most agency clients in home services or local professional services, phone isn\'t the primary conversion channel, and we\'ll tell you that on the qualification call.',
+  },
+];
+---
+
+<Layout
+  title="Outsourced Appointment Setting for Agencies | FlowCraftPro"
+  description="BANT-qualified meetings on your agency's calendar in 14 days. White-label, first 5 free. Home services, med spa, legal, IT verticals covered."
+  nav={global?.nav?.map((n: any) => ({ label: n.label, href: n.href })) ?? []}
+  siteName={global?.siteName}
+>
+  <style>
+    .glow-button {
+      box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
+      transition: all 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 30px rgba(190, 242, 100, 0.7), 0 0 15px rgba(190, 242, 100, 0.9);
+      transform: translateY(-2px);
+    }
+    .stat-card {
+      background: linear-gradient(135deg, rgba(190, 242, 100, 0.1) 0%, rgba(190, 242, 100, 0.05) 100%);
+      border: 1px solid rgba(190, 242, 100, 0.2);
+    }
+  </style>
+
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-brand-dark">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-gray-900 to-brand-dark"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+      <span class="inline-block px-4 py-2 bg-brand-lime/20 text-brand-lime text-sm font-semibold rounded-full border border-brand-lime/30 mb-6">
+        OUTSOURCED APPOINTMENT SETTING
+      </span>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold font-display tracking-tight text-white leading-tight mb-6">
+        {hero.headline}
+      </h1>
+      <p class="text-xl md:text-2xl text-brand-gray max-w-3xl mx-auto mb-8">
+        {hero.subHeadline}
+      </p>
+      <div class="flex flex-wrap justify-center gap-3 mb-10 text-sm text-brand-gray/80">
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">White-label ready</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">First 5 appointments free</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">14-day ramp</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">Built for agencies only</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-4xl mx-auto">
+        {stats.map((stat: { value: string; label: string }) => (
+          <div class="stat-card p-6 rounded-2xl text-center">
+            <div class="text-4xl md:text-5xl font-bold text-brand-lime mb-2">{stat.value}</div>
+            <div class="text-brand-gray text-sm">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={hero.ctaUrl} class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">
+          {hero.ctaLabel}
+        </a>
+        <a href="#how-it-works" class="inline-block border border-gray-600 text-white font-bold px-10 py-5 rounded-full text-lg hover:border-gray-400 transition-colors">
+          How It Works ↓
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- §1 — What it is -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-6">What Outsourced Appointment Setting Actually Is (and What It Isn't)</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>Outsourced appointment setting sits at a specific point in the outbound funnel — after the list is built and the first touches go out, before the sales call happens. It's the qualification-and-booking layer. A good appointment setting partner takes raw replies from cold outreach and converts them into calendar-confirmed meetings with prospects who match your BANT criteria.</p>
+        <p>It's not list-building. It's not a lead list handoff where you get a spreadsheet of "interested" contacts and have to chase them yourself. Outsourced appointment setting services end when a qualified prospect is on your calendar with a confirmed time — not before.</p>
+        <p>For marketing agencies, the model has one additional requirement the rest of the category ignores: <strong class="text-white">white-label delivery</strong>. Your client should never see the vendor behind the work. The calendar invite, the confirmation email, the reminder sequence — all of it should come from your agency's brand or your client's, never from ours.</p>
+        <p>FlowCraftPro runs outsourced appointment setting built from the ground up for agencies. If you want the full reseller context, our <a href="/white-label-lead-generation/" class="text-brand-lime hover:underline">white-label lead generation program</a> covers the broader model this sits inside.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 — Why outsource -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Why Agencies Outsource Appointment Setting Instead of Building In-House</h2>
+        <p class="text-brand-gray text-lg">Building it in-house sounds straightforward until you actually cost it out.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {proofPoints.map((point: string) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800 flex items-start gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime flex items-center justify-center text-black font-bold">✓</div>
+            <p class="text-brand-gray">{point}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §3 — How it runs -->
+  <section id="how-it-works" class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">How FlowCraftPro Runs Outsourced Appointment Setting for Agencies</h2>
+        <p class="text-brand-gray text-lg">Structured around one question: can we get the first 5 qualified appointments on your calendar inside the first cycle?</p>
+      </div>
+      <div class="space-y-6">
+        {phases.map((phase: { title: string; items: string[] }, i: number) => (
+          <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800">
+            <div class="flex items-center gap-4 mb-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black font-bold flex items-center justify-center">{i + 1}</span>
+              <h3 class="text-xl font-bold text-white">{phase.title}</h3>
+            </div>
+            <ul class="space-y-2 pl-14">
+              {phase.items.map((item: string) => (
+                <li class="text-brand-gray flex items-start gap-2">
+                  <span class="text-brand-lime mt-1 flex-shrink-0">→</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §4 — What's included -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">What's Included in Outsourced Appointment Setting Services</h2>
+        <p class="text-brand-gray text-lg">The full stack — not just the booking layer.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {included.map((item) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800">
+            <h3 class="text-white font-bold mb-3">{item.title}</h3>
+            <p class="text-brand-gray text-sm leading-relaxed">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §5 — White-label reseller -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-6">White-Label Appointment Setting for Reseller Agencies</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>If your agency is already reselling services to clients, appointment setting is one of the easiest additions to productize. It's a checkbox on the retainer renewal, and the unit economics are clean.</p>
+        <p><strong class="text-white">The reseller math.</strong> FlowCraftPro charges a flat partner rate per engagement. You set retail. Typical markup is 2–3x. A $2,500/mo partner rate resold at $5,500–7,000/mo is the common structure — and your client still pays less than hiring an in-house setter.</p>
+        <p><strong class="text-white">Invisible delivery.</strong> Your client sees your logo on every touchpoint. Calendar invites from your domain. Reminder emails signed by your team. Reply handling done behind the scenes — the client's only vendor relationship is with you.</p>
+        <p><strong class="text-white">Risk structure.</strong> The first-5-appointments guarantee passes through to your client. If we don't deliver, your client doesn't pay, and neither do you. Zero cash risk on a failed engagement.</p>
+        <p>This is part of the broader <a href="/white-label-lead-generation/" class="text-brand-lime hover:underline">white-label lead generation program</a>, which covers the full outbound stack as a single reseller product. Agencies that only need the appointment setting layer can engage it as a standalone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §6 — Appointment setting vs cold calling -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Outsourced Appointment Setting vs. Outsourced Cold Calling</h2>
+        <p class="text-brand-gray text-lg max-w-2xl mx-auto">These two get confused constantly, and the confusion costs agencies real money when they pick the wrong model.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-brand-dark p-8 rounded-2xl border border-gray-800">
+          <h3 class="text-xl font-bold text-white mb-4">Outsourced Cold Calling</h3>
+          <ul class="space-y-3 text-brand-gray">
+            <li class="flex items-start gap-2"><span class="text-brand-lime mt-1">→</span> Phone-first outreach — setters dial through a list and book meetings in real-time conversation</li>
+            <li class="flex items-start gap-2"><span class="text-brand-lime mt-1">→</span> Works for high-ticket B2B ($20k+ deals) where the prospect expects a phone conversation</li>
+            <li class="flex items-start gap-2"><span class="text-brand-lime mt-1">→</span> Doesn't scale for high-volume home services or local professional services — prospects screen calls</li>
+            <li class="flex items-start gap-2"><span class="text-brand-lime mt-1">→</span> Available as an add-on from FlowCraftPro for legal, IT, and enterprise consulting verticals</li>
+          </ul>
+        </div>
+        <div class="bg-brand-lime/5 p-8 rounded-2xl border border-brand-lime/30">
+          <h3 class="text-xl font-bold text-white mb-4">Outsourced Appointment Setting <span class="text-brand-lime text-sm font-normal">(FlowCraftPro model)</span></h3>
+          <ul class="space-y-3 text-brand-gray">
+            <li class="flex items-start gap-2"><span class="text-brand-lime mt-1">→</span> Multi-channel — email-led, LinkedIn-supported, phone optional for verticals that need it</li>
+            <li class="flex items-start gap-2"><span class="text-brand-lime mt-1">→</span> Scales better: one campaign reaches 500 prospects in the time a dialer reaches 50</li>
+            <li class="flex items-start gap-2"><span class="text-brand-lime mt-1">→</span> Right model for home services, med spas, law firms, IT outsourcing, dental groups</li>
+            <li class="flex items-start gap-2"><span class="text-brand-lime mt-1">→</span> Total meetings booked higher for most agency verticals at equivalent spend</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- §7 — Who it fits -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Who This Works For</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-bold text-brand-lime mb-4">Good fit</h3>
+          <ul class="space-y-3">
+            {goodFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-brand-lime mt-1 flex-shrink-0">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-red-400 mb-4">Not a fit</h3>
+          <ul class="space-y-3">
+            {notFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-red-400 mt-1 flex-shrink-0">✕</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- §8 — FAQ -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white text-center mb-12">FAQ</h2>
+      <div class="space-y-0">
+        {faq.map((item) => (
+          <details class="border-b border-gray-800 group">
+            <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
+              {item.q}
+              <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <div class="pb-6 pr-8 text-brand-gray">{item.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §9 — Final CTA -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{ctaSection.heading}</h2>
+      <p class="text-lg text-brand-gray mb-8 max-w-2xl mx-auto">{ctaSection.subheading}</p>
+      <a
+        href={ctaSection.ctaUrl}
+        class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button mb-6"
+      >
+        {ctaSection.ctaLabel}
+      </a>
+      <p class="text-sm text-brand-gray">{ctaSection.guaranteeText}</p>
+    </div>
+  </section>
+</Layout>
