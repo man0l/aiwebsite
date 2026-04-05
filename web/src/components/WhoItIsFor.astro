@@ -18,9 +18,7 @@ const cards: any[] = who?.cards?.length ? who.cards : [
     <h2 class="text-3xl md:text-5xl font-display font-bold text-white text-center mb-4">
       {whoHeading}
     </h2>
-    <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12">
-      {whoSubheading}
-    </p>
+    <p class="text-brand-gray text-lg text-center max-w-2xl mx-auto mb-12" set:html={whoSubheading} />
 
     {cards.length > 0 && (
       <div class="grid md:grid-cols-3 gap-6">
