@@ -1,0 +1,218 @@
+---
+import Layout from '../components/Layout.astro';
+
+const STRAPI_URL = import.meta.env.STRAPI_URL ?? 'http://localhost:1337';
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+
+const fallback = {
+  title: 'Lead Generation for Marketing Agencies | FlowCraftPro',
+  hero: {
+    headline: 'Lead Generation for Marketing Agencies',
+    subHeadline: 'We book 20–30 qualified HVAC, med spa, legal & IT client meetings onto your agency\'s calendar every month. The first 5 are free until they\'re on your calendar.',
+    ctaLabel: 'Book a Free Strategy Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+  },
+  stats: [
+    { value: '20–30', label: 'Qualified Meetings/Month' },
+    { value: '14',    label: 'Days to First Send' },
+    { value: '5',     label: 'Free Meetings Guarantee' },
+  ],
+  phases: [
+    {
+      title: 'Phase 1 — Infrastructure (Days 1–14)',
+      items: [
+        'Dedicated domains procured, warmed, and hardened with DKIM/SPF/DMARC',
+        'Inbox pools sharded so one reply pattern can\'t sink deliverability',
+        'AI agent loaded with your offers, case studies, objections, and ICP',
+        'HIPAA-compliant flows for med spa/dental; GDPR coverage for EU outreach',
+      ],
+    },
+    {
+      title: 'Phase 2 — Multi-Channel Launch (Days 15–45)',
+      items: [
+        'Orchestrated sequences across email, LinkedIn, and AI-driven follow-up',
+        'Vertical-specific pain hooks: HVAC CPLs, med spa intake gaps, law firm compliance',
+        'Replies route directly to your AE\'s calendar — no SDR handoff, no form fill',
+        'PAS-framed messaging referencing pain the operator lives with on Tuesday morning',
+      ],
+    },
+    {
+      title: 'Phase 3 — Qualification & Scale (Days 46–90)',
+      items: [
+        'Reply data drives variant weighting — winning sequences get amplified',
+        'Follow-up instrumented through touch 7 with intent-aware branching',
+        'BANT qualification on every reply before a calendar invite is sent',
+        'Volume target: 5–10 consults/month for high-ticket; 20–30 for high-volume niches',
+      ],
+    },
+  ],
+  proofPoints: [
+    '3.1% positive reply rate for AI automation agency (industry average ~1.7%)',
+    '23 qualified contractor meetings in 6 weeks for ClickROI — zero internal effort',
+    '24/7 med spa patient intake via AI-assisted nurture layer — no after-hours drop-off',
+    '$100k+ ARR stabilized for IT outsourcing firm over two consecutive growth years',
+  ],
+  ctaSection: {
+    heading: 'First 5 Meetings Free — Or You Don\'t Pay',
+    subheading: 'We build your outbound infrastructure, pre-qualify every lead on BANT, and book directly to your calendar. 14 days to first send. 90-day money-back guarantee.',
+    ctaLabel: 'Book Your Free Strategy Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+    guaranteeText: 'Full refund if 5 qualified meetings aren\'t booked in 90 days. HIPAA & GDPR compliant. No long-term contracts.',
+  },
+};
+
+let pageData = fallback;
+
+try {
+  const res = await fetch(
+    `${STRAPI_URL}/api/landing-pages?filters[slug][$eq]=lead-generation-for-marketing-agencies&populate=*`,
+    {
+      headers: {
+        Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  if (res.ok) {
+    const json = await res.json();
+    const item = json?.data?.[0]?.attributes ?? json?.data?.[0];
+    if (item) {
+      pageData = {
+        title:       item.title       ?? fallback.title,
+        hero:        item.hero        ?? fallback.hero,
+        stats:       item.stats?.length       ? item.stats       : fallback.stats,
+        phases:      item.phases?.length      ? item.phases      : fallback.phases,
+        proofPoints: item.proofPoints?.length ? item.proofPoints : fallback.proofPoints,
+        ctaSection:  item.ctaSection  ?? fallback.ctaSection,
+      };
+    }
+  }
+} catch (_) {
+  // Strapi unavailable — use fallback
+}
+
+const { hero, stats, phases, proofPoints, ctaSection } = pageData;
+const seoTitle = 'Lead Generation for Marketing Agencies | FlowCraftPro';
+const seoDesc  = 'We book 20–30 qualified HVAC, med spa, legal, and IT client meetings on your agency\'s calendar every month. First 5 meetings free. HIPAA & GDPR compliant.';
+---
+
+<Layout title={seoTitle} description={seoDesc}>
+  <style>
+    .glow-button {
+      box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
+      transition: all 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 30px rgba(190, 242, 100, 0.7), 0 0 15px rgba(190, 242, 100, 0.9);
+      transform: translateY(-2px);
+    }
+    .stat-card {
+      background: linear-gradient(135deg, rgba(190, 242, 100, 0.1) 0%, rgba(190, 242, 100, 0.05) 100%);
+      border: 1px solid rgba(190, 242, 100, 0.2);
+    }
+  </style>
+
+  <!-- Hero -->
+  <section class="relative py-20 md:py-32 min-h-screen flex items-center">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-gray-900 to-brand-dark"></div>
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="text-center mb-12">
+        <span class="inline-block px-4 py-2 bg-brand-lime/20 text-brand-lime text-sm font-semibold rounded-full border border-brand-lime/30 mb-6">
+          DONE-FOR-YOU OUTBOUND FOR AGENCIES
+        </span>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight mb-6">
+          {hero.headline}
+        </h1>
+        <p class="text-xl md:text-2xl text-brand-gray max-w-3xl mx-auto mb-8">
+          {hero.subHeadline}
+        </p>
+        <div class="flex flex-wrap justify-center gap-3 mb-8 text-sm text-brand-gray/80">
+          <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">HIPAA Compliant</span>
+          <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">GDPR Compliant</span>
+          <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">First 5 meetings free</span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+        {stats.map((stat: { value: string; label: string }) => (
+          <div class="stat-card p-6 rounded-2xl text-center">
+            <div class="text-4xl md:text-5xl font-bold text-brand-lime mb-2">{stat.value}</div>
+            <div class="text-brand-gray text-sm">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <!-- CTA -->
+      <div class="text-center">
+        <a
+          href={hero.ctaUrl}
+          class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button"
+        >
+          {hero.ctaLabel}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">How We Book 20–30 Qualified Agency Meetings a Month</h2>
+        <p class="text-lg text-brand-gray">Infrastructure. Launch. Scale. Fourteen days to first send.</p>
+      </div>
+      <div class="space-y-8">
+        {phases.map((phase: { title: string; items: string[] }, i: number) => (
+          <div class="bg-brand-dark p-8 rounded-2xl border border-gray-800">
+            <div class="flex items-center gap-4 mb-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black font-bold flex items-center justify-center">{i + 1}</span>
+              <h3 class="text-xl font-bold text-white">{phase.title}</h3>
+            </div>
+            <ul class="space-y-2 pl-14">
+              {phase.items.map((item: string) => (
+                <li class="text-brand-gray flex items-start gap-2">
+                  <span class="text-brand-lime mt-1 flex-shrink-0">→</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof -->
+  <section class="py-20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">What We've Built for Agencies Like Yours</h2>
+        <p class="text-lg text-brand-gray">Different verticals, same operating principle.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {proofPoints.map((point: string) => (
+          <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 flex items-start gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime flex items-center justify-center text-black font-bold">✓</div>
+            <p class="text-brand-gray">{point}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Guarantee / Final CTA -->
+  <section id="guarantee" class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{ctaSection.heading}</h2>
+      <p class="text-lg text-brand-gray mb-8 max-w-2xl mx-auto">{ctaSection.subheading}</p>
+      <a
+        href={ctaSection.ctaUrl}
+        class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button mb-6"
+      >
+        {ctaSection.ctaLabel}
+      </a>
+      <p class="text-sm text-brand-gray">{ctaSection.guaranteeText}</p>
+    </div>
+  </section>
+</Layout>
