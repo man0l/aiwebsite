@@ -201,6 +201,19 @@ const notFit = [
     </div>
   </section>
 
+  <!-- §1 — What white-label lead generation actually means -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">What White-Label Lead Generation Actually Means</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>Most agencies discover white label lead generation the same way: a client asks for outbound, the agency doesn't want to build an SDR team from scratch, and the founder starts looking for a partner who can run the work quietly in the background.</p>
+        <p><strong class="text-white">White-label software</strong> is a SaaS tool you rebrand and run yourself — your logo on the login screen, your team still doing all the work. The tool is white-labeled. The labor isn't.</p>
+        <p><strong class="text-white">White-label service</strong> is a partner that runs the entire outbound motion behind your brand. Sequences, sending infrastructure, reply handling, booked meetings — all under the hood. You sell the outcome. They deliver it.</p>
+        <p>FlowCraftPro is the second. If you want to know <a href="/blog/how-to-white-label-lead-generation/" class="text-brand-lime hover:underline">how to white label lead generation without hiring</a>, this page is about that path. If you want a tool to run yourself, we'll say so on the call.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- How the engine runs -->
   <section id="how-it-works" class="py-20 bg-gray-900 border-t border-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -223,6 +236,31 @@ const notFit = [
                 </li>
               ))}
             </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §4 — What you can resell -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">What You Can Resell Under Your Brand</h2>
+        <p class="text-lg text-brand-gray max-w-2xl mx-auto">Every sub-component of outbound, delivered as a service — your client never sees a FlowCraftPro logo on anything.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        {[
+          { title: 'White-Label Cold Email Outbound', body: 'Sending domains, warmed inboxes, sequences, AI personalization, reply handling, and booked meetings — all branded as yours.' },
+          { title: 'White-Label Appointment Setting', body: 'Already running top-of-funnel but don\'t want to staff the qualification layer? We take it from reply to calendar. See our <a href="/outsourced-appointment-setting/" class="text-brand-lime hover:underline">outsourced appointment setting</a> program for standalone engagements.', html: true },
+          { title: 'White-Label LinkedIn & Multichannel', body: 'The same ICP and AI agent pushed through LinkedIn sequences in parallel with email — consistent messaging across both channels without a visible seam.' },
+        ].map((card) => (
+          <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+            <h3 class="text-lg font-bold text-white mb-3">{card.title}</h3>
+            {card.html
+              ? <p class="text-brand-gray text-sm" set:html={card.body} />
+              : <p class="text-brand-gray text-sm">{card.body}</p>
+            }
           </div>
         ))}
       </div>
