@@ -1,8 +1,12 @@
 ---
 import Layout from '../components/Layout.astro';
+import { getGlobal } from '../lib/strapi.ts';
 
 const STRAPI_URL = import.meta.env.STRAPI_URL ?? 'http://localhost:1337';
 const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+
+let global: any = null;
+try { global = await getGlobal(); } catch (_) {}
 
 const fallback = {
   title: 'Lead Generation for Marketing Agencies | FlowCraftPro',
@@ -96,7 +100,7 @@ const seoTitle = 'Lead Generation for Marketing Agencies | FlowCraftPro';
 const seoDesc  = 'We book 20–30 qualified HVAC, med spa, legal, and IT client meetings on your agency\'s calendar every month. First 5 meetings free. HIPAA & GDPR compliant.';
 ---
 
-<Layout title={seoTitle} description={seoDesc}>
+<Layout title={seoTitle} description={seoDesc} nav={global?.nav?.map((n: any) => ({ label: n.label, href: n.href })) ?? []} siteName={global?.siteName}>
   <style>
     .glow-button {
       box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
