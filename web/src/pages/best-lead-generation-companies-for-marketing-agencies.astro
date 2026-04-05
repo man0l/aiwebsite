@@ -1,0 +1,379 @@
+---
+import Layout from '../components/Layout.astro';
+import { getGlobal } from '../lib/strapi.ts';
+
+let global: any = null;
+try { global = await getGlobal(); } catch (_) {}
+
+const vendors = [
+  {
+    rank: 1,
+    id: 'rank-1',
+    name: 'FlowCraftPro',
+    badge: 'AGENCY-EXCLUSIVE · BEST OVERALL',
+    badgeColor: 'bg-brand-lime/20 text-brand-lime border-brand-lime/30',
+    summary: 'AI-powered done-for-you outbound built specifically for PPC, SEO, and digital agencies. White-label delivery. First-5-meetings-free guarantee. Ready-made playbooks for home services, med spa, legal, and IT verticals.',
+    pros: 'Agency-exclusive positioning is rare in this category. Most competitors will happily take an agency client, but they\'re built for SaaS companies and enterprise sales teams. FlowCraftPro was built from the ground up for agencies — vertical playbooks, white-label delivery model, reseller economics, and the guarantee are all agency-first decisions.',
+    cons: 'We don\'t serve enterprise B2B or SaaS. If your agency\'s clients are Series B software companies, Martal and Belkins are a better fit. We also don\'t do inbound, paid media management, or SEO. Outbound only.',
+    bestFor: 'PPC, SEO, and digital agencies with 5+ active clients, selling into home services, med spa, dental, legal, accounting, IT outsourcing, or adjacent verticals.',
+    standout: 'The guarantee. No other vendor on this list books the first 5 qualified meetings before taking payment.',
+    pricing: 'Flat monthly partner rate, agency sets retail. Typical 2–3x markup. Rate sheet sent after a 15-minute qualification call.',
+    cta: { label: 'See our full lead generation for marketing agencies program →', href: '/lead-generation-for-marketing-agencies/' },
+  },
+  {
+    rank: 2,
+    name: 'Callbox',
+    badge: 'BEST FOR ENTERPRISE SCALE',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'One of the oldest and largest B2B lead generation companies. Multi-channel outbound across industries worldwide. Strong data infrastructure, long track record.',
+    pros: 'Scale. Callbox has been running outbound longer than most competitors have existed, and the data operation is genuinely deep. Strong in APAC. Real case studies in consulting, IT, and software.',
+    cons: 'Agency clients are a minority of their customer base. Pricing and engagement structure are built for enterprise buyers, not small-to-mid agencies reselling a productized service. Ramp time is longer than most agencies can carry against a client deadline.',
+    bestFor: 'Mid-to-large agencies serving B2B consulting, IT, or SaaS verticals with enterprise-scale budgets and 60–90 day ramp tolerance.',
+    pricing: 'Custom quotes, typically higher entry point than agency-focused vendors.',
+  },
+  {
+    rank: 3,
+    name: 'Belkins',
+    badge: 'BEST FOR APPOINTMENT QUALITY',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'Appointment setting and outbound lead generation known for strong reply rates and hands-on campaign management. Frequently cited as a benchmark for outsourced SDR work.',
+    pros: 'Execution quality. Belkins has built a reputation on actually booking meetings, not just sending volume. Deeply hands-on with campaign strategy, copy, and deliverability. Case studies are specific and reply rates are real.',
+    cons: 'Designed around end-business clients — SaaS, professional services, your clients\' clients, not your agency itself. No formal white-label or reseller program out of the box. You can make it work, but you\'re adapting their model rather than using one built for resale.',
+    bestFor: 'Agencies that want to white-label quietly without a formal reseller program, or agencies serving B2B clients who need proven appointment-setting.',
+    pricing: 'Retainer-based, mid-to-high range for the category.',
+  },
+  {
+    rank: 4,
+    name: 'Martal Group',
+    badge: 'BEST FOR B2B TECH VERTICALS',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'Fractional sales team for B2B tech and IT companies. Combines SDR outreach with sales development strategy and account-based approaches.',
+    pros: 'Deep expertise in B2B tech. If your agency\'s clients are software companies, IT service providers, or tech-adjacent SaaS, Martal understands the buyer cycle in a way generalist vendors don\'t.',
+    cons: 'Vertical mismatch for most agencies on this page. If you sell into HVAC, med spas, law firms, or local home services, Martal isn\'t built for those buyers. Their playbooks are SaaS playbooks.',
+    bestFor: 'Agencies with a concentrated book of B2B tech or IT clients who need outbound that understands long enterprise sales cycles.',
+    pricing: 'Fractional team structure, premium pricing.',
+  },
+  {
+    rank: 5,
+    name: 'Sopro',
+    badge: 'BEST FOR UK / EU AGENCIES',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'UK-based prospecting service that handles list-building, email outreach, and reply management. Transparent pricing, high-volume delivery, strong brand presence in the UK market.',
+    pros: 'Transparency. One of the few vendors that publishes clear pricing and deliverable expectations up front, making it easier to build reseller math before signing. Strong in UK and European markets.',
+    cons: 'Built on volume and automation — great for some campaigns, poor for high-ticket verticals where personalization matters more than touch count. Light on white-label infrastructure.',
+    bestFor: 'UK and European agencies, or agencies running high-volume campaigns into mid-market B2B buyers.',
+    pricing: 'Published tiers, transparent monthly rates.',
+  },
+  {
+    rank: 6,
+    name: 'Cleverly',
+    badge: 'BEST FOR LINKEDIN-FIRST AGENCIES',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'LinkedIn-focused lead generation service. Builds outreach campaigns, handles messaging, books meetings — all through LinkedIn Sales Navigator infrastructure.',
+    pros: 'LinkedIn specifically. If LinkedIn is your primary channel — common for agencies serving B2B professional services — Cleverly has focus that multi-channel vendors lack. Messaging quality on the platform is better than average.',
+    cons: 'Single-channel limitation. Most agencies need email + LinkedIn + follow-up automation working together. For agencies whose clients sit in trades or local services, LinkedIn isn\'t where the buyers are.',
+    bestFor: 'Agencies serving B2B professional services clients where LinkedIn is the primary discovery channel — consulting, coaching, agency-to-agency, tech B2B.',
+    pricing: 'Tiered monthly packages, relatively accessible entry point.',
+  },
+  {
+    rank: 7,
+    name: 'JumpCrew',
+    badge: 'BEST FOR BUNDLED SERVICES',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'Outsourced sales and marketing platform combining SDR services with digital marketing execution. Handles outreach, lead qualification, and booking.',
+    pros: 'Integrated model. JumpCrew sits at the intersection of outbound and marketing operations, a fit for companies that want more than just a meeting-booking service.',
+    cons: 'The integrated model is a feature for end-business clients and a bug for agencies. If your agency already does strategy, creative, and reporting in-house, paying JumpCrew for those layers means paying twice.',
+    bestFor: 'Small agencies that want a broader outsourced partner rather than pure outbound.',
+    pricing: 'Custom engagements, bundled service pricing.',
+  },
+  {
+    rank: 8,
+    name: 'Generect',
+    badge: 'BEST FOR DATA-LED AGENCIES',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'B2B data and outreach platform combining verified contact data with email and LinkedIn outreach workflows. Positioned against legacy data vendors like ZoomInfo and Apollo.',
+    pros: 'Data quality for modern B2B. Contact verification and enrichment is competitive with much more expensive incumbents, and the outreach layer is built on top of that data.',
+    cons: 'More of a hybrid tool/service than pure done-for-you. Agencies that want the work fully off their plate will find Generect expects more participation than a full DFY service.',
+    bestFor: 'Agencies with existing SDR capability who want better data and workflow infrastructure, not agencies trying to skip hiring altogether.',
+    pricing: 'SaaS + service hybrid, mid-range pricing.',
+  },
+  {
+    rank: 9,
+    name: 'Softtrix',
+    badge: 'BEST MULTI-SERVICE WHITE-LABEL',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'Digital marketing agency offering white-label lead generation services to other agencies. One of the few vendors that explicitly markets a reseller model.',
+    pros: 'Reseller clarity. Softtrix is upfront about selling to agencies and has a stated white-label program, putting them ahead of most of this list for agencies shopping specifically for a resale partner.',
+    cons: 'Generalist approach across digital marketing. Lead gen specialization isn\'t as deep as at a dedicated outbound vendor. Vertical playbooks are lighter than at vertical-specific competitors.',
+    bestFor: 'Agencies that want a one-stop white-label partner across multiple digital services, not just outbound.',
+    pricing: 'Accessible entry point, clear white-label tiers.',
+  },
+  {
+    rank: 10,
+    name: 'SalesBread',
+    badge: 'BEST FOR HIGH-TICKET B2B',
+    badgeColor: 'bg-gray-700 text-gray-300 border-gray-600',
+    summary: 'LinkedIn-led outbound focused on higher-ticket B2B sales. Manual personalization, lower volume, higher intent.',
+    pros: 'Quality over volume. SalesBread runs lower-touch campaigns with heavier personalization — a legitimate model for high-ticket sales where one booked meeting moves the needle.',
+    cons: 'Volume ceiling. For agencies whose clients need 20–30 meetings a month (home services, med spas, dental), the SalesBread model doesn\'t scale. Built for low-volume, high-value pipeline.',
+    bestFor: 'Agencies serving enterprise consulting, high-ticket B2B, or executive coaching clients where fewer, higher-quality meetings outperform volume.',
+    pricing: 'Mid-to-high monthly retainer, low contract minimums.',
+  },
+];
+
+const comparison = [
+  { vendor: 'FlowCraftPro', agencyFirst: 'Yes', whiteLabel: 'Yes (built for it)', verticals: 'Deep', guarantee: 'First 5 free', best: 'Home services, med spa, legal, IT agencies', highlight: true },
+  { vendor: 'Callbox',      agencyFirst: 'No',  whiteLabel: 'Limited',            verticals: 'Broad / shallow', guarantee: 'No', best: 'Large B2B consulting agencies' },
+  { vendor: 'Belkins',      agencyFirst: 'No',  whiteLabel: 'Workable, not formal',verticals: 'Medium (B2B)',   guarantee: 'No', best: 'Quality appointment setting' },
+  { vendor: 'Martal Group', agencyFirst: 'No',  whiteLabel: 'No',                 verticals: 'Tech/IT only',   guarantee: 'No', best: 'B2B tech agencies' },
+  { vendor: 'Sopro',        agencyFirst: 'Partial', whiteLabel: 'Limited',        verticals: 'Medium',         guarantee: 'No', best: 'UK/EU mid-market agencies' },
+  { vendor: 'Cleverly',     agencyFirst: 'Partial', whiteLabel: 'Limited',        verticals: 'LinkedIn only',  guarantee: 'No', best: 'B2B professional services' },
+  { vendor: 'JumpCrew',     agencyFirst: 'No',  whiteLabel: 'No',                 verticals: 'Medium, bundled',guarantee: 'No', best: 'Agencies wanting bundled services' },
+  { vendor: 'Generect',     agencyFirst: 'Partial', whiteLabel: 'Tool-hybrid',    verticals: 'Vertical-agnostic', guarantee: 'No', best: 'Agencies with in-house SDRs' },
+  { vendor: 'Softtrix',     agencyFirst: 'Yes', whiteLabel: 'Yes (stated)',        verticals: 'Light',          guarantee: 'No', best: 'Multi-service white-label' },
+  { vendor: 'SalesBread',   agencyFirst: 'Partial', whiteLabel: 'Limited',        verticals: 'High-ticket B2B',guarantee: 'No', best: 'High-ticket consulting agencies' },
+];
+
+const faq = [
+  {
+    q: 'How much does lead generation for a marketing agency actually cost across these vendors?',
+    a: 'Entry points range from roughly $1,500/mo at the lower end (Sopro, Cleverly) to $6,000+/mo at the high end (Martal, Callbox). FlowCraftPro\'s partner rate sits in the middle, but uniquely starts at $0 until the first 5 meetings are booked — so the cash cost at signup is different from the retainer cost after delivery.',
+  },
+  {
+    q: 'Which of these companies are actually white-label?',
+    a: 'Two have explicitly stated white-label programs built for agencies: FlowCraftPro and Softtrix. Belkins and Generect can be adapted into white-label structures, but it\'s not how their service is marketed. The other six are not built for resale.',
+  },
+  {
+    q: 'Can I use more than one of these vendors at the same time?',
+    a: 'Yes, and some agencies do — one for high-ticket B2B clients, another for home services. Just watch for sending domain overlap if you\'re running email campaigns on behalf of the same client through two vendors simultaneously.',
+  },
+  {
+    q: 'Why is FlowCraftPro ranked #1 on a list published by FlowCraftPro?',
+    a: 'Because the scoring criteria favor agency-first positioning, white-label readiness, vertical depth in home services and regulated professional services, and guarantee structure — and we built FlowCraftPro to score well on exactly those four things. If you use different criteria (enterprise scale, LinkedIn specialization, tech vertical depth), a different vendor on this list wins. We\'ve tried to be honest about that in each entry above.',
+  },
+  {
+    q: 'What if none of these vendors fit my agency?',
+    a: 'Then don\'t sign with any of them. The worst outcome isn\'t picking the wrong vendor — it\'s feeling pressured to pick a vendor when the right answer is "wait until your agency has the client base and vertical focus to make any of these work."',
+  },
+];
+---
+
+<Layout
+  title="Best Lead Generation Companies for Marketing Agencies 2026 | FlowCraftPro"
+  description="10 lead gen companies ranked for marketing agencies. Agency-specific criteria: vertical depth, white-label readiness, and guarantee structure. Updated April 2026."
+  nav={global?.nav?.map((n: any) => ({ label: n.label, href: n.href })) ?? []}
+  siteName={global?.siteName}
+>
+  <style>
+    .glow-button {
+      box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
+      transition: all 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 30px rgba(190, 242, 100, 0.7), 0 0 15px rgba(190, 242, 100, 0.9);
+      transform: translateY(-2px);
+    }
+  </style>
+
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-brand-dark border-b border-gray-800">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-gray-900 to-brand-dark"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="flex flex-wrap justify-center gap-3 mb-6 text-xs text-brand-gray/70">
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">Last updated: April 2026</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">10 vendors reviewed</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">Agency-specific criteria only</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold font-display tracking-tight text-white leading-tight mb-6">
+        The 10 Best Lead Generation Companies for Marketing Agencies in 2026
+      </h1>
+      <p class="text-xl text-brand-gray max-w-3xl mx-auto mb-10">
+        Most "best of" lists rank vendors that sell to everyone. This one only ranks companies that actually work with PPC, SEO, and digital marketing agencies — and we included ourselves at #1 with full honesty about where the other nine beat us.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#rank-1" class="inline-block bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">
+          See Who Ranked #1 ↓
+        </a>
+        <a href="#comparison" class="inline-block border border-gray-600 text-white font-bold px-8 py-4 rounded-full text-lg hover:border-gray-400 transition-colors">
+          Jump to Comparison Table ↓
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why this list exists -->
+  <section class="py-20 border-b border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-6">Why This List Exists</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>Most listicles on this query are written by SEO tools, directories, or agencies whose actual customers are SaaS companies and enterprise sales teams — not marketing agencies trying to book clients for their HVAC, med spa, or legal verticals.</p>
+        <p>A list of "top lead gen companies" only helps if the list is filtered by who the company actually serves. So we built this around one question: <strong class="text-white">which lead generation companies actually work for marketing agencies?</strong> Not "can they work" — which vendors have real agency playbooks, agency pricing, and a track record of delivering for agency clients specifically.</p>
+        <p>Yes, FlowCraftPro is on this list. Yes, we ranked ourselves at #1. What we've tried to do is be honest about where each of the nine competitors beats us, so the ranking means something. If you finish this page and pick a different vendor, that's fine. At least you'll pick the right one.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ranking criteria -->
+  <section class="py-20 bg-gray-900 border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">How We Ranked Them</h2>
+        <p class="text-brand-gray text-lg">Five criteria. No weighting tricks. The five things that actually determine whether a lead generation partnership works for an agency.</p>
+      </div>
+      <div class="grid md:grid-cols-5 gap-4">
+        {[
+          { n: '1', title: 'Agency-specific positioning', body: 'Does the company explicitly serve marketing agencies, or are agencies just one of many verticals they\'ll take money from?' },
+          { n: '2', title: 'Vertical depth', body: 'Ready ICP data for your vertical? Without it, you burn 45 days of ramp before the first meeting lands.' },
+          { n: '3', title: 'Delivery model fit', body: 'DFY service, outsourced SDR, white-label reseller, or self-serve software? Each model has different unit economics for agencies.' },
+          { n: '4', title: 'Risk structure', body: 'Who carries the downside if it doesn\'t work — the agency, the vendor, or the end client?' },
+          { n: '5', title: 'Agency track record', body: 'Actual case studies from agencies who resold the service or used it to grow their own pipeline — not testimonials from SaaS founders.' },
+        ].map((c) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800">
+            <div class="w-8 h-8 rounded-full bg-brand-lime text-black font-bold flex items-center justify-center text-sm mb-3">{c.n}</div>
+            <h3 class="text-white font-bold mb-2 text-sm">{c.title}</h3>
+            <p class="text-brand-gray text-xs leading-relaxed">{c.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Vendor cards -->
+  <section class="py-20 border-b border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white text-center mb-12">The 10 Best Lead Generation Companies for Marketing Agencies</h2>
+      <div class="space-y-8">
+        {vendors.map((v) => (
+          <div id={v.id ?? undefined} class={`rounded-2xl border p-8 ${v.rank === 1 ? 'border-brand-lime/40 bg-brand-lime/5' : 'border-gray-800 bg-gray-900'}`}>
+            <div class="flex items-start justify-between gap-4 mb-4 flex-wrap">
+              <div class="flex items-center gap-3">
+                <span class={`text-3xl font-extrabold ${v.rank === 1 ? 'text-brand-lime' : 'text-gray-600'}`}>#{v.rank}</span>
+                <h3 class="text-2xl font-bold text-white">{v.name}</h3>
+              </div>
+              <span class={`text-xs font-bold px-3 py-1 rounded-full border ${v.badgeColor}`}>{v.badge}</span>
+            </div>
+            <p class="text-brand-gray mb-6 text-sm leading-relaxed">{v.summary}</p>
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+              <div class="bg-brand-dark rounded-xl p-4">
+                <p class="text-brand-lime text-xs font-bold uppercase tracking-wide mb-2">What they do well</p>
+                <p class="text-brand-gray text-sm leading-relaxed">{v.pros}</p>
+              </div>
+              <div class="bg-brand-dark rounded-xl p-4">
+                <p class="text-red-400 text-xs font-bold uppercase tracking-wide mb-2">Where they fall short for agencies</p>
+                <p class="text-brand-gray text-sm leading-relaxed">{v.cons}</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-4 text-sm">
+              <div class="flex-1 min-w-48">
+                <span class="text-white font-medium">Best for: </span>
+                <span class="text-brand-gray">{v.bestFor}</span>
+              </div>
+              {v.standout && (
+                <div class="flex-1 min-w-48">
+                  <span class="text-white font-medium">Standout: </span>
+                  <span class="text-brand-gray">{v.standout}</span>
+                </div>
+              )}
+              <div class="w-full">
+                <span class="text-white font-medium">Pricing: </span>
+                <span class="text-brand-gray">{v.pricing}</span>
+              </div>
+            </div>
+            {v.cta && (
+              <div class="mt-5">
+                <a href={v.cta.href} class="text-brand-lime hover:underline text-sm font-medium">{v.cta.label}</a>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison table -->
+  <section id="comparison" class="py-20 bg-gray-900 border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white text-center mb-12">Side-by-Side Comparison</h2>
+      <div class="overflow-x-auto rounded-2xl border border-gray-800">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-800 bg-brand-dark">
+              <th class="text-left p-4 text-brand-gray font-medium">Vendor</th>
+              <th class="text-left p-4 text-brand-gray font-medium">Agency-first?</th>
+              <th class="text-left p-4 text-brand-gray font-medium">White-label ready?</th>
+              <th class="text-left p-4 text-brand-gray font-medium">Vertical depth</th>
+              <th class="text-left p-4 text-brand-gray font-medium">Guarantee</th>
+              <th class="text-left p-4 text-brand-gray font-medium">Best fit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparison.map((row) => (
+              <tr class={`border-b border-gray-800 ${row.highlight ? 'bg-brand-lime/5' : ''}`}>
+                <td class={`p-4 font-bold ${row.highlight ? 'text-brand-lime' : 'text-white'}`}>{row.vendor}</td>
+                <td class={`p-4 ${row.agencyFirst === 'Yes' ? 'text-brand-lime' : 'text-brand-gray'}`}>{row.agencyFirst}</td>
+                <td class={`p-4 ${row.whiteLabel.startsWith('Yes') ? 'text-brand-lime' : 'text-brand-gray'}`}>{row.whiteLabel}</td>
+                <td class={`p-4 ${row.verticals === 'Deep' ? 'text-brand-lime' : 'text-brand-gray'}`}>{row.verticals}</td>
+                <td class={`p-4 ${row.guarantee !== 'No' ? 'text-brand-lime font-medium' : 'text-brand-gray'}`}>{row.guarantee}</td>
+                <td class="p-4 text-brand-gray">{row.best}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to pick -->
+  <section class="py-20 border-b border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-8">How to Actually Pick One</h2>
+      <div class="space-y-8">
+        <div class="bg-gray-900 rounded-2xl p-6 border border-gray-800">
+          <h3 class="text-white font-bold mb-2">What verticals do your agency's clients sit in?</h3>
+          <p class="text-brand-gray leading-relaxed">If the answer is HVAC, plumbing, roofing, solar, med spa, dental, law firms, accounting, or IT outsourcing — the shortlist is FlowCraftPro, Softtrix, and maybe Belkins. If the answer is B2B SaaS or enterprise tech — Martal, Belkins, Callbox, and Generect. LinkedIn-heavy professional services — Cleverly and SalesBread.</p>
+        </div>
+        <div class="bg-gray-900 rounded-2xl p-6 border border-gray-800">
+          <h3 class="text-white font-bold mb-2">Do you want to resell this under your brand, or just use it in-house?</h3>
+          <p class="text-brand-gray leading-relaxed">If resale is the goal, the honest shortlist collapses to two: FlowCraftPro and Softtrix. Nobody else on this list has a formal white-label program built from the ground up. See our <a href="/white-label-lead-generation/" class="text-brand-lime hover:underline">white label lead generation</a> page for how the reseller model runs in practice.</p>
+        </div>
+        <div class="bg-gray-900 rounded-2xl p-6 border border-gray-800">
+          <h3 class="text-white font-bold mb-2">How much downside can your agency carry?</h3>
+          <p class="text-brand-gray leading-relaxed">If the answer is "very little," the guarantee becomes the deciding factor — and FlowCraftPro is the only vendor on this list that puts the first 5 meetings at zero risk. If you have budget room to absorb a failed engagement, optimize on vertical fit over risk structure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 bg-gray-900 border-b border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white text-center mb-12">FAQ</h2>
+      <div class="space-y-0">
+        {faq.map((item) => (
+          <details class="border-b border-gray-800 group">
+            <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
+              {item.q}
+              <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <div class="pb-6 pr-8 text-brand-gray">{item.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to See If We're Actually the Right Fit?</h2>
+      <p class="text-lg text-brand-gray mb-8 max-w-2xl mx-auto">15-minute qualification call. We'll look at your client base, confirm which verticals we have playbooks for, and tell you honestly if another vendor on this list is a better fit. No deck, no pitch, no obligation.</p>
+      <a
+        href="https://calendly.com/manolt/15min"
+        class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button mb-6"
+      >
+        Book Your Free Strategy Call →
+      </a>
+      <p class="text-sm text-brand-gray">First 5 meetings free per engagement. Full refund if guarantee not met in 90 days. HIPAA & GDPR compliant. Built for agencies — only agencies.</p>
+    </div>
+  </section>
+</Layout>
