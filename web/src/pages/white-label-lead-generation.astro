@@ -1,0 +1,371 @@
+---
+import Layout from '../components/Layout.astro';
+import { getGlobal } from '../lib/strapi.ts';
+
+const STRAPI_URL = import.meta.env.STRAPI_URL ?? 'http://localhost:1337';
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+
+let global: any = null;
+try { global = await getGlobal(); } catch (_) {}
+
+const fallback = {
+  hero: {
+    headline: 'White Label Lead Generation',
+    subHeadline: 'We book qualified meetings under your brand. You keep the margin. No SaaS to manage, no SDR to hire, no payment until the first 5 meetings are on the calendar.',
+    ctaLabel: 'Apply for the Reseller Program',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+  },
+  stats: [
+    { value: '2–3x', label: 'Typical Agency Markup' },
+    { value: '14',   label: 'Days to First Send' },
+    { value: '5',    label: 'Free Meetings Guarantee' },
+  ],
+  phases: [
+    {
+      title: 'Step 1 — Your Brand, Our Infrastructure',
+      items: [
+        'Sending domains registered under your agency or client\'s name',
+        'DKIM, SPF, and DMARC configured so every email looks like it came from you',
+        'We never touch your root domain and never send from ours',
+      ],
+    },
+    {
+      title: 'Step 2 — Your Offer, Our AI',
+      items: [
+        'Your positioning, offers, case studies, and ICP loaded into the AI agent',
+        'Sequences reference your voice, not ours',
+        'Reply routing goes to you, your AM, or your client\'s team directly',
+      ],
+    },
+    {
+      title: 'Step 3 — Your Vertical Playbooks',
+      items: [
+        'Working ICP data for HVAC, med spa, dental, law firms, IT outsourcing',
+        'Existing verticals launch in 14 days — no ramp time',
+        'Adjacent verticals get a custom playbook in the same 14-day window',
+      ],
+    },
+    {
+      title: 'Step 4 — Your Calendar, Our Silence',
+      items: [
+        'BANT-filtered meetings land on your calendar or your client\'s',
+        'We don\'t appear on the call, confirmation, or thank-you note',
+        'From your client\'s perspective, there is one vendor: you',
+      ],
+    },
+  ],
+  proofPoints: [
+    'Margin without headcount — partner rate is a fraction of one SDR\'s loaded cost',
+    'Retention without fulfillment drag — clients who get meetings stay longer',
+    'Compliance handled — HIPAA, GDPR, CAN-SPAM, suppression lists baked in',
+    'First-5-meetings guarantee passes through to your client — risk sits with us',
+  ],
+  ctaSection: {
+    heading: 'Add a Revenue Line Without Adding a Team',
+    subheading: 'Agencies that resell lead gen grow faster than agencies that refer it out. 15-minute qualification call. No deck, no pitch, no obligation.',
+    ctaLabel: 'Apply for the White-Label Partner Program',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+    guaranteeText: 'Rate sheet sent after the call. First 5 meetings free per engagement. Full refund if guarantee not met in 90 days.',
+  },
+};
+
+let pageData = fallback;
+
+try {
+  const res = await fetch(
+    `${STRAPI_URL}/api/landing-pages?filters[slug][$eq]=white-label-lead-generation&populate=*`,
+    { headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}`, 'Content-Type': 'application/json' } }
+  );
+  if (res.ok) {
+    const json = await res.json();
+    const item = json?.data?.[0]?.attributes ?? json?.data?.[0];
+    if (item) {
+      pageData = {
+        hero:        item.hero        ?? fallback.hero,
+        stats:       item.stats?.length       ? item.stats       : fallback.stats,
+        phases:      item.phases?.length      ? item.phases      : fallback.phases,
+        proofPoints: item.proofPoints?.length ? item.proofPoints : fallback.proofPoints,
+        ctaSection:  item.ctaSection  ?? fallback.ctaSection,
+      };
+    }
+  }
+} catch (_) {}
+
+const { hero, stats, phases, proofPoints, ctaSection } = pageData;
+
+const comparison = [
+  { feature: 'Who runs the outbound',        software: 'Your team',                    service: 'We do, behind your brand' },
+  { feature: 'Setup time to first meeting',  software: '4–8 weeks learning the tool',  service: '14 days, no learning curve' },
+  { feature: 'Deliverability ownership',     software: 'Yours',                         service: 'Ours' },
+  { feature: 'Copy, ICP, sequences',         software: 'You build from scratch',        service: 'We bring ready vertical playbooks' },
+  { feature: 'Monthly cost profile',         software: 'Low software fee + high labor', service: 'Flat partner rate, no labor' },
+  { feature: 'Client-facing branding',       software: 'Yours',                         service: 'Yours' },
+  { feature: 'Who gets blamed if it fails',  software: 'You',                           service: 'Us — covered by the guarantee' },
+  { feature: 'Scales with client count',     software: 'Only if you keep hiring',       service: 'Yes, without hiring' },
+];
+
+const faq = [
+  {
+    q: 'Will my clients ever find out FlowCraftPro is behind the work?',
+    a: 'No. Sending domains are registered under your agency or your client\'s name, email signatures are yours, calendar invites are yours, and we never contact your clients directly. The only way a client would find out is if you told them.',
+  },
+  {
+    q: 'Do I need to pay you before my client pays me?',
+    a: 'No. Partner invoices are issued on a monthly cycle with payment terms that accommodate client-side collection. Cash flow doesn\'t become your problem.',
+  },
+  {
+    q: 'How do the first-5-meetings guarantee and white-label billing interact?',
+    a: 'The guarantee passes through. If we don\'t book the first 5 qualified meetings for your client inside 90 days, your client doesn\'t pay and neither do you. You never carry risk you haven\'t collected on.',
+  },
+  {
+    q: 'Can I white-label just the appointment setting piece, not the full outbound?',
+    a: 'Yes. If you\'re already running the top of the funnel and only need qualification and booking, we run white label appointment setting as a standalone engagement.',
+  },
+  {
+    q: 'What verticals do you already have playbooks for?',
+    a: 'HVAC, plumbing, roofing, solar, remodeling, med spas, dental groups, law firms, accounting, IT outsourcing, and a few adjacents. For the full list, see our <a href="/lead-generation-for-marketing-agencies/" class="text-brand-lime hover:underline">lead generation for marketing agencies</a> program.',
+  },
+];
+
+const goodFit = [
+  'Established PPC, SEO, or digital agencies with at least 5 active clients',
+  'Agencies serving home services, med spa, dental, legal, IT outsourcing, or adjacent verticals',
+  'Willing to position lead gen as a productized add-on rather than a custom build',
+  'Comfortable with a 90-day minimum partnership so the system has room to ramp',
+];
+
+const notFit = [
+  'Agencies that want a reseller badge without actually selling the service',
+  'Agencies selling into verticals we don\'t have ICP data for — we\'ll say so on the qualification call',
+  'Solo operators with fewer than three active clients, where the unit economics don\'t land yet',
+  'Anyone looking for list-buying, scraped databases, or pure volume plays',
+];
+---
+
+<Layout
+  title="White Label Lead Generation | FlowCraftPro"
+  description="Resell booked HVAC, med spa, legal & IT meetings under your agency brand. Flat partner rate, 2-3x markup, first 5 meetings free. HIPAA & GDPR compliant."
+  nav={global?.nav?.map((n: any) => ({ label: n.label, href: n.href })) ?? []}
+  siteName={global?.siteName}
+>
+  <style>
+    .glow-button {
+      box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
+      transition: all 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 30px rgba(190, 242, 100, 0.7), 0 0 15px rgba(190, 242, 100, 0.9);
+      transform: translateY(-2px);
+    }
+    .stat-card {
+      background: linear-gradient(135deg, rgba(190, 242, 100, 0.1) 0%, rgba(190, 242, 100, 0.05) 100%);
+      border: 1px solid rgba(190, 242, 100, 0.2);
+    }
+  </style>
+
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-brand-dark">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-gray-900 to-brand-dark"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+      <span class="inline-block px-4 py-2 bg-brand-lime/20 text-brand-lime text-sm font-semibold rounded-full border border-brand-lime/30 mb-6">
+        WHITE-LABEL RESELLER PROGRAM
+      </span>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold font-display tracking-tight text-white leading-tight mb-6">
+        {hero.headline}
+      </h1>
+      <p class="text-xl md:text-2xl text-brand-gray max-w-3xl mx-auto mb-8">
+        {hero.subHeadline}
+      </p>
+      <div class="flex flex-wrap justify-center gap-3 mb-10 text-sm text-brand-gray/80">
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">White-label DFY</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">HIPAA & GDPR compliant</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">First 5 meetings free</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">Your brand, never ours</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-4xl mx-auto">
+        {stats.map((stat: { value: string; label: string }) => (
+          <div class="stat-card p-6 rounded-2xl text-center">
+            <div class="text-4xl md:text-5xl font-bold text-brand-lime mb-2">{stat.value}</div>
+            <div class="text-brand-gray text-sm">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={hero.ctaUrl} class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">
+          {hero.ctaLabel}
+        </a>
+        <a href="#how-it-works" class="inline-block border border-gray-600 text-white font-bold px-10 py-5 rounded-full text-lg hover:border-gray-400 transition-colors">
+          How the Markup Works ↓
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How the engine runs -->
+  <section id="how-it-works" class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">How the White-Label Engine Runs Behind Your Brand</h2>
+        <p class="text-lg text-brand-gray">Your client never sees the machine. Here's what that looks like in practice.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {phases.map((phase: { title: string; items: string[] }, i: number) => (
+          <div class="bg-brand-dark p-8 rounded-2xl border border-gray-800">
+            <div class="flex items-center gap-4 mb-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black font-bold flex items-center justify-center">{i + 1}</span>
+              <h3 class="text-lg font-bold text-white">{phase.title}</h3>
+            </div>
+            <ul class="space-y-2 pl-14">
+              {phase.items.map((item: string) => (
+                <li class="text-brand-gray flex items-start gap-2">
+                  <span class="text-brand-lime mt-1 flex-shrink-0">→</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why white-label -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Why Agencies White-Label Instead of Building In-House</h2>
+        <p class="text-lg text-brand-gray">The reasons compound on each other.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {proofPoints.map((point: string) => (
+          <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 flex items-start gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime flex items-center justify-center text-black font-bold text-lg">✓</div>
+            <p class="text-brand-gray">{point}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Software vs Service comparison -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">White-Label Software vs. White-Label Service</h2>
+        <p class="text-lg text-brand-gray max-w-2xl mx-auto">Pick the one that matches what you're optimizing for: time or margin per unit.</p>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-gray-800">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-800">
+              <th class="text-left p-4 text-brand-gray font-medium"></th>
+              <th class="text-left p-4 text-brand-gray font-medium">White-label software (rebranded SaaS)</th>
+              <th class="text-left p-4 text-brand-lime font-medium">White-label service (FlowCraftPro)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparison.map((row, i) => (
+              <tr class={`border-b border-gray-800 ${i % 2 === 0 ? 'bg-brand-dark' : 'bg-gray-900'}`}>
+                <td class="p-4 text-white font-medium">{row.feature}</td>
+                <td class="p-4 text-brand-gray">{row.software}</td>
+                <td class="p-4 text-brand-lime">{row.service}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reseller economics -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">How the Reseller Economics Work</h2>
+        <p class="text-lg text-brand-gray max-w-2xl mx-auto">The math, in the open.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[
+          { title: 'Flat partner rate, you set retail', body: 'FlowCraftPro charges you a flat monthly fee per engagement. You set what your clients pay. The delta is your margin — no revenue share, no clawbacks, no surprise markups.' },
+          { title: 'Realistic markup range', body: 'Agencies inside the reseller program typically charge clients 2–3x the partner rate. A $3k/mo partner fee resold at $7–9k is the common structure.' },
+          { title: 'Stack with existing retainers', body: 'Most partners bolt it onto an existing PPC or SEO retainer as an upsell. Zero extra sales motion — it becomes a checkbox on the renewal conversation.' },
+          { title: 'Volume tier pricing', body: 'Partners running three or more active client engagements get tier pricing, which widens the margin without changing the retail.' },
+          { title: 'The floor', body: 'The first-5-meetings guarantee passes through to you. If we don\'t deliver, your client doesn\'t pay and neither do you. Risk sits with us.' },
+          { title: 'Get the rate sheet', body: 'Partner rate sheet is sent after the qualification call. No commitment required to see the numbers.' },
+        ].map((card) => (
+          <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+            <h3 class="text-lg font-bold text-white mb-3">{card.title}</h3>
+            <p class="text-brand-gray text-sm">{card.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Who it fits -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Who the Reseller Program Fits</h2>
+        <p class="text-lg text-brand-gray">The program works well for some agencies and badly for others.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-bold text-brand-lime mb-4">Good fit</h3>
+          <ul class="space-y-3">
+            {goodFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-brand-lime mt-1 flex-shrink-0">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-red-400 mb-4">Not a fit</h3>
+          <ul class="space-y-3">
+            {notFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-red-400 mt-1 flex-shrink-0">✕</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white text-center mb-12">White-Label Lead Generation FAQ</h2>
+      <div class="space-y-0">
+        {faq.map((item) => (
+          <details class="border-b border-gray-800 group">
+            <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
+              {item.q}
+              <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <div class="pb-6 pr-8 text-brand-gray" set:html={item.a} />
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{ctaSection.heading}</h2>
+      <p class="text-lg text-brand-gray mb-8 max-w-2xl mx-auto">{ctaSection.subheading}</p>
+      <a
+        href={ctaSection.ctaUrl}
+        class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button mb-6"
+      >
+        {ctaSection.ctaLabel}
+      </a>
+      <p class="text-sm text-brand-gray">{ctaSection.guaranteeText}</p>
+    </div>
+  </section>
+</Layout>
