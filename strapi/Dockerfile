@@ -32,8 +32,9 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./
 COPY --from=build /app/favicon.png ./
 COPY --from=build /app/public ./public
+COPY --from=build /app/dist/src ./src
 COPY config ./config
-COPY src ./src
+RUN find /app/config -name '*.ts' -delete
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0

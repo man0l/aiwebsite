@@ -1,0 +1,9 @@
+node_modules
+.git
+.cache
+.tmp
+.strapi
+build
+dist
+*.ts
+!src/**/*.ts
