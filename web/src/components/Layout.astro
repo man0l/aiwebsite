@@ -10,11 +10,12 @@ interface Props {
 const { title, description, image, nav = [], siteName = 'FlowCraft Pro' } = Astro.props;
 
 const navItems = nav.length > 0 ? nav : [
-  { label: 'Systems',  href: '/#systems'  },
-  { label: 'Process',  href: '/#process'  },
-  { label: 'Results',  href: '/#results'  },
-  { label: 'FAQ',      href: '/#faq'      },
-  { label: 'Blog',     href: '/blog'      },
+  { label: 'Systems',      href: '/#systems'      },
+  { label: 'Process',      href: '/#process'      },
+  { label: 'Results',      href: '/#results'      },
+  { label: 'For Agencies', href: '/lead-generation-for-marketing-agencies' },
+  { label: 'FAQ',          href: '/#faq'          },
+  { label: 'Blog',         href: '/blog'          },
 ];
 ---
 <!DOCTYPE html>

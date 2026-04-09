@@ -119,7 +119,6 @@
                     <a href="#systems" class="text-brand-gray hover:text-white font-medium transition-colors">Systems</a>
                     <a href="#process" class="text-brand-gray hover:text-white font-medium transition-colors">Process</a>
                     <a href="#results" class="text-brand-gray hover:text-white font-medium transition-colors">Results</a>
-                    <a href="/lead-generation-for-marketing-agencies/" class="text-brand-gray hover:text-white font-medium transition-colors">For Agencies</a>
                     <a href="#faq" class="text-brand-gray hover:text-white font-medium transition-colors">FAQ</a>
                 </nav>
                 <div class="hidden md:block">
@@ -148,7 +147,6 @@
                     <a href="#systems" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">Systems</a>
                     <a href="#process" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">Process</a>
                     <a href="#results" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">Results</a>
-                    <a href="/lead-generation-for-marketing-agencies/" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">For Agencies</a>
                     <a href="#faq" class="mobile-nav-link text-3xl text-brand-gray hover:text-white font-medium transition-colors">FAQ</a>
                     <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="mt-8 bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors">Book Strategy Call</a>
                 </nav>
@@ -162,127 +160,12 @@
             <div class="absolute inset-0 bg-brand-dark/90"></div>
             <div class="relative z-10 max-w-5xl mx-auto text-center px-4">
                 <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
-                    Stop Hiring Expensive SDRs. Automate 20-30 Qualified Meetings Per Month.
+                    Replace Unpredictable Referrals with an 
+                    <span class="text-brand-lime">AI-Driven Pipeline of 5+ Monthly Leads.</span>
                 </h1>
-                <p class="mt-8 text-lg md:text-xl text-brand-gray max-w-3xl mx-auto">Manual prospecting burnout ends here. We build the AI-first acquisition infrastructure—domains procured and warmed, multi-channel orchestration, and a “first 5 meetings booked or you don't pay” guarantee.</p>
+                <p class="mt-8 text-lg md:text-xl text-brand-gray max-w-3xl mx-auto">AI-powered client acquisition systems for PPC & SEO agencies. Replace inconsistent referrals with predictable growth, <span class="text-white font-semibold">guaranteed to deliver 5+ monthly leads or your money back.</span></p>
                 <div class="mt-12">
-                    <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button inline-flex items-center justify-center text-center w-full sm:w-auto max-w-xs mx-auto">Get Your Free Growth Strategy</a>
-                    <p class="mt-4 text-sm text-brand-gray">Pay only after the first 5 meetings are booked. GDPR & HIPAA compliant.</p>
-                </div>
-                <div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2 text-xs font-semibold">
-                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-900 border border-gray-800 text-white">
-                        <span class="text-brand-lime">●</span> HIPAA Compliant
-                    </span>
-                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-900 border border-gray-800 text-white">
-                        <span class="text-brand-lime">●</span> GDPR Compliant
-                    </span>
-                </div>
-                <div class="mt-8">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 text-sm text-brand-gray">
-                        <span class="font-semibold text-white">Powering growth for agencies like:</span>
-                        <div class="flex flex-wrap items-center justify-center gap-3">
-                            <span class="px-3 py-1 rounded-full border border-gray-800 bg-black/40 text-brand-gray">ClickROI · Construction</span>
-                            <span class="px-3 py-1 rounded-full border border-gray-800 bg-black/40 text-brand-gray">Local Click Studio · Med Spas</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-8 flex flex-col items-center space-y-3">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-16 h-16 rounded-full overflow-hidden border border-gray-800">
-                            <img src="https://aiaccelerator.bg/wp-content/uploads/2025/12/avatar-upwork.png" alt="Founder portrait" class="w-full h-full object-cover">
-                        </div>
-                        <div class="text-left">
-                            <p class="text-white font-semibold">Infrastructure engineered by veterans</p>
-                            <p class="text-brand-gray text-sm">17 years of engineering, $100k+ scaling track record</p>
-                        </div>
-                    </div>
-                    <div class="text-center text-brand-gray text-sm">
-                        <p class="italic text-white">“First 5 meetings booked or you don’t pay.”</p>
-                        <p class="mt-1 text-white font-semibold">— Manol T., Founder</p>
-                    </div>
-                </div>
-                <div class="mt-10">
-                    <div class="bg-gray-900/70 border border-gray-800 rounded-2xl p-6 max-w-4xl mx-auto">
-                        <div class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-4 md:space-y-0">
-                            <div class="md:w-1/2 space-y-3">
-                                <h3 class="text-xl font-bold text-white">How It Works (90-Second Snapshot)</h3>
-                                <ul class="text-brand-gray text-sm space-y-2">
-                                    <li class="flex items-start"><span class="text-brand-lime font-bold mr-2">1.</span> Domains procured & warmed; AI agent loads your offers and case studies.</li>
-                                    <li class="flex items-start"><span class="text-brand-lime font-bold mr-2">2.</span> Multi-channel sequences fire (email, LinkedIn, AI follow-up) with niche pain points.</li>
-                                    <li class="flex items-start"><span class="text-brand-lime font-bold mr-2">3.</span> Calendar-ready, qualified meetings flow in—first 5 booked before you pay.</li>
-                                </ul>
-                            </div>
-                            <div class="md:w-1/2">
-                                <div class="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-xl p-4 shadow-lg">
-                                    <p class="text-brand-gray text-xs uppercase tracking-wide mb-3">Pipeline Visualization</p>
-                                    <div class="space-y-3">
-                                        <div>
-                                            <div class="flex justify-between text-xs text-brand-gray mb-1"><span>Cold outreach</span><span>Inbox ready</span></div>
-                                            <div class="h-2 rounded-full bg-gray-800">
-                                                <div class="h-2 rounded-full bg-brand-lime" style="width: 85%;"></div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="flex justify-between text-xs text-brand-gray mb-1"><span>Replies nurtured</span><span>Qualified</span></div>
-                                            <div class="h-2 rounded-full bg-gray-800">
-                                                <div class="h-2 rounded-full bg-lime-400" style="width: 65%;"></div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="flex justify-between text-xs text-brand-gray mb-1"><span>Booked meetings</span><span>Calendar</span></div>
-                                            <div class="h-2 rounded-full bg-gray-800">
-                                                <div class="h-2 rounded-full bg-emerald-400" style="width: 45%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Revenue Loss Calculator -->
-        <section class="py-20 bg-brand-dark border-t border-b border-gray-800">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto">
-                    <p class="text-brand-lime font-bold text-sm uppercase tracking-wide">The Cost of Silence</p>
-                    <h2 class="text-4xl md:text-5xl font-bold text-white mt-3">See What 20 Missed Meetings Cost Every Month</h2>
-                    <p class="mt-4 text-lg text-brand-gray">Drag the sliders to quantify the revenue lost when 20 qualified appointments aren’t on your calendar.</p>
-                </div>
-
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-                        <div class="mb-6">
-                            <div class="flex justify-between items-center mb-2">
-                                <label for="dealValue" class="text-white font-semibold">Average Client Value</label>
-                                <span id="dealValueLabel" class="text-brand-lime font-semibold">$3,000</span>
-                            </div>
-                            <input id="dealValue" type="range" min="500" max="50000" value="3000" step="100" class="w-full accent-brand-lime">
-                            <p class="text-xs text-brand-gray mt-2">$500 – $50,000</p>
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <label for="closeRate" class="text-white font-semibold">Close Rate</label>
-                                <span id="closeRateLabel" class="text-brand-lime font-semibold">20%</span>
-                            </div>
-                            <input id="closeRate" type="range" min="1" max="50" value="20" step="1" class="w-full accent-brand-lime">
-                            <p class="text-xs text-brand-gray mt-2">1% – 50%</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col justify-between">
-                        <div>
-                            <p class="text-sm text-brand-gray uppercase tracking-wide">Revenue Lost (per month)</p>
-                            <p id="revenueLost" class="mt-3 text-4xl md:text-5xl font-extrabold text-red-400">$12,000</p>
-                            <p id="revenueSubtext" class="mt-2 text-brand-gray text-sm">You’re leaving $12,000/month on the table.</p>
-                        </div>
-                        <div class="mt-8">
-                            <a id="revenueCTA" href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="block text-center bg-brand-lime text-black font-bold px-6 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">Reclaim My $12,000 Next Month</a>
-                            <p class="mt-3 text-center text-xs text-brand-gray">First 5 meetings booked or you don’t pay.</p>
-                        </div>
-                    </div>
+                    <a href="https://calendly.com/manolt/15min" target="_blank" rel="noopener noreferrer" class="bg-brand-lime text-black font-bold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button inline-flex items-center justify-center text-center w-full sm:w-auto max-w-xs mx-auto">Book Your Free Growth Strategy Call</a>
                 </div>
             </div>
         </section>
@@ -327,11 +210,6 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mt-0 grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
                     <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                        <span class="text-brand-lime font-bold text-xs uppercase">AI AUTOMATION AGENCY</span>
-                        <h3 class="mt-2 text-2xl font-bold text-white">3.1% Positive Response Rate</h3>
-                        <p class="mt-2 text-brand-gray text-sm">Built a hyper-personalized outreach system using AI site-crawling and manual lead-scrubbing to book high-intent meetings with SEO & PPC founders.</p>
-                    </div>
-                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
                         <span class="text-brand-lime font-bold text-xs uppercase">E-COMMERCE BUSINESS</span>
                         <h3 class="mt-2 text-2xl font-bold text-white">$25,000/mo Profit Increase</h3>
                         <p class="mt-2 text-brand-gray text-sm">Overhauled fulfillment and inventory workflows in just 4 months, drastically reducing costs.</p>
@@ -347,19 +225,9 @@
                         <p class="mt-2 text-brand-gray text-sm">Built an AI-powered content system that generated significant authority from scratch in only 3 months.</p>
                     </div>
                     <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                        <span class="text-brand-lime font-bold text-xs uppercase">KLAVIYO EMAIL AGENCY</span>
-                        <h3 class="mt-2 text-2xl font-bold text-white">100% Admin Automation</h3>
-                        <p class="mt-2 text-brand-gray text-sm">Eliminated a 60-minute manual onboarding bottleneck by engineering a 3-tier n8n workflow connecting ClickUp, GDrive, and Slack.</p>
-                    </div>
-                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                        <span class="text-brand-lime font-bold text-xs uppercase">CLICKROI · CONSTRUCTION</span>
-                        <h3 class="mt-2 text-2xl font-bold text-white">No-Burnout Lead Engine</h3>
-                        <p class="mt-2 text-brand-gray text-sm">Gatekeeper-bypass cold outreach for general contractors, delivering a steady pipeline without manual prospecting burnout.</p>
-                    </div>
-                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                        <span class="text-brand-lime font-bold text-xs uppercase">LOCAL CLICK STUDIO · MED SPAS</span>
-                        <h3 class="mt-2 text-2xl font-bold text-white">24/7 Patient Intake</h3>
-                        <p class="mt-2 text-brand-gray text-sm">AI-assisted nurturing to fix speed-to-lead for Med Spas, capturing inquiries instantly and boosting booked consults.</p>
+                        <span class="text-brand-lime font-bold text-xs uppercase">HIGH-TICKET COACH</span>
+                        <h3 class="mt-2 text-2xl font-bold text-white">Custom Management App</h3>
+                        <p class="mt-2 text-brand-gray text-sm">Developed a bespoke app to streamline client management, saving hundreds of hours per year.</p>
                     </div>
                 </div>
             </div>
@@ -370,153 +238,91 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="text-4xl md:text-5xl font-bold text-white">Your AI-Powered Client Acquisition System</h2>
-                    <p class="mt-4 text-lg text-brand-gray">Built for PPC, SEO, and digital agencies serving local businesses. Each component tackles the biggest blockers to scaling fulfillment-heavy, service-based models.</p>
+                    <p class="mt-4 text-lg text-brand-gray">A scalable, predictable growth asset, built for you. Explore the core components by clicking each tab below to see how a consistent flow of qualified opportunities is created.</p>
                 </div>
 
                 <div class="mt-16 max-w-4xl mx-auto">
                     <div class="mb-8 border-b border-gray-800 flex justify-center space-x-4 md:space-x-8">
-                        <button data-tab="email" class="system-tab active-tab py-4 px-1 font-semibold text-lg border-b-2">✉️ Niche Outreach</button>
-                        <button data-tab="linkedin" class="system-tab py-4 px-1 font-semibold text-lg border-b-2 border-transparent text-brand-gray hover:text-white transition-colors">🔗 Authority</button>
-                        <button data-tab="content" class="system-tab py-4 px-1 font-semibold text-lg border-b-2 border-transparent text-brand-gray hover:text-white transition-colors">🤖 Educational Assets</button>
+                        <button data-tab="email" class="system-tab active-tab py-4 px-1 font-semibold text-lg border-b-2">✉️ Cold Email</button>
+                        <button data-tab="linkedin" class="system-tab py-4 px-1 font-semibold text-lg border-b-2 border-transparent text-brand-gray hover:text-white transition-colors">🔗 LinkedIn</button>
+                        <button data-tab="content" class="system-tab py-4 px-1 font-semibold text-lg border-b-2 border-transparent text-brand-gray hover:text-white transition-colors">🤖 AI Content</button>
                     </div>
 
                     <div id="email" class="system-content">
                         <div class="bg-gray-900 p-8 md:p-10 rounded-2xl border border-gray-800">
-                           <h3 class="text-2xl font-bold mb-4 text-white">Niche-Specific Decision Maker Outreach</h3>
-                           <p class="text-brand-gray mb-6">Bypass gatekeepers and land in owners’ inboxes with AI-personalized outreach tied to vertical pain (missed calls, rising CPL).</p>
+                           <h3 class="text-2xl font-bold mb-4 text-white">Direct-to-Inbox Pipeline</h3>
+                           <p class="text-brand-gray mb-6">A precision-targeted cold email system is built to book meetings directly with your ideal clients. The service covers everything from lead sourcing and personalized copywriting to technical setup and inbox management.</p>
                            <ul class="space-y-4 text-brand-light">
-                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Decision-Maker Sourcing:</strong> Data-backed lists of owners and partners—not generic front-desk contacts—so outreach never stalls with gatekeepers.</div></li>
-                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Pain-Point Personalization:</strong> Sequences reference vertical-specific problems (e.g., 20% missed new-patient calls, rising HVAC lead costs) to drive replies.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Technical Infrastructure:</strong> Full setup of domains, inboxes, and warming protocols to land in the primary inbox.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">AI-Powered Copywriting:</strong> A/B tested email sequences that convert, written by an expert team and optimized by AI.</div></li>
                            </ul>
-                           <div class="mt-6 p-4 bg-gray-800/70 border border-gray-700 rounded-xl">
-                               <p class="text-sm text-brand-gray"><span class="text-brand-lime font-semibold">ClickROI · Construction</span> — Used this inbox-ready system to bypass manual prospecting and book contractor meetings without burning out their team.</p>
-                           </div>
                         </div>
                     </div>
                     <div id="linkedin" class="system-content hidden">
                          <div class="bg-gray-900 p-8 md:p-10 rounded-2xl border border-gray-800">
-                           <h3 class="text-2xl font-bold mb-4 text-white">Vertical Authority Positioning</h3>
-                           <p class="text-brand-gray mb-6">Own your niche on LinkedIn so sales calls start with trust, not price pressure.</p>
+                           <h3 class="text-2xl font-bold mb-4 text-white">Authority & Connection Engine</h3>
+                           <p class="text-brand-gray mb-6">Your LinkedIn profile is turned into a powerful lead generation asset. The system connects with hundreds of ideal prospects, nurtures them with value-driven messaging, and converts them into booked sales calls.</p>
                             <ul class="space-y-4 text-brand-light">
-                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Niche Positioning:</strong> Profiles rewritten to signal relevance to contractors, legal, dental, and hospitality owners.</div></li>
-                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Automated Warm-Up:</strong> Safe, steady outreach to 500+ decision-makers monthly so sales calls start with trust, not skepticism.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Profile Optimization:</strong> Your profile is rewritten to speak directly to your target audience and position you as an authority.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Automated Connection Campaigns:</strong> Safely connect with 500+ targeted decision-makers every month.</div></li>
                            </ul>
                         </div>
                     </div>
                     <div id="content" class="system-content hidden">
                          <div class="bg-gray-900 p-8 md:p-10 rounded-2xl border border-gray-800">
-                           <h3 class="text-2xl font-bold mb-4 text-white">Pain-Point Educational Assets</h3>
-                           <p class="text-brand-gray mb-6">AI-assisted content that tackles immediate threats (AI search, patient loss) and nurtures leads before the call.</p>
+                           <h3 class="text-2xl font-bold mb-4 text-white">AI-Powered Content Creation</h3>
+                           <p class="text-brand-gray mb-6">You are established as a thought leader with high-quality, AI-assisted content. This system repurposes your core ideas into content that attracts inbound leads and warms up outbound prospects.</p>
                             <ul class="space-y-4 text-brand-light">
-                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">AI Drafting, Human Proof:</strong> Expert editors refine AI drafts into authoritative guides that win trust.</div></li>
-                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Multi-Channel Nurture:</strong> Assets shipped across email, LinkedIn, and retargeting to warm outbound prospects and shorten sales cycles.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">AI-Drafting & Human Editing:</strong> Advanced AI is used to draft content, which is then refined and polished by expert human editors.</div></li>
+                                <li class="flex items-start"><span class="text-brand-lime font-bold mr-3 mt-1">✓</span><div><strong class="font-semibold text-white">Multi-Channel Distribution:</strong> Your content is formatted and distributed across key platforms to maximize reach.</div></li>
                            </ul>
-                            <div class="mt-6 p-4 bg-gray-800/70 border border-gray-700 rounded-xl">
-                                <p class="text-sm text-brand-gray"><span class="text-brand-lime font-semibold">Local Click Studio · Med Spas</span> — Deployed AI-assisted nurture to fix speed-to-lead, capturing patient inquiries instantly and increasing booked consults.</p>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
-
-
-        <!-- Unified Delivery Timeline -->
+        
+        <!-- Process Section -->
         <section id="process" class="py-20 bg-gray-900 border-t border-b border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto">
-                    <p class="text-brand-lime font-bold text-sm uppercase tracking-wide">How We Build & Scale</p>
-                    <h2 class="text-4xl md:text-5xl font-bold text-white mt-3">One Clear Path to 20-30 Qualified Meetings</h2>
-                    <p class="mt-4 text-lg text-brand-gray">Asset build, launch, and scale in one streamlined timeline—backed by the First 5 Meetings Guarantee.</p>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Your 90-Day Path to Predictable Growth</h2>
+                    <p class="mt-4 text-lg text-brand-gray">The structured process is designed for clarity and rapid results, taking you from strategy to a fully scaled system in one quarter.</p>
                 </div>
-
-                <div class="mt-14 space-y-10">
-                    <!-- Step 1 -->
-                    <div class="flex flex-col lg:flex-row items-center lg:items-start lg:space-x-10 bg-gray-900 rounded-2xl border border-gray-800 p-6">
-                        <div class="lg:w-5/12">
-                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand-lime text-black font-bold text-lg">1</div>
-                            <h3 class="mt-4 text-2xl font-bold text-white">Asset Build (Days 1-14)</h3>
-                            <p class="mt-3 text-brand-gray">Dedicated domains procured and warmed; 24/7 AI agent loaded with your offers and case studies; compliance baked in (HIPAA/GDPR).</p>
-                        </div>
-                        <div class="lg:w-7/12 mt-6 lg:mt-0">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-gray-800/60 border border-gray-800 rounded-xl p-4">
-                                    <p class="text-white font-semibold text-sm">Infrastructure</p>
-                                    <p class="text-brand-gray text-sm mt-2">Domains + inboxes warmed, DKIM/SPF/DMARC set, SISR sharding for inbox placement.</p>
-                                </div>
-                                <div class="bg-gray-800/60 border border-gray-800 rounded-xl p-4">
-                                    <p class="text-white font-semibold text-sm">Targeting</p>
-                                    <p class="text-brand-gray text-sm mt-2">ICP + lookalikes from your best wins (Construction, Med Spa, Legal).</p>
-                                </div>
+                <div class="mt-16 max-w-6xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-10 gap-y-8">
+                        <!-- Step 1 -->
+                        <div class="process-step relative text-left">
+                            <div class="flex justify-start items-center mb-2">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">1</div>
+                                <h3 class="ml-4 text-xl font-bold text-white">Strategy & Build</h3>
                             </div>
+                            <p class="text-brand-gray">Days 1-14: System infrastructure setup and initial campaign strategy.</p>
                         </div>
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div class="flex flex-col lg:flex-row-reverse items-center lg:items-start lg:space-x-10 lg:space-x-reverse bg-gray-900 rounded-2xl border border-gray-800 p-6">
-                        <div class="lg:w-5/12">
-                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand-lime text-black font-bold text-lg">2</div>
-                            <h3 class="mt-4 text-2xl font-bold text-white">Launch (Days 15-45)</h3>
-                            <p class="mt-3 text-brand-gray">Multi-channel orchestration: email, LinkedIn, and AI follow-ups tuned to niche pain points (missed calls, high CPL, compliance risk).</p>
-                        </div>
-                        <div class="lg:w-7/12 mt-6 lg:mt-0">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-gray-800/60 border border-gray-800 rounded-xl p-4">
-                                    <p class="text-white font-semibold text-sm">Messaging</p>
-                                    <p class="text-brand-gray text-sm mt-2">PAS-driven sequences tied to vertical pains; AI personalization; reply routing to calendar.</p>
-                                </div>
-                                <div class="bg-gray-800/60 border border-gray-800 rounded-xl p-4">
-                                    <p class="text-white font-semibold text-sm">Volume Control</p>
-                                    <p class="text-brand-gray text-sm mt-2">High-ticket niches: 5-10 enterprise consults. High-volume niches: 20-30 patient/intake appointments.</p>
-                                </div>
+                        <!-- Step 2 -->
+                        <div class="process-step relative text-left">
+                           <div class="flex justify-start items-center mb-2">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">2</div>
+                                <h3 class="ml-4 text-xl font-bold text-white">Launch & Test</h3>
                             </div>
+                            <p class="text-brand-gray">Days 15-30: Campaigns go live to gather initial market feedback and data.</p>
                         </div>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="flex flex-col lg:flex-row items-center lg:items-start lg:space-x-10 bg-gray-900 rounded-2xl border border-gray-800 p-6">
-                        <div class="lg:w-5/12">
-                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand-lime text-black font-bold text-lg">3</div>
-                            <h3 class="mt-4 text-2xl font-bold text-white">Scale (Days 46-90)</h3>
-                            <p class="mt-3 text-brand-gray">Optimize on reply data; automated follow-up captures the 60% of responses after touch two; no-lead-lost ops while you focus on fulfillment.</p>
-                        </div>
-                        <div class="lg:w-7/12 mt-6 lg:mt-0">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-gray-800/60 border border-gray-800 rounded-xl p-4">
-                                    <p class="text-white font-semibold text-sm">Qualification</p>
-                                    <p class="text-brand-gray text-sm mt-2">BANT-style filtering: Budget, Authority, Need, Timing matched to ICP before booking.</p>
-                                </div>
-                                <div class="bg-gray-800/60 border border-gray-800 rounded-xl p-4">
-                                    <p class="text-white font-semibold text-sm">Guarantee</p>
-                                    <p class="text-brand-gray text-sm mt-2">First 5 meetings booked before you pay; ongoing target 20-30 meetings/month once ramped.</p>
-                                </div>
+                        <!-- Step 3 -->
+                        <div class="process-step relative text-left">
+                           <div class="flex justify-start items-center mb-2">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">3</div>
+                                <h3 class="ml-4 text-xl font-bold text-white">Optimize & Scale</h3>
                             </div>
+                            <p class="text-brand-gray">Days 31-60: Double down on winning angles and increase outreach volume.</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Who Is This For Section -->
-        <section class="py-20 bg-brand-dark border-b border-gray-800">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto">
-                    <h2 class="text-4xl md:text-5xl font-bold text-white">Built for Local-Focused Agencies</h2>
-                    <p class="mt-4 text-lg text-brand-gray">For PPC, SEO, and digital marketing agencies stuck in the feast-or-famine cycle and ready to productize acquisition.</p>
-                </div>
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                        <h3 class="text-xl font-bold text-white">Who We Target</h3>
-                        <p class="mt-3 text-brand-gray">Practice owners, partners, and contractors—roofers, MedSpas, dental groups, law firms, restaurants, and hospitality operators.</p>
-                    </div>
-                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                        <h3 class="text-xl font-bold text-white">Core Pain We Solve</h3>
-                        <p class="mt-3 text-brand-gray">Unpredictable referrals, high churn, and manual fulfillment that keeps you from scaling beyond a handful of retainers.</p>
-                    </div>
-                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                        <h3 class="text-xl font-bold text-white">Why It Works</h3>
-                        <p class="mt-3 text-brand-gray">Gatekeeper-bypass outreach, niche authority positioning, and educational assets that pre-sell before the first call.</p>
+                        <!-- Step 4 -->
+                        <div class="process-step relative text-left">
+                            <div class="flex justify-start items-center mb-2">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black flex items-center justify-center font-bold text-lg">4</div>
+                                <h3 class="ml-4 text-xl font-bold text-white">Predictable Flow</h3>
+                            </div>
+                            <p class="text-brand-gray">Days 61-90: The system is now a reliable growth asset delivering consistent calls.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -606,12 +412,11 @@
         </section>
     </main>
 
-    <!-- Clutch widget -->
-    <div class="mt-4 flex justify-center">
-        <div class="clutch-widget" data-url="https://widget.clutch.co" data-widget-type="2" data-height="45" data-nofollow="false" data-expandifr="true" data-clutchcompany-id="1794582"></div>
+    <!-- TrustBox widget - Review Collector -->
+    <div class="trustpilot-widget" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="68f14e204d60350202835e61" data-style-height="52px" data-style-width="100%" data-token="89c10467-7105-41b5-be95-802d38ba86a4">
+      <a href="https://www.trustpilot.com/review/flowcraftpro.com" target="_blank" rel="noopener">Trustpilot</a>
     </div>
-    <script type="text/javascript" src="https://widget.clutch.co/static/js/widget.js"></script>
-    <!-- End Clutch widget -->
+    <!-- End TrustBox widget -->
 
     <footer class="bg-brand-dark">
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center border-t border-gray-800">
@@ -783,41 +588,6 @@
                         }
                     }
                 });
-            }
-
-            // Revenue Loss Calculator
-            const dealValueInput = document.getElementById('dealValue');
-            const closeRateInput = document.getElementById('closeRate');
-            const dealValueLabel = document.getElementById('dealValueLabel');
-            const closeRateLabel = document.getElementById('closeRateLabel');
-            const revenueLostEl = document.getElementById('revenueLost');
-            const revenueSubtextEl = document.getElementById('revenueSubtext');
-            const revenueCTA = document.getElementById('revenueCTA');
-
-            function formatCurrency(value) {
-                return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
-            }
-
-            function updateCalculator() {
-                const meetings = 20;
-                const dealValue = Number(dealValueInput?.value || 0);
-                const closeRate = Number(closeRateInput?.value || 0) / 100;
-
-                dealValueLabel.textContent = formatCurrency(dealValue);
-                closeRateLabel.textContent = `${Math.round(closeRate * 100)}%`;
-
-                const revenueLost = Math.round(meetings * closeRate * dealValue);
-                const revenueText = formatCurrency(revenueLost);
-
-                revenueLostEl.textContent = revenueText;
-                revenueSubtextEl.textContent = `You’re leaving ${revenueText}/month on the table.`;
-                revenueCTA.textContent = `Reclaim My ${revenueText} Next Month`;
-            }
-
-            if (dealValueInput && closeRateInput) {
-                updateCalculator();
-                dealValueInput.addEventListener('input', updateCalculator);
-                closeRateInput.addEventListener('input', updateCalculator);
             }
         });
     </script>
