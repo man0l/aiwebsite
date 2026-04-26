@@ -1,6 +1,7 @@
 ---
 import Layout from '../../components/Layout.astro';
 import { getBlogPosts, getGlobal, STRAPI_URL } from '../../lib/strapi.ts';
+import { marked } from 'marked';
 
 export async function getStaticPaths() {
   let posts: any[] = [];
@@ -36,6 +37,8 @@ const date = post.publishedAt
   : '';
 
 const seo = post.seo ?? {};
+
+const contentHtml = post.content ? await marked.parse(post.content) : '';
 ---
 <Layout
   title={seo.metaTitle ?? post.title}
@@ -70,10 +73,10 @@ const seo = post.seo ?? {};
         <img src={coverUrl} alt={post.title} class="mt-8 w-full rounded-2xl object-cover max-h-96" />
       )}
 
-      {post.content && (
+      {contentHtml && (
         <div
           class="mt-10 prose prose-invert prose-lg max-w-none prose-headings:font-display prose-a:text-brand-lime"
-          set:html={post.content}
+          set:html={contentHtml}
         />
       )}
 
