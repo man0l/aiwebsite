@@ -1,0 +1,449 @@
+---
+import Layout from '../components/Layout.astro';
+import { getGlobal } from '../lib/strapi.ts';
+
+const STRAPI_URL = import.meta.env.STRAPI_URL ?? 'http://localhost:1337';
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+
+let global: any = null;
+try { global = await getGlobal(); } catch (_) {}
+
+const fallback = {
+  hero: {
+    headline: 'Outsourced Lead Generation for Marketing Agencies',
+    subHeadline: 'Add a full outbound function to your agency — without hiring, without building infrastructure, without pulling your team off fulfillment.',
+    ctaLabel: 'Book a Free Strategy Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+  },
+  stats: [
+    { value: '20–30', label: 'Qualified meetings/month once ramped' },
+    { value: '14',    label: 'Days to first send' },
+    { value: '5',     label: 'Free meetings before you pay a cent' },
+  ],
+  phases: [
+    {
+      title: 'Phase 1 — Infrastructure (Days 1–14)',
+      items: [
+        'Dedicated sending domains registered and warmed under your brand',
+        'DKIM, SPF, and DMARC configured, validated, and monitored',
+        'Inbox pools sharded so a single reply pattern can\'t tank deliverability across the board',
+        'AI agent loaded with your offers, case studies, ICP criteria, and objection responses',
+        'HIPAA-compliant flows for med spa and dental; GDPR coverage for EU outreach',
+      ],
+    },
+    {
+      title: 'Phase 2 — Launch (Days 15–45)',
+      items: [
+        'Multi-channel sequences live across email and LinkedIn',
+        'Every message personalized to the prospect\'s vertical — HVAC language for HVAC, compliance copy for law firms, intake-gap messaging for med spas',
+        'Positive replies routed through BANT and booked directly on your calendar — no SDR handoff, no form fill',
+        'Objections handled with pre-approved responses that match your positioning',
+      ],
+    },
+    {
+      title: 'Phase 3 — Scale (Days 46–90)',
+      items: [
+        'Reply data drives variant weighting — sequences that generate replies get amplified, underperformers cut',
+        'Follow-up runs through touch seven with intent-aware branching — the 60% of replies that come after touch two don\'t fall through',
+        'Steady-state target: 20–30 qualified meetings per month, calibrated to what your sales capacity can close',
+      ],
+    },
+  ],
+  proofPoints: [
+    'A single SDR costs $50k–$80k loaded — before ramp time, management overhead, turnover risk, and tooling',
+    '60–90 days before an in-house hire books consistently; outsourcing collapses that to 14 days',
+    'Lead generation is a different discipline from PPC, SEO, and social — outsourcing puts it in specialist hands',
+    'Agencies scale their client base without scaling headcount or pulling account managers off fulfillment',
+  ],
+  ctaSection: {
+    heading: 'Add Outsourced Lead Generation to Your Agency — Without Adding Headcount',
+    subheading: 'On the qualification call, we\'ll review your client base, confirm which verticals we have playbooks for, and tell you whether outsourced lead generation or the full lead generation program is the right starting point.',
+    ctaLabel: 'Book Your Free Strategy Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+    guaranteeText: 'First 5 meetings free per engagement. Full refund if guarantee not met in 90 days. White-label delivery. HIPAA and GDPR compliant. No long-term contracts.',
+  },
+};
+
+let pageData = fallback;
+
+try {
+  const res = await fetch(
+    `${STRAPI_URL}/api/landing-pages?filters[slug][$eq]=outsourced-lead-generation-for-agencies&populate=*`,
+    { headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}`, 'Content-Type': 'application/json' } }
+  );
+  if (res.ok) {
+    const json = await res.json();
+    const item = json?.data?.[0]?.attributes ?? json?.data?.[0];
+    if (item) {
+      pageData = {
+        hero:        item.hero        ?? fallback.hero,
+        stats:       item.stats?.length       ? item.stats       : fallback.stats,
+        phases:      item.phases?.length      ? item.phases      : fallback.phases,
+        proofPoints: item.proofPoints?.length ? item.proofPoints : fallback.proofPoints,
+        ctaSection:  item.ctaSection  ?? fallback.ctaSection,
+      };
+    }
+  }
+} catch (_) {}
+
+const { hero, stats, phases, proofPoints, ctaSection } = pageData;
+
+const included = [
+  { title: 'Dedicated sending infrastructure', body: 'Domains registered and warmed under your brand. DKIM/SPF/DMARC hardened. Inbox rotation built to protect deliverability at volume. The layer most vendors skip — and the reason most outbound burns out after three months.' },
+  { title: 'Vertical playbooks', body: 'Pre-built sequence libraries for HVAC, plumbing, roofing, solar, med spa, dental, legal, accounting, and IT outsourcing. Pain hooks specific to each vertical\'s buying triggers — not generic B2B copy.' },
+  { title: 'AI-powered personalization', body: 'An AI agent that researches each prospect before the first touch — crawling their site, pulling vertical-specific signals, and writing a first line that looks hand-researched. Not mail-merge. Not token replacement.' },
+  { title: 'Multi-channel orchestration', body: 'Email-led sequences supported by LinkedIn outreach, coordinated so the prospect gets consistent messaging without hitting duplicate-contact filters.' },
+  { title: 'Reply handling and BANT qualification', body: 'Every reply reviewed, categorized, and routed. Positive replies cleared through Budget, Authority, Need, and Timing before a calendar invite is sent. Three-of-four criteria go to nurture, not a discard pile.' },
+  { title: 'Calendar delivery and no-show recovery', body: 'Direct integration with Google Calendar, Outlook, Calendly, or HubSpot. Branded invites and reminders. Automated rescheduling on no-shows — roughly 60% recover with a single follow-up.' },
+  { title: 'White-label delivery', body: 'Everything under your agency\'s brand or your client\'s. Your logo, your domain, your team name on the calendar invite. FlowCraftPro is never visible.' },
+  { title: 'Weekly and monthly reporting', body: 'Meetings booked, qualification criteria hit, vertical performance, pipeline attribution. Formatted as your deliverable, not ours.' },
+];
+
+const goodFit = [
+  'PPC, SEO, or digital agencies with at least 3–5 active retainer clients',
+  'Agencies serving home services, med spa, dental, legal, IT outsourcing, or adjacent verticals — the nine we have playbooks for',
+  'Agencies that want to add a white-label outbound revenue line without hiring or building infrastructure',
+  'Agencies willing to commit to a 90-day engagement so the system has room to ramp and optimize',
+  'Agencies looking to productize client acquisition rather than depend on referrals or manual outreach',
+];
+
+const notFit = [
+  'Pre-revenue agencies with no defined ICP or offer — the infrastructure needs something to sell',
+  'Agencies serving verticals with no existing FlowCraftPro playbook — we\'ll tell you that clearly on the qualification call',
+  'Anyone expecting volume over quality — we run BANT on every reply before a meeting touches your calendar',
+  'Solo operators or freelancers with fewer than three active clients — the economics don\'t land at that scale yet',
+];
+
+const faq = [
+  {
+    q: 'How is outsourced lead generation different from buying a leads list?',
+    a: 'A leads list gives you contacts and stops there. Outsourced lead generation covers the entire function — building the list, writing the sequences, managing deliverability, qualifying replies, and booking meetings directly onto your calendar. You don\'t do any of the work. You just take the meetings.',
+  },
+  {
+    q: 'Can we outsource lead generation and resell it to our own clients?',
+    a: 'Yes. FlowCraftPro is built explicitly for agency resellers. Everything is delivered white-label — your client sees your brand at every touchpoint, not ours. See the white-label lead generation page for the full reseller packaging and margin structure.',
+  },
+  {
+    q: 'How many meetings should we expect per month?',
+    a: 'The ramp target is 5 qualified meetings in the first cycle (which is the guarantee). Once the system has 45–90 days of reply data to optimize against, the steady-state target is 20–30 qualified meetings per month for high-volume verticals, and 5–10 for high-ticket verticals like IT outsourcing or enterprise legal.',
+  },
+  {
+    q: 'What does "qualified" actually mean?',
+    a: 'Every prospect passes BANT — Budget confirmed, Authority verified (we\'re talking to a decision-maker), Need established, and Timing defined — before a calendar invite is sent. We also match against your ICP on vertical, geography, company size, and title before booking.',
+  },
+  {
+    q: 'Is this HIPAA compliant?',
+    a: 'Yes. Flows for med spa, dental, and any healthcare-adjacent vertical are built with HIPAA-compliant infrastructure — dedicated sending environments, compliant data handling, and sequencing that avoids PHI in outreach. GDPR coverage is included for any EU-based outreach.',
+  },
+  {
+    q: 'What\'s the contract length?',
+    a: 'The minimum engagement is 90 days. This isn\'t to lock you in — it\'s because the system needs that runway to produce the reply data that drives optimization. The first 5 meetings are guaranteed before you pay. Full refund if 5+ qualified meetings aren\'t booked in 90 days.',
+  },
+  {
+    q: 'Do you work with agencies that serve multiple verticals?',
+    a: 'Yes. Most agency partners run 2–4 verticals simultaneously. Each vertical gets its own sequence library, its own ICP, and its own sending infrastructure. Reporting separates performance by vertical so you know exactly what\'s working for which client type.',
+  },
+];
+---
+
+<Layout
+  title="Outsourced Lead Generation for Marketing Agencies | FlowCraftPro"
+  description="FlowCraftPro runs outsourced lead generation built for marketing agencies — white-label delivery, vertical playbooks for 9 niches, and a first-5-meetings guarantee. 14 days to first send."
+  nav={global?.nav?.map((n: any) => ({ label: n.label, href: n.href })) ?? []}
+  siteName={global?.siteName}
+>
+  <style>
+    .glow-button {
+      box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
+      transition: all 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 30px rgba(190, 242, 100, 0.7), 0 0 15px rgba(190, 242, 100, 0.9);
+      transform: translateY(-2px);
+    }
+    .stat-card {
+      background: linear-gradient(135deg, rgba(190, 242, 100, 0.1) 0%, rgba(190, 242, 100, 0.05) 100%);
+      border: 1px solid rgba(190, 242, 100, 0.2);
+    }
+  </style>
+
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-brand-dark">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-gray-900 to-brand-dark"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+      <span class="inline-block px-4 py-2 bg-brand-lime/20 text-brand-lime text-sm font-semibold rounded-full border border-brand-lime/30 mb-6">
+        OUTSOURCED LEAD GENERATION FOR AGENCIES
+      </span>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold font-display tracking-tight text-white leading-tight mb-6">
+        {hero.headline}
+      </h1>
+      <p class="text-xl md:text-2xl text-brand-gray max-w-3xl mx-auto mb-8">
+        {hero.subHeadline}
+      </p>
+      <div class="flex flex-wrap justify-center gap-3 mb-10 text-sm text-brand-gray/80">
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">White-label ready</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">First 5 meetings free</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">HIPAA & GDPR compliant</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">Agency-exclusive</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-4xl mx-auto">
+        {stats.map((stat: { value: string; label: string }) => (
+          <div class="stat-card p-6 rounded-2xl text-center">
+            <div class="text-4xl md:text-5xl font-bold text-brand-lime mb-2">{stat.value}</div>
+            <div class="text-brand-gray text-sm">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={hero.ctaUrl} class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">
+          {hero.ctaLabel}
+        </a>
+        <a href="#how-it-works" class="inline-block border border-gray-600 text-white font-bold px-10 py-5 rounded-full text-lg hover:border-gray-400 transition-colors">
+          How It Works ↓
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- §1 — What it means -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-6">What Outsourced Lead Generation Actually Means for Agencies</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>Most content about outsourced lead generation is written for the businesses buying leads — the HVAC owner, the law firm partner, the IT director looking to grow. This page is for the agency sitting between that buyer and their pipeline. The mechanics are different. The economics are different. And the vendor requirements are completely different.</p>
+        <p>Outsourced lead generation, in the agency context, means contracting an external partner to run the full outbound acquisition function on your behalf — or on behalf of your clients — without any of the output being traceable to that partner. You take the meetings. You get the credit. Your client never sees a third-party brand anywhere in the process.</p>
+        <p>That last part is the piece most outsourced lead generation services fail at. They're built for end-businesses buying a commodity service. They invoice in their own name, send from their own domains, and hand you a spreadsheet at the end of the month. That model breaks the moment you're an agency that needs to put your own logo on deliverables.</p>
+        <p>FlowCraftPro runs outsourced lead generation built from the ground up for marketing agencies. The entire infrastructure — sending domains, calendar invites, confirmation emails, reporting — runs under your brand or your client's. You're the only vendor your client knows. For the full picture of how this fits into the broader outbound model, see our <a href="/lead-generation-for-marketing-agencies/" class="text-brand-lime hover:underline">lead generation program for marketing agencies</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 — Why outsource -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Why Agencies Outsource Lead Generation Instead of Building It</h2>
+        <p class="text-brand-gray text-lg">The case for keeping it in-house sounds reasonable until you cost it out.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {proofPoints.map((point: string) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800 flex items-start gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime flex items-center justify-center text-black font-bold">✓</div>
+            <p class="text-brand-gray">{point}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §3 — How it works -->
+  <section id="how-it-works" class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">How FlowCraftPro Runs Outsourced Lead Generation for Agencies</h2>
+        <p class="text-brand-gray text-lg">Three phases. Fourteen days to first send. Performance guaranteed.</p>
+      </div>
+      <div class="space-y-6">
+        {phases.map((phase: { title: string; items: string[] }, i: number) => (
+          <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800">
+            <div class="flex items-center gap-4 mb-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black font-bold flex items-center justify-center">{i + 1}</span>
+              <h3 class="text-xl font-bold text-white">{phase.title}</h3>
+            </div>
+            <ul class="space-y-2 pl-14">
+              {phase.items.map((item: string) => (
+                <li class="text-brand-gray flex items-start gap-2">
+                  <span class="text-brand-lime mt-1 flex-shrink-0">→</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §4 — What's included -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">What's Included in Outsourced Lead Generation Services</h2>
+        <p class="text-brand-gray text-lg">The full stack — not just the top of the funnel.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {included.map((item) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800">
+            <h3 class="text-white font-bold mb-3">{item.title}</h3>
+            <p class="text-brand-gray text-sm leading-relaxed">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §5 — Reseller economics -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-6">Reseller Economics: Outsourcing Lead Generation and Marking It Up</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>If your agency resells this to clients, the unit economics are straightforward.</p>
+        <p>FlowCraftPro charges a flat monthly partner rate per engagement. You set the retail price. The standard markup window is 2–3x — a $3,000/mo partner rate becomes a $7,000–9,000/mo retainer line for your client. Your client pays less than they would for an in-house SDR. You earn margin without adding headcount. The first-5-meetings guarantee passes through to your client, so the risk sits with us, not with you.</p>
+        <p>Delivery is invisible. Your client sees your logo on every touchpoint. The only vendor relationship they have is with you.</p>
+        <p>For a full breakdown of the white-label packaging, margin structure, and how to position this as a productized retainer add-on, see our <a href="/white-label-lead-generation/" class="text-brand-lime hover:underline">white-label lead generation for agencies</a> page.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §6 — Comparison table -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Outsourced Lead Generation vs. the Alternatives</h2>
+        <p class="text-brand-gray text-lg max-w-2xl mx-auto">The column that matters most for agency buyers: white-label delivery.</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="text-left py-4 pr-6 text-brand-gray font-medium w-44"></th>
+              <th class="text-center py-4 px-4 text-brand-lime font-bold">Outsourced Lead Gen<br/><span class="text-xs font-normal text-brand-gray">(FlowCraftPro)</span></th>
+              <th class="text-center py-4 px-4 text-white font-bold">In-House SDR</th>
+              <th class="text-center py-4 px-4 text-white font-bold">Leads List Provider</th>
+              <th class="text-center py-4 px-4 text-white font-bold">Lead Gen Software</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-800">
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Time to first meeting</td>
+              <td class="py-4 px-4 text-center text-white">14 days</td>
+              <td class="py-4 px-4 text-center text-brand-gray">60–90 days</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Days (low quality)</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Weeks (DIY)</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Cost structure</td>
+              <td class="py-4 px-4 text-center text-white">Flat partner rate</td>
+              <td class="py-4 px-4 text-center text-brand-gray">$50k–$80k/yr loaded</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Per-list fee</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Monthly SaaS + labour</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Vertical expertise</td>
+              <td class="py-4 px-4 text-center text-white">9 pre-built playbooks</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Depends on hire</td>
+              <td class="py-4 px-4 text-center text-brand-gray">None</td>
+              <td class="py-4 px-4 text-center text-brand-gray">None</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">White-label option</td>
+              <td class="py-4 px-4 text-center text-white">Yes — full stack</td>
+              <td class="py-4 px-4 text-center text-brand-gray">N/A</td>
+              <td class="py-4 px-4 text-center text-brand-gray">No</td>
+              <td class="py-4 px-4 text-center text-brand-gray">No</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Guarantee</td>
+              <td class="py-4 px-4 text-center text-white">First 5 meetings free</td>
+              <td class="py-4 px-4 text-center text-brand-gray">None</td>
+              <td class="py-4 px-4 text-center text-brand-gray">None</td>
+              <td class="py-4 px-4 text-center text-brand-gray">None</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">HIPAA/GDPR</td>
+              <td class="py-4 px-4 text-center text-white">Built in</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Your responsibility</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Rarely</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Rarely</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Scales with agency</td>
+              <td class="py-4 px-4 text-center text-white">Yes — add engagements</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Hiring lag</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Volume-limited</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Labour-limited</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-8 text-brand-gray text-center">
+        For a comparison of how the appointment setting layer fits the broader outsourced model, see <a href="/outsourced-appointment-setting/" class="text-brand-lime hover:underline">outsourced appointment setting for agencies</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- §7 — Who it fits -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Who This Works For (and Who It Doesn't)</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-bold text-brand-lime mb-4">Good fit</h3>
+          <ul class="space-y-3">
+            {goodFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-brand-lime mt-1 flex-shrink-0">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-red-400 mb-4">Not a fit</h3>
+          <ul class="space-y-3">
+            {notFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-red-400 mt-1 flex-shrink-0">✕</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- §8 — FAQ -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white text-center mb-12">Frequently Asked Questions</h2>
+      <div class="space-y-0">
+        {faq.map((item) => (
+          <details class="border-b border-gray-800 group">
+            <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
+              {item.q}
+              <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <div class="pb-6 pr-8 text-brand-gray">{item.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §9 — Final CTA -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{ctaSection.heading}</h2>
+      <p class="text-lg text-brand-gray mb-4 max-w-2xl mx-auto">Fourteen days to first send. Twenty to thirty qualified meetings per month once ramped. First five meetings booked before you pay a cent.</p>
+      <p class="text-lg text-brand-gray mb-8 max-w-2xl mx-auto">{ctaSection.subheading}</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+        <a
+          href={ctaSection.ctaUrl}
+          class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button"
+        >
+          {ctaSection.ctaLabel}
+        </a>
+        <a
+          href="/lead-generation-for-marketing-agencies/"
+          class="inline-block border border-gray-600 text-white font-bold px-10 py-5 rounded-full text-xl hover:border-gray-400 transition-colors"
+        >
+          See the Full Program →
+        </a>
+      </div>
+      <p class="text-sm text-brand-gray">{ctaSection.guaranteeText}</p>
+    </div>
+  </section>
+</Layout>
