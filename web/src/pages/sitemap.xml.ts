@@ -9,6 +9,9 @@ const STATIC_PAGES = [
   { path: '/best-lead-generation-companies-for-marketing-agencies', priority: '0.7', changefreq: 'monthly' },
   { path: '/white-label-lead-generation', priority: '0.7', changefreq: 'monthly' },
   { path: '/cold-email-case-study', priority: '0.7', changefreq: 'monthly' },
+  { path: '/outsourced-sdr', priority: '0.7', changefreq: 'monthly' },
+  { path: '/outsourced-lead-generation-for-agencies', priority: '0.7', changefreq: 'monthly' },
+  { path: '/fractional-sdr', priority: '0.7', changefreq: 'monthly' },
 ];
 
 function urlElement(loc: string, lastmod: string, changefreq: string, priority: string) {
