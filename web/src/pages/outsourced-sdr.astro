@@ -1,0 +1,425 @@
+---
+import Layout from '../components/Layout.astro';
+import { getGlobal } from '../lib/strapi.ts';
+
+const STRAPI_URL = import.meta.env.STRAPI_URL ?? 'http://localhost:1337';
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+
+let global: any = null;
+try { global = await getGlobal(); } catch (_) {}
+
+const fallback = {
+  hero: {
+    headline: 'Outsourced SDR Services for Marketing Agencies',
+    subHeadline: 'Your clients need a full sales development function. You don\'t need to hire one — or build one from scratch.',
+    ctaLabel: 'Book a Free Strategy Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+  },
+  stats: [
+    { value: '14',  label: 'Days to First Meeting' },
+    { value: '5',   label: 'Meetings Guaranteed Free' },
+    { value: '90',  label: 'Day Delivery Window' },
+  ],
+  phases: [
+    {
+      title: 'Phase 1 (Days 1–14): ICP Definition, List Build, Infrastructure',
+      items: [
+        'ICP built from your client\'s service area, vertical, and existing customer profile',
+        'Dedicated sending domains registered, warmed, and authenticated (DKIM/SPF/DMARC)',
+        'Prospect lists sourced and verified — no recycled databases',
+      ],
+    },
+    {
+      title: 'Phase 2 (Days 15–45): Multi-Channel Sequences',
+      items: [
+        'Email and LinkedIn outreach running in parallel with coordinated messaging',
+        'AI-personalized hooks tied to vertical-specific pain points — HVAC language for HVAC, legal language for law firms',
+        'AI follow-up sequences activate on non-replies, keeping pipeline volume consistent',
+      ],
+    },
+    {
+      title: 'Phase 3 (Days 46–90): Optimize, Qualify, Deliver',
+      items: [
+        'Reply data analyzed weekly — subject lines, hooks, and CTAs tuned to what converts',
+        'Every positive reply run through BANT qualification before touching your calendar',
+        'Qualified meetings delivered with branded invite, confirmation, and reminder sequence',
+      ],
+    },
+  ],
+  proofPoints: [
+    'An in-house SDR costs $55k–$80k loaded — before 60–90 days of ramp and the first real pipeline',
+    'Agencies that do their own prospecting are burning fulfillment time that should go to retained clients',
+    'Adding SDR headcount doesn\'t scale for retainer-based models — every hire is fixed cost against variable revenue',
+    'FlowCraftPro is day-one output: sequences live in 14 days, first meetings booked inside the first cycle',
+  ],
+  ctaSection: {
+    heading: 'First 5 Meetings Booked Before You Pay',
+    subheading: '15-minute strategy call. We\'ll review your client base, confirm vertical fit, and give you honest economics before you commit to anything.',
+    ctaLabel: 'Book a Free Strategy Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+    guaranteeText: 'First 5 meetings guaranteed. Full refund if not delivered within 90 days. White-label delivery. HIPAA and GDPR compliant.',
+  },
+};
+
+let pageData = fallback;
+
+try {
+  const res = await fetch(
+    `${STRAPI_URL}/api/landing-pages?filters[slug][$eq]=outsourced-sdr&populate=*`,
+    { headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}`, 'Content-Type': 'application/json' } }
+  );
+  if (res.ok) {
+    const json = await res.json();
+    const item = json?.data?.[0]?.attributes ?? json?.data?.[0];
+    if (item) {
+      pageData = {
+        hero:        item.hero        ?? fallback.hero,
+        stats:       item.stats?.length       ? item.stats       : fallback.stats,
+        phases:      item.phases?.length      ? item.phases      : fallback.phases,
+        proofPoints: item.proofPoints?.length ? item.proofPoints : fallback.proofPoints,
+        ctaSection:  item.ctaSection  ?? fallback.ctaSection,
+      };
+    }
+  }
+} catch (_) {}
+
+const { hero, stats, phases, proofPoints, ctaSection } = pageData;
+
+const included = [
+  { title: 'Dedicated sending infrastructure', body: 'Separate sending domains per client, inbox rotation, warmup, and deliverability monitoring. The technical layer that determines whether outreach lands or dies in spam.' },
+  { title: 'AI-personalized sequences', body: 'Not mail-merge. Every sequence references the prospect\'s business, location, and vertical context. Personalization at scale without a copywriter on each send.' },
+  { title: 'Email + LinkedIn outreach', body: 'Multi-channel coordination so the same prospect sees consistent messaging across touchpoints without triggering duplicate-contact filters.' },
+  { title: 'Vertical playbooks', body: 'Pre-built and tested for HVAC, roofing, dental, legal, and IT outsourcing. New verticals get custom playbook development before sequences go live.' },
+  { title: 'Reply management and BANT qualification', body: 'Every reply reviewed, categorized, and routed. Positive replies cleared through Budget, Authority, Need, and Timing before a calendar invite goes out.' },
+  { title: 'Qualification calls', body: 'For prospects who need a human conversation before committing to a meeting, a qualification call layer screens them and warms them into the booking flow.' },
+  { title: 'Calendar handoff', body: 'Direct integration with Google Calendar, Outlook, Calendly, or HubSpot. Branded invite, confirmation, 24-hour reminder, 1-hour reminder, no-show recovery.' },
+  { title: 'White-label delivery', body: 'Your agency\'s brand or your client\'s on every touchpoint. Logo, domain, sender name — FlowCraftPro is never visible to the end prospect.' },
+];
+
+const goodFit = [
+  'Marketing agencies with 3 or more active retainer clients',
+  'Agencies serving local service verticals — home services, dental, legal, IT, med spa',
+  'Agencies that want to add outbound as a productized service without adding headcount',
+  'Partners willing to run a 90-day minimum engagement so the system has room to ramp',
+];
+
+const notFit = [
+  'Solo operators or single-person freelancers — the unit economics don\'t land yet',
+  'Agencies with no defined ICP or no consistent offer to take to market',
+  'Pure e-commerce or DTC-focused agencies — outbound SDR doesn\'t map to your conversion model',
+  'Anyone expecting instant results without a qualification call — we\'ll tell you honestly whether the fit is there',
+];
+
+const faq = [
+  {
+    q: 'What does an outsourced SDR actually do?',
+    a: 'An SDR (Sales Development Representative) handles the top of the outbound funnel: building prospect lists, running multi-channel outreach, handling replies, and qualifying leads before they reach a closing call. In the FlowCraftPro model, this includes email and LinkedIn outreach, AI follow-up sequences, BANT qualification, and calendar delivery — the full function, not just the dialing layer.',
+  },
+  {
+    q: 'How is this different from buying a leads list?',
+    a: 'A leads list is a spreadsheet. Outsourced SDR is a running system. We build the list, write and send the sequences, manage the replies, qualify the interested prospects, and get confirmed meetings on your calendar. You don\'t receive contacts to chase — you receive booked meetings with prospects who have cleared BANT criteria.',
+  },
+  {
+    q: 'How many meetings can we expect per month?',
+    a: 'Varies by vertical, offer clarity, and ICP tightness. Most agency partners in home services or local professional services verticals see 6–12 qualified meetings per month per client engagement after the ramp period. We set realistic expectations on the strategy call based on your specific vertical and market.',
+  },
+  {
+    q: 'Can we white-label this for our own clients?',
+    a: 'Yes — white-label delivery is the default, not an add-on. Every touchpoint is branded as your agency or your client. No FlowCraftPro branding anywhere in the prospect-facing flow. The full reseller economics are covered in our white-label lead generation program.',
+  },
+  {
+    q: 'Is this HIPAA compliant?',
+    a: 'Yes. For healthcare-adjacent verticals — dental practices, med spas, healthcare staffing — we operate under HIPAA-compliant data handling. GDPR compliance is also standard across all engagements. Compliance documentation available on request.',
+  },
+  {
+    q: 'What\'s the contract length and guarantee?',
+    a: 'Minimum engagement is 90 days — outbound systems need time to ramp, and anything shorter produces misleading data. The guarantee is simple: 5 qualified meetings delivered in the first 90 days or a full refund. You don\'t pay for a failed engagement.',
+  },
+];
+---
+
+<Layout
+  title="Outsourced SDR Services for Agencies | FlowCraftPro"
+  description="Outsourced SDR for marketing agencies. First 5 meetings guaranteed. White-label delivery, HIPAA & GDPR compliant. HVAC, dental, legal, IT verticals covered."
+  nav={global?.nav?.map((n: any) => ({ label: n.label, href: n.href })) ?? []}
+  siteName={global?.siteName}
+>
+  <style>
+    .glow-button {
+      box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
+      transition: all 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 30px rgba(190, 242, 100, 0.7), 0 0 15px rgba(190, 242, 100, 0.9);
+      transform: translateY(-2px);
+    }
+    .stat-card {
+      background: linear-gradient(135deg, rgba(190, 242, 100, 0.1) 0%, rgba(190, 242, 100, 0.05) 100%);
+      border: 1px solid rgba(190, 242, 100, 0.2);
+    }
+  </style>
+
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-brand-dark">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-gray-900 to-brand-dark"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+      <span class="inline-block px-4 py-2 bg-brand-lime/20 text-brand-lime text-sm font-semibold rounded-full border border-brand-lime/30 mb-6">
+        OUTSOURCED SDR
+      </span>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold font-display tracking-tight text-white leading-tight mb-6">
+        {hero.headline}
+      </h1>
+      <p class="text-xl md:text-2xl text-brand-gray max-w-3xl mx-auto mb-8">
+        {hero.subHeadline}
+      </p>
+      <div class="flex flex-wrap justify-center gap-3 mb-10 text-sm text-brand-gray/80">
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">First 5 Meetings Guaranteed</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">HIPAA & GDPR Compliant</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">Agency-Exclusive</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">White-label ready</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-4xl mx-auto">
+        {stats.map((stat: { value: string; label: string }) => (
+          <div class="stat-card p-6 rounded-2xl text-center">
+            <div class="text-4xl md:text-5xl font-bold text-brand-lime mb-2">{stat.value}</div>
+            <div class="text-brand-gray text-sm">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={hero.ctaUrl} class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">
+          {hero.ctaLabel}
+        </a>
+        <a href="#how-it-works" class="inline-block border border-gray-600 text-white font-bold px-10 py-5 rounded-full text-lg hover:border-gray-400 transition-colors">
+          See How It Works ↓
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- §1 — Definition -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-6">What Outsourced SDR Means for Marketing Agencies</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>An outsourced SDR function takes the top of your outbound funnel — prospecting, list building, multi-channel outreach, reply handling, and lead qualification — and runs it as a managed service. You get pipeline activity and qualified meetings without hiring, training, or managing a rep.</p>
+        <p>This is different from three things agencies commonly confuse it with. An <strong class="text-white">SDR software tool</strong> like Apollo gives you a database and a sending platform — you still build the sequences, manage the replies, and qualify leads yourself. A <strong class="text-white">VA or generalist contractor</strong> can do tasks but lacks the vertical playbooks, infrastructure, and qualification rigor a true SDR function requires. And simply <strong class="text-white">hiring an SDR</strong> means 60–90 days of ramp time, $55k–$80k loaded cost, and all the management overhead — before you see a single booked meeting.</p>
+        <p>SDR-as-a-service sits between the software and the hire: a fully managed function that produces day-one output without adding headcount. For marketing agencies specifically, the additional requirement is <strong class="text-white">white-label delivery</strong> — every touchpoint branded as your agency or your client, never as the vendor behind the work.</p>
+        <p>If you want the broader reseller context, our <a href="/lead-generation-for-marketing-agencies/" class="text-brand-lime hover:underline">lead generation program for marketing agencies</a> covers the full outbound stack this SDR function sits inside.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 — Why outsource -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Why Agencies Outsource SDR Work</h2>
+        <p class="text-brand-gray text-lg">The commercial argument isn't complicated once you run the numbers.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {proofPoints.map((point: string) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800 flex items-start gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime flex items-center justify-center text-black font-bold">✓</div>
+            <p class="text-brand-gray">{point}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §3 — How it works -->
+  <section id="how-it-works" class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">How the Outsourced SDR Model Works</h2>
+        <p class="text-brand-gray text-lg">Three phases across 90 days — infrastructure, outreach, and optimization.</p>
+      </div>
+      <div class="space-y-6">
+        {phases.map((phase: { title: string; items: string[] }, i: number) => (
+          <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800">
+            <div class="flex items-center gap-4 mb-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black font-bold flex items-center justify-center">{i + 1}</span>
+              <h3 class="text-xl font-bold text-white">{phase.title}</h3>
+            </div>
+            <ul class="space-y-2 pl-14">
+              {phase.items.map((item: string) => (
+                <li class="text-brand-gray flex items-start gap-2">
+                  <span class="text-brand-lime mt-1 flex-shrink-0">→</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §4 — What's included -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">What's Included in Outsourced SDR Services</h2>
+        <p class="text-brand-gray text-lg">The full function — not just a sending tool.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {included.map((item) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800">
+            <h3 class="text-white font-bold mb-3">{item.title}</h3>
+            <p class="text-brand-gray text-sm leading-relaxed">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §5 — Reseller economics -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-6">The Reseller Economics of SDR Outsourcing</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>For agencies, outsourced SDR isn't just a cost-reduction play — it's a revenue line. You take on the service at a partner rate and resell it to clients at a margin that beats hiring while still coming in under what the client would pay to build it themselves.</p>
+        <p><strong class="text-white">The math.</strong> FlowCraftPro charges a flat monthly partner rate per engagement. Typical reseller markup is 2–3x. A $2,500/month partner rate resold at $5,500–7,000/month is the common structure — and your client still gets a better deal than a $65k SDR hire that takes three months to ramp.</p>
+        <p><strong class="text-white">Productized, not bespoke.</strong> Because the verticals and playbooks are pre-built, you can scope and price this in a sales call without a custom RFP. It goes on the retainer like any other productized service. Renewals are straightforward because the output — meetings on the calendar — is measurable.</p>
+        <p><strong class="text-white">Risk structure.</strong> The first-5-meetings guarantee passes through to your client. If the engagement doesn't deliver, your client doesn't pay — and neither do you. No cash risk on a failed engagement.</p>
+        <p>This sits inside the broader <a href="/white-label-lead-generation/" class="text-brand-lime hover:underline">white-label lead generation program</a>, which covers the full outbound stack as a single reseller product. Agencies that want the SDR function only can engage it standalone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §6 — Comparison table -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Outsourced SDR vs. In-House SDR vs. SDR Software</h2>
+        <p class="text-brand-gray text-lg max-w-2xl mx-auto">Three options that look similar from the outside and are very different once you run the numbers.</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="text-left py-4 pr-6 text-brand-gray font-medium w-40"></th>
+              <th class="text-center py-4 px-4 text-brand-lime font-bold">Outsourced SDR<br/><span class="text-xs font-normal text-brand-gray">(FlowCraftPro)</span></th>
+              <th class="text-center py-4 px-4 text-white font-bold">In-House SDR Hire</th>
+              <th class="text-center py-4 px-4 text-white font-bold">SDR Software<br/><span class="text-xs font-normal text-brand-gray">(Apollo, etc.)</span></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-800">
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Setup time</td>
+              <td class="py-4 px-4 text-center text-white">14 days</td>
+              <td class="py-4 px-4 text-center text-brand-gray">60–90 days</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Days (but you run it)</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Cost</td>
+              <td class="py-4 px-4 text-center text-white">Flat partner rate</td>
+              <td class="py-4 px-4 text-center text-brand-gray">$55k–$80k loaded/yr</td>
+              <td class="py-4 px-4 text-center text-brand-gray">$500–2k/mo + your time</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Vertical expertise</td>
+              <td class="py-4 px-4 text-center text-white">Pre-built playbooks</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Depends on the hire</td>
+              <td class="py-4 px-4 text-center text-brand-gray">None — tool only</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Guarantee</td>
+              <td class="py-4 px-4 text-center text-white">First 5 meetings free</td>
+              <td class="py-4 px-4 text-center text-brand-gray">None</td>
+              <td class="py-4 px-4 text-center text-brand-gray">None</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">White-label option</td>
+              <td class="py-4 px-4 text-center text-white">Standard</td>
+              <td class="py-4 px-4 text-center text-brand-gray">N/A</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Partial</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Compliance</td>
+              <td class="py-4 px-4 text-center text-white">HIPAA & GDPR</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Your responsibility</td>
+              <td class="py-4 px-4 text-center text-brand-gray">GDPR only (varies)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- §7 — Who it fits -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Who This Is and Isn't For</h2>
+        <p class="text-brand-gray text-lg">The filter keeps lead quality high on both ends.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-bold text-brand-lime mb-4">Good fit</h3>
+          <ul class="space-y-3">
+            {goodFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-brand-lime mt-1 flex-shrink-0">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-red-400 mb-4">Not a fit</h3>
+          <ul class="space-y-3">
+            {notFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-red-400 mt-1 flex-shrink-0">✕</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- §8 — FAQ -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white text-center mb-12">Frequently Asked Questions</h2>
+      <div class="space-y-0">
+        {faq.map((item) => (
+          <details class="border-b border-gray-800 group">
+            <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
+              {item.q}
+              <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <div class="pb-6 pr-8 text-brand-gray">{item.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §9 — Final CTA -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{ctaSection.heading}</h2>
+      <p class="text-lg text-brand-gray mb-8 max-w-2xl mx-auto">{ctaSection.subheading}</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+        <a
+          href={ctaSection.ctaUrl}
+          class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button"
+        >
+          {ctaSection.ctaLabel}
+        </a>
+        <a
+          href="/lead-generation-for-marketing-agencies/"
+          class="inline-block border border-gray-600 text-white font-bold px-10 py-5 rounded-full text-xl hover:border-gray-400 transition-colors"
+        >
+          See the Full Program →
+        </a>
+      </div>
+      <p class="text-sm text-brand-gray">{ctaSection.guaranteeText}</p>
+    </div>
+  </section>
+</Layout>
