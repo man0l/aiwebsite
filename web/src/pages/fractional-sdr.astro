@@ -1,0 +1,405 @@
+---
+import Layout from '../components/Layout.astro';
+import { getGlobal } from '../lib/strapi.ts';
+
+const STRAPI_URL = import.meta.env.STRAPI_URL ?? 'http://localhost:1337';
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+
+let global: any = null;
+try { global = await getGlobal(); } catch (_) {}
+
+const fallback = {
+  hero: {
+    headline: 'Fractional SDR Services for Marketing Agencies',
+    subHeadline: 'Full sales development output. No full-time hire. No ramp. No seat to fill when it doesn\'t work out.',
+    ctaLabel: 'Book a Free Strategy Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+  },
+  stats: [
+    { value: '14',   label: 'Days to first send' },
+    { value: '5',    label: 'Free meetings before you pay' },
+    { value: '2–3x', label: 'Typical agency markup on resale' },
+  ],
+  phases: [
+    {
+      title: 'Phase 1 — Infrastructure (Days 1–14)',
+      items: [
+        'Dedicated sending domains registered and warmed under your brand or your client\'s',
+        'DKIM, SPF, and DMARC configured and validated',
+        'Inbox rotation built for deliverability at volume',
+        'AI agent loaded with your ICP, offers, case studies, and objection responses',
+        'HIPAA-compliant flows for med spa and dental; GDPR coverage for EU outreach',
+      ],
+    },
+    {
+      title: 'Phase 2 — Launch (Days 15–45)',
+      items: [
+        'Multi-channel sequences live across email and LinkedIn',
+        'Vertical-specific hooks — HVAC cost-per-lead language, law firm compliance framing, med spa intake messaging',
+        'Every reply routed immediately: positive replies through BANT, objections handled with pre-approved responses',
+        'Borderline replies entered into a nurture track, not a discard pile',
+      ],
+    },
+    {
+      title: 'Phase 3 — Optimization (Days 46–90)',
+      items: [
+        'Reply data drives sequence weighting — winners amplified, underperformers revised',
+        'Follow-up through touch seven with intent-aware branching — the 60% of replies after touch two get captured',
+        'End of cycle: a running system calibrated to your verticals, delivering predictable volume month over month',
+      ],
+    },
+  ],
+  proofPoints: [
+    'A full-time SDR costs $50k–$80k loaded — plus tools, management, and 60–90 days of ramp before the first consistent booking',
+    'Fractional eliminates every line item except results: no salary, no tools budget, no onboarding',
+    'Because it\'s productized, fractional SDR packages cleanly as a retainer add-on with 2–3x markup and no delivery risk',
+    'The first-5-meetings guarantee passes through to your client — the risk sits with us, not with you',
+  ],
+  ctaSection: {
+    heading: 'Get a Fractional SDR Running in 14 Days',
+    subheading: 'On the qualification call, we\'ll confirm which verticals match your client base, walk through the delivery model, and tell you whether fractional SDR or the full lead generation program is the right starting point.',
+    ctaLabel: 'Book Your Free Strategy Call',
+    ctaUrl: 'https://calendly.com/manolt/15min',
+    guaranteeText: 'First 5 meetings free per engagement. Full refund if guarantee not met in 90 days. White-label delivery. HIPAA and GDPR compliant. No long-term contracts.',
+  },
+};
+
+let pageData = fallback;
+
+try {
+  const res = await fetch(
+    `${STRAPI_URL}/api/landing-pages?filters[slug][$eq]=fractional-sdr&populate=*`,
+    { headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}`, 'Content-Type': 'application/json' } }
+  );
+  if (res.ok) {
+    const json = await res.json();
+    const item = json?.data?.[0]?.attributes ?? json?.data?.[0];
+    if (item) {
+      pageData = {
+        hero:        item.hero        ?? fallback.hero,
+        stats:       item.stats?.length       ? item.stats       : fallback.stats,
+        phases:      item.phases?.length      ? item.phases      : fallback.phases,
+        proofPoints: item.proofPoints?.length ? item.proofPoints : fallback.proofPoints,
+        ctaSection:  item.ctaSection  ?? fallback.ctaSection,
+      };
+    }
+  }
+} catch (_) {}
+
+const { hero, stats, phases, proofPoints, ctaSection } = pageData;
+
+const included = [
+  { title: 'Dedicated sending infrastructure', body: 'Domains, warmup, DKIM/SPF/DMARC, inbox rotation — under your brand, not ours. The layer most vendors skip and the reason most outbound burns out after three months.' },
+  { title: 'Vertical playbooks', body: 'Pre-built sequence libraries for HVAC, plumbing, roofing, solar, med spa, dental, legal, accounting, and IT outsourcing. Nine verticals, each with its own pain hooks and ICP criteria baked in.' },
+  { title: 'AI personalization engine', body: 'Prospect-level research at scale. The AI agent crawls each prospect\'s site, pulls a vertical-specific signal, and writes a first line that reads as hand-researched. Not a token swap. Not mail-merge.' },
+  { title: 'Reply handling and BANT qualification', body: 'Every reply reviewed and routed. Meetings only go to your calendar after Budget, Authority, Need, and Timing are confirmed. Prospects who clear three of four enter a nurture sequence.' },
+  { title: 'Calendar delivery and no-show recovery', body: 'Branded invites from your domain. Confirmation and reminder sequences. Automated rescheduling — 60% of no-shows recover with one follow-up.' },
+  { title: 'White-label delivery', body: 'Every client-facing touchpoint carries your brand. Calendar invite, confirmation email, reminder, reporting — all yours. FlowCraftPro is never visible.' },
+];
+
+const goodFit = [
+  'Marketing agencies that want to add an outbound revenue line without hiring',
+  'Agencies serving home services, med spa, dental, legal, IT outsourcing, or other verticals in the FlowCraftPro playbook library',
+  'Agencies looking to test outbound before committing to a full outsourced SDR engagement',
+  'Agencies that want to productize fractional SDR as a white-label retainer add-on for their own clients',
+];
+
+const notFit = [
+  'Solo freelancers or pre-revenue operators with no defined offer or ICP',
+  'Agencies serving verticals outside the current playbook library — we\'ll confirm on the qualification call',
+  'Anyone expecting a high-volume spray-and-pray approach — every meeting goes through BANT before touching your calendar',
+  'Agencies that need phone-first cold calling as the primary channel — this is email-led with LinkedIn support',
+];
+
+const faq = [
+  {
+    q: 'What\'s the difference between a fractional SDR and a virtual assistant doing outreach?',
+    a: 'A VA executes tasks. A fractional SDR owns outcomes. FlowCraftPro manages the full function — infrastructure, sequences, deliverability, qualification, calendar delivery, and no-show recovery — and guarantees results. A VA sends emails. We book meetings.',
+  },
+  {
+    q: 'Can we white-label fractional SDR services for our own clients?',
+    a: 'Yes — it\'s one of the primary use cases. Your client sees your brand on every touchpoint. The margin between the partner rate and your retail price is yours. The first-5-meetings guarantee passes through so the delivery risk stays with us.',
+  },
+  {
+    q: 'How quickly can we get started?',
+    a: 'Fourteen days from contract signature to first send. Verticals with existing playbooks — HVAC, med spa, legal, IT — ramp fastest. New verticals take 21–28 days for ICP definition and sequence build.',
+  },
+  {
+    q: 'What\'s included in the first-5-meetings guarantee?',
+    a: 'Five BANT-qualified meetings on your calendar before you pay anything. If we don\'t hit five in the first engagement cycle, you owe nothing. Full refund if 5+ qualified meetings aren\'t delivered in 90 days.',
+  },
+  {
+    q: 'Is this HIPAA compliant?',
+    a: 'Yes. Med spa, dental, and healthcare-adjacent flows run on HIPAA-compliant infrastructure with compliant data handling. GDPR coverage is included for EU outreach.',
+  },
+];
+---
+
+<Layout
+  title="Fractional SDR Services for Marketing Agencies | FlowCraftPro"
+  description="FlowCraftPro delivers fractional SDR for marketing agencies — white-label outbound, 9 vertical playbooks, and a first-5-meetings guarantee. 14 days to first send, no full-time hire required."
+  nav={global?.nav?.map((n: any) => ({ label: n.label, href: n.href })) ?? []}
+  siteName={global?.siteName}
+>
+  <style>
+    .glow-button {
+      box-shadow: 0 0 20px rgba(190, 242, 100, 0.5), 0 0 10px rgba(190, 242, 100, 0.7);
+      transition: all 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 30px rgba(190, 242, 100, 0.7), 0 0 15px rgba(190, 242, 100, 0.9);
+      transform: translateY(-2px);
+    }
+    .stat-card {
+      background: linear-gradient(135deg, rgba(190, 242, 100, 0.1) 0%, rgba(190, 242, 100, 0.05) 100%);
+      border: 1px solid rgba(190, 242, 100, 0.2);
+    }
+  </style>
+
+  <!-- Hero -->
+  <section class="relative py-24 md:py-32 bg-brand-dark">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-gray-900 to-brand-dark"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+      <span class="inline-block px-4 py-2 bg-brand-lime/20 text-brand-lime text-sm font-semibold rounded-full border border-brand-lime/30 mb-6">
+        FRACTIONAL SDR FOR AGENCIES
+      </span>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold font-display tracking-tight text-white leading-tight mb-6">
+        {hero.headline}
+      </h1>
+      <p class="text-xl md:text-2xl text-brand-gray max-w-3xl mx-auto mb-8">
+        {hero.subHeadline}
+      </p>
+      <div class="flex flex-wrap justify-center gap-3 mb-10 text-sm text-brand-gray/80">
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">White-label ready</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">First 5 meetings free</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">HIPAA & GDPR compliant</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full border border-gray-700">Agency-exclusive</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-4xl mx-auto">
+        {stats.map((stat: { value: string; label: string }) => (
+          <div class="stat-card p-6 rounded-2xl text-center">
+            <div class="text-4xl md:text-5xl font-bold text-brand-lime mb-2">{stat.value}</div>
+            <div class="text-brand-gray text-sm">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={hero.ctaUrl} class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-lg hover:bg-lime-300 transition-colors glow-button">
+          {hero.ctaLabel}
+        </a>
+        <a href="#how-it-works" class="inline-block border border-gray-600 text-white font-bold px-10 py-5 rounded-full text-lg hover:border-gray-400 transition-colors">
+          How It Works ↓
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- §1 — What it is -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white mb-6">What a Fractional SDR Is (and Why Agencies Are the Right Buyer)</h2>
+      <div class="space-y-4 text-brand-gray text-lg leading-relaxed">
+        <p>A fractional SDR is a sales development function you access at a fraction of the cost and commitment of a full-time hire. Same output — prospecting, outreach, qualification, calendar delivery — without the salary, benefits, management overhead, and 90-day ramp that come with bringing someone in-house.</p>
+        <p>The term gets used loosely. Some vendors use "fractional SDR" to mean a part-time contractor who sends emails. Others mean a shared-resource pool spread across multiple clients. Neither model works well for marketing agencies, because neither can deliver white-label output — the non-negotiable requirement when your client thinks the meetings are coming from you.</p>
+        <p>FlowCraftPro's fractional SDR model is built differently. It runs as a fully managed, fully branded outbound function — dedicated infrastructure, vertical-specific sequences, BANT qualification on every reply — delivered under your agency's name. Your client never sees a third-party vendor. You get the meetings, the margin, and the credit.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §2 — Why fractional over full-time -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Why Agencies Choose Fractional Over Full-Time</h2>
+        <p class="text-brand-gray text-lg">The math kills the full-time SDR argument fast.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {proofPoints.map((point: string) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800 flex items-start gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime flex items-center justify-center text-black font-bold">✓</div>
+            <p class="text-brand-gray">{point}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §3 — How it works -->
+  <section id="how-it-works" class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">How the Fractional SDR Model Works</h2>
+        <p class="text-brand-gray text-lg">Three phases across 90 days — infrastructure, launch, and optimization.</p>
+      </div>
+      <div class="space-y-6">
+        {phases.map((phase: { title: string; items: string[] }, i: number) => (
+          <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800">
+            <div class="flex items-center gap-4 mb-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-lime text-black font-bold flex items-center justify-center">{i + 1}</span>
+              <h3 class="text-xl font-bold text-white">{phase.title}</h3>
+            </div>
+            <ul class="space-y-2 pl-14">
+              {phase.items.map((item: string) => (
+                <li class="text-brand-gray flex items-start gap-2">
+                  <span class="text-brand-lime mt-1 flex-shrink-0">→</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §4 — What's included -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">What's Included</h2>
+        <p class="text-brand-gray text-lg">The full function — not a part-time email sender.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {included.map((item) => (
+          <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800">
+            <h3 class="text-white font-bold mb-3">{item.title}</h3>
+            <p class="text-brand-gray text-sm leading-relaxed">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §5 — Fractional vs Outsourced comparison -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Fractional SDR vs. Outsourced SDR: What's the Difference?</h2>
+        <p class="text-brand-gray text-lg max-w-2xl mx-auto">The terms get used interchangeably. For practical purposes, the distinction comes down to scope and framing.</p>
+      </div>
+      <div class="overflow-x-auto mb-8">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="text-left py-4 pr-6 text-brand-gray font-medium w-44"></th>
+              <th class="text-center py-4 px-4 text-brand-lime font-bold">Fractional SDR</th>
+              <th class="text-center py-4 px-4 text-white font-bold">Outsourced SDR</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-800">
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Framing</td>
+              <td class="py-4 px-4 text-center text-white">Partial sales development function</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Full SDR function, external</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Best for</td>
+              <td class="py-4 px-4 text-center text-white">Agencies testing outbound or adding it as a client service</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Agencies replacing or augmenting an existing SDR motion</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Commitment</td>
+              <td class="py-4 px-4 text-center text-white">90-day minimum</td>
+              <td class="py-4 px-4 text-center text-brand-gray">90-day minimum</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Output</td>
+              <td class="py-4 px-4 text-center text-white">Qualified meetings on calendar</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Qualified meetings on calendar</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">White-label</td>
+              <td class="py-4 px-4 text-center text-white">Yes</td>
+              <td class="py-4 px-4 text-center text-brand-gray">Yes</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-6 text-brand-gray font-medium">Guarantee</td>
+              <td class="py-4 px-4 text-center text-white">First 5 meetings free</td>
+              <td class="py-4 px-4 text-center text-brand-gray">First 5 meetings free</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-brand-gray text-center">
+        In practice, the FlowCraftPro delivery model is identical whether you call it fractional or outsourced. For the full outsourced framing and a deeper look at the model, see <a href="/outsourced-sdr/" class="text-brand-lime hover:underline">outsourced SDR for agencies</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- §6 — Who it fits -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Who This Is and Isn't For</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-bold text-brand-lime mb-4">Good fit</h3>
+          <ul class="space-y-3">
+            {goodFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-brand-lime mt-1 flex-shrink-0">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-red-400 mb-4">Not a fit</h3>
+          <ul class="space-y-3">
+            {notFit.map((item) => (
+              <li class="flex items-start gap-3 text-brand-gray">
+                <span class="text-red-400 mt-1 flex-shrink-0">✕</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- §7 — FAQ -->
+  <section class="py-20 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white text-center mb-12">Frequently Asked Questions</h2>
+      <div class="space-y-0">
+        {faq.map((item) => (
+          <details class="border-b border-gray-800 group">
+            <summary class="flex justify-between items-center py-6 cursor-pointer text-white font-medium list-none">
+              {item.q}
+              <span class="text-brand-lime text-2xl font-light ml-4 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <div class="pb-6 pr-8 text-brand-gray">{item.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- §8 — Final CTA -->
+  <section class="py-20 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{ctaSection.heading}</h2>
+      <p class="text-lg text-brand-gray mb-4 max-w-2xl mx-auto">First five meetings on your calendar before you pay. White-label delivery. Nine vertical playbooks ready to go.</p>
+      <p class="text-lg text-brand-gray mb-8 max-w-2xl mx-auto">
+        {ctaSection.subheading} See the full <a href="/lead-generation-for-marketing-agencies/" class="text-brand-lime hover:underline">lead generation program for marketing agencies</a>.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+        <a
+          href={ctaSection.ctaUrl}
+          class="inline-block bg-brand-lime text-black font-bold px-10 py-5 rounded-full text-xl hover:bg-lime-300 transition-colors glow-button"
+        >
+          {ctaSection.ctaLabel}
+        </a>
+        <a
+          href="/lead-generation-for-marketing-agencies/"
+          class="inline-block border border-gray-600 text-white font-bold px-10 py-5 rounded-full text-xl hover:border-gray-400 transition-colors"
+        >
+          See the Full Program →
+        </a>
+      </div>
+      <p class="text-sm text-brand-gray">{ctaSection.guaranteeText}</p>
+    </div>
+  </section>
+</Layout>
